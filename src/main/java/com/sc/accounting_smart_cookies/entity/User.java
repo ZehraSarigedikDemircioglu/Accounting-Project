@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
-    //After based entity is create, class will be extend and delete id field.
+    //After based entity creates, class will be extend and delete id field.
     @Id
     private Long id;
     @Column(unique = true)

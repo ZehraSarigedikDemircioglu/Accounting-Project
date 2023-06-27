@@ -20,6 +20,6 @@ public class Product {
     private Integer quantityInStock;
     private Integer lowLimitAlert;
     private ProductUnit productUnit;
-    @ManyToOne
-    private Category category;
+//    @ManyToOne
+//    private Category category;
 }

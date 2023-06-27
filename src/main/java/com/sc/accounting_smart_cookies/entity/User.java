@@ -13,9 +13,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
-    //After based entity creates, class will be extend and delete id field.
-    @Id
+public class User extends BaseEntity{
+
     private Long id;
     @Column(unique = true)
     private String userName;
@@ -23,8 +22,8 @@ public class User {
     private String lastName;
     private String phone;
     private boolean enabled;
-//    @ManyToOne
-//    private Role role;
+    @ManyToOne
+    private Role role;
 //    @ManyToOne
 //    private Company company;
 }

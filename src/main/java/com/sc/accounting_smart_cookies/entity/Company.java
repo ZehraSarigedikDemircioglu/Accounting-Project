@@ -6,12 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Entity
+@Entity
 @Table(name = "companies")
 public class Company extends BaseEntity {
 
@@ -19,6 +20,8 @@ public class Company extends BaseEntity {
     private String phone;
     private String website;
     private CompanyStatus companyStatus;
+
+    @OneToOne
     private Address address;
 
 }

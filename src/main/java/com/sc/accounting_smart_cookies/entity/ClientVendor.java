@@ -4,7 +4,6 @@ import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.jni.Address;
 
 import javax.persistence.*;
 
@@ -20,10 +19,12 @@ public class ClientVendor extends BaseEntity{
     private ClientVendorType clientVendorType;
     private String phone;
     private String website;
+
     @OneToOne
     private Address address;
-    //@ManyToOne
-    //private Company company;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Company company;
 
 
 }

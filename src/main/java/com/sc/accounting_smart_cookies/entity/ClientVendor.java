@@ -22,8 +22,8 @@ public class ClientVendor extends BaseEntity{
     private String website;
     @OneToOne
     private Address address;
-    @ManyToOne
-    private Company company;
+    //@ManyToOne
+    //private Company company;
 
 
 }

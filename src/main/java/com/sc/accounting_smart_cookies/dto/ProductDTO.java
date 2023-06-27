@@ -1,6 +1,6 @@
-package com.sc.dto;
+package com.sc.accounting_smart_cookies.dto;
 
-import com.sc.enums.ProductUnit;
+import com.sc.accounting_smart_cookies.enums.ProductUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

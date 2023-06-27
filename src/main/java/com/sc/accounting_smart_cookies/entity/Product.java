@@ -1,6 +1,6 @@
-package com.sc.entity;
+package com.sc.accounting_smart_cookies.entity;
 
-import com.sc.enums.ProductUnit;
+import com.sc.accounting_smart_cookies.enums.ProductUnit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

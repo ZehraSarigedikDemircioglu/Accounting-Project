@@ -1,4 +1,4 @@
-package com.sc.enums;
+package com.sc.accounting_smart_cookies.enums;
 
 public enum ProductUnit {
     LBS("Libre"), GALLON("Gallon"), PCS("Pieces"), KG("Kilogram"), METER("Meter"), INCH("Inch"), FEET("Feet");

@@ -13,12 +13,12 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ClientVendor {
+public class ClientVendor extends BaseEntity{
 
     private String clientVendorName;
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
-    private Long phone;
+    private String phone;
     private String website;
     @OneToOne
     private Address address;

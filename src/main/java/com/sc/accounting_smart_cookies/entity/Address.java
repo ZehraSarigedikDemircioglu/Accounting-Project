@@ -11,9 +11,9 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Address {
+public class Address extends BaseEntity{
 
-    //should have primary key
+
     private String addressLine1;
     private String addressLine2;
     private String city;

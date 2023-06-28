@@ -16,9 +16,11 @@ import javax.persistence.*;
 public class User extends BaseEntity{
 
     @Column(unique = true)
-    private String userName;
+    private String username;
+
+    private String firstname;
+    private String lastname;
     private String password;
-    private String lastName;
     private String phone;
     private boolean enabled;
     @ManyToOne

@@ -5,9 +5,7 @@ import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data
@@ -17,7 +15,11 @@ import java.time.LocalDate;
 public class Invoice extends BaseEntity {
 
     private String invoiceNo;
+
+    @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
+
+    @Enumerated(EnumType.STRING)
     private InvoiceType invoiceType;
     private LocalDate date;
 

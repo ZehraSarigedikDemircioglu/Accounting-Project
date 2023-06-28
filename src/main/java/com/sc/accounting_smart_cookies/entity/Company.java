@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +17,8 @@ public class Company extends BaseEntity {
     private String title;
     private String phone;
     private String website;
+
+    @Enumerated(EnumType.STRING)
     private CompanyStatus companyStatus;
 
     @OneToOne

@@ -9,5 +9,6 @@ public interface InvoiceService {
 
     List<InvoiceDTO> findAll();
 
-//    InvoiceProduct findById(Long id);
+    InvoiceDTO findById(Long id);
+
 }

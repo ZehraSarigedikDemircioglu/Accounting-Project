@@ -14,6 +14,6 @@ public class CompanyDTO {
     private String title;
     private String phone;
     private String website;
-    //private AddressDto address;
+    private AddressDTO address;
     private CompanyStatus companyStatus;
 }

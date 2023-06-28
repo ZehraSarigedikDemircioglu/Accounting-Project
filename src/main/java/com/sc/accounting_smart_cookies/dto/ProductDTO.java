@@ -15,5 +15,6 @@ public class ProductDTO {
     private Integer quantityInStock;
     private Integer lowLimitAlert;
     private ProductUnit productUnit;
-//    private CategoryDTO category;
+    private CategoryDTO category;
+
 }

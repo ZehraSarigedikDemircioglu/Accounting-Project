@@ -10,13 +10,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvoiceProductDTO {
+
    private Long id;
-            private Integer quantity;
-           private BigDecimal price;
-           private Integer tax;
-            private BigDecimal total;
-           private BigDecimal profitLoss;
-            private Integer remainingQty;
-         //  private InvoiceDto invoice;
-      //    private   ProductDto product;;
+   private Integer quantity;
+   private BigDecimal price;
+   private Integer tax;
+   private BigDecimal total;
+   private BigDecimal profitLoss;
+   private Integer remainingQty;
+   private InvoiceDTO invoice;
+   private ProductDTO product;;
 }

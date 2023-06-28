@@ -1,4 +1,4 @@
-package com.sc.accounting_smart_cookies.service.implementation;
+package com.sc.accounting_smart_cookies.service.impl;
 
 import com.sc.accounting_smart_cookies.service.DashboardService;
 import org.springframework.stereotype.Service;

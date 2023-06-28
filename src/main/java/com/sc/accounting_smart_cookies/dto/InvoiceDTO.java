@@ -15,13 +15,12 @@ import java.time.LocalDate;
 public class InvoiceDTO {
 
     private Long id;
-
     private String invoiceNo;
     private InvoiceStatus invoiceStatus;
     private InvoiceType invoiceType;
     private LocalDate localDate;
-//    private CompanyDto company;
-//    private ClientVendorDto clientVendor;
+    private CompanyDTO company;
+    private ClientVendorDTO clientVendor;
     private BigDecimal price;
     private Integer tax;
     private BigDecimal total;

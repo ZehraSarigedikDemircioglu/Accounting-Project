@@ -3,6 +3,7 @@ package com.sc.accounting_smart_cookies.service.impl;
 import com.sc.accounting_smart_cookies.converter.InvoiceDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.entity.Invoice;
+import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.mapper.InvoiceMapper;
 import com.sc.accounting_smart_cookies.repository.InvoiceRepository;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
@@ -28,7 +29,25 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceDTO> findAll() {
 
-        List<Invoice> invoices = invoiceRepository.findAll();
+        List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(InvoiceType.PURCHASE);
+
+        return invoices.stream().map(invoiceMapper::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InvoiceDTO> findAllPurchasesInvoices() {
+
+        List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(InvoiceType.PURCHASE);
+
+        return invoices.stream().map(invoiceMapper::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InvoiceDTO> findAllSalesInvoices() {
+
+        List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(InvoiceType.SALES);
 
         return invoices.stream().map(invoiceMapper::convertToDto)
                 .collect(Collectors.toList());

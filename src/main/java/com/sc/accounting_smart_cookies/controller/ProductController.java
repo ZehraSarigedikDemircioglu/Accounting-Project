@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -16,7 +16,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public String listProduct(Model model){
         model.addAttribute("products", productService.findAll());
         return "product/product-list";

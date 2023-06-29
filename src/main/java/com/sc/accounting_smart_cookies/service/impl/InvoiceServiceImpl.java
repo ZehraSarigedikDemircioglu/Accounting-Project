@@ -58,14 +58,14 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         InvoiceDTO newInvoice = new InvoiceDTO();
         newInvoice.setDate(LocalDate.now());
-        newInvoice.setInvoiceNo("P-" + getNextInvoiceNo().substring(1));
+        newInvoice.setInvoiceNo("P" + getNextInvoiceNo().substring(1));
 
         return newInvoice;
     }
 
     private String getNextInvoiceNo() {
 
-        return (invoiceRepository.findTopByOrderOrderByInvoiceNo()).getInvoiceNo();
+        return (invoiceRepository.findTopByOrderByInvoiceNoDesc()).getInvoiceNo();
     }
 
 }

@@ -24,19 +24,20 @@ public class ProductController {
     }
     @GetMapping("/create")
     public String createProduct(Model model){
-        model.addAttribute("product", new ProductDTO());
+        model.addAttribute("newProduct", new ProductDTO());
         return "product/product-create";
     }
     @PostMapping("/create")
     public String saveProduct(@ModelAttribute("product") ProductDTO productDTO){
         productService.save(productDTO);
-        return "redirect:/product/product-list";
+        return "redirect:/products/list";
     }
     @GetMapping("/update/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model){
         model.addAttribute("product", productService.findById(id));
         model.addAttribute("products", productService.findAll());
         model.addAttribute("productUnits", ProductUnit.values());
+//        model.addAttribute("categories", categoryService.listAll());
         return "product/product-update";
     }
     @PostMapping("/update")
@@ -47,6 +48,6 @@ public class ProductController {
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id){
         productService.deleteById(id);
-        return "redirect:/product/product-list";
+        return "redirect:/products/list";
     }
 }

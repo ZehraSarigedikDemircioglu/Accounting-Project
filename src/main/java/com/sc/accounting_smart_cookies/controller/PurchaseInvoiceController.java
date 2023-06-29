@@ -21,7 +21,7 @@ public class PurchaseInvoiceController {
     @GetMapping("/list")
     public String listPurchaseInvoices(Model model) {
 // Purchase Invoices list:
-        model.addAttribute("invoices", invoiceService.findAllPurchasesInvoices());
+        model.addAttribute("invoices", invoiceService.findAllPurchaseInvoices());
 
         return "invoice/purchase-invoice-list";
     }

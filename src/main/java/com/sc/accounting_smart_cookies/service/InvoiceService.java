@@ -8,7 +8,7 @@ import java.util.List;
 public interface InvoiceService {
 
     List<InvoiceDTO> findAll();
-    List<InvoiceDTO> findAllPurchasesInvoices();
+    List<InvoiceDTO> findAllPurchaseInvoices();
     List<InvoiceDTO> findAllSalesInvoices();
 
     InvoiceDTO findById(Long id);

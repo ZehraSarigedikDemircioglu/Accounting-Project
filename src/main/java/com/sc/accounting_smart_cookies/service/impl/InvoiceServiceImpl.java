@@ -36,7 +36,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceDTO> findAllPurchasesInvoices() {
+    public List<InvoiceDTO> findAllPurchaseInvoices() {
 
         List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(InvoiceType.PURCHASE);
 
@@ -56,6 +56,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDTO findById(Long id) {
 
-        return invoiceDTOConverter.convert(id);
+        Invoice invoice = invoiceRepository.findById(id).orElseThrow();
+
+        return invoiceMapper.convertToDto(invoice);
     }
 }

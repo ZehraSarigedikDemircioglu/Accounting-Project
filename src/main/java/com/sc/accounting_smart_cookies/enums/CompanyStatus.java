@@ -1,5 +1,8 @@
 package com.sc.accounting_smart_cookies.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum CompanyStatus {
 
     ACTIVE ("Active"), PASSIVE ("Passive");

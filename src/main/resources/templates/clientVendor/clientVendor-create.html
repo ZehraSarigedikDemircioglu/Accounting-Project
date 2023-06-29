@@ -47,9 +47,9 @@
                                                                     <label>Type</label>
                                                                     <select id="clientVendorType" class="form-control"
                                                                             th:field="*{clientVendorType}">
-                                                                        <option th:if="${clientVendorTypes.size() > 1}"
-                                                                                th:value="''" th:text="'Select'"
-                                                                                selected></option>
+<!--                                                                        <option th:if="${clientVendorTypes.size() > 1}"-->
+<!--                                                                                th:value="''" th:text="'Select'"-->
+<!--                                                                                selected></option>-->
                                                                         <option th:each="clientVendorType:${clientVendorTypes}"
                                                                                 th:value="${clientVendorType}"
                                                                                 th:text="${clientVendorType.value}"></option>

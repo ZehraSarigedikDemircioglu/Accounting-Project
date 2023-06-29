@@ -37,7 +37,9 @@ public class ProductController {
         model.addAttribute("product", productService.findById(id));
         model.addAttribute("products", productService.findAll());
         model.addAttribute("productUnits", ProductUnit.values());
+
 //        model.addAttribute("categories", categoryService.listAll());
+
         return "product/product-update";
     }
     @PostMapping("/update")

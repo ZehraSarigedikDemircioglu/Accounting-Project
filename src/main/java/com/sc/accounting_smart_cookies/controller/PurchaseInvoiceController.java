@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.controller;
 
+import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
@@ -29,11 +30,14 @@ public class PurchaseInvoiceController {
         return "invoice/purchase-invoice-list";
     }
 
-//    @GetMapping("/create")
-//    public String create(Model model) {
-//
-//        model.addAttribute("clientVendor", clientVendorService.findAll());
-//    }
+    @GetMapping("/create")
+    public String create(Model model) {
+
+        model.addAttribute("newPurchaseInvoice", new InvoiceDTO());
+        model.addAttribute("vendors", clientVendorService.findAll());
+
+        return "invoice/purchase-invoice-create";
+    }
 
     @GetMapping("/update/{id}")
     public String update(@PathVariable("id") Long id, Model model) {

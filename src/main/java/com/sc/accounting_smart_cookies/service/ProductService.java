@@ -12,7 +12,7 @@ public interface ProductService {
 
     List<ProductDTO> findAll();
 
-    void save(ProductDTO productDTO);
+    ProductDTO save(ProductDTO productDTO);
 
-    void update(ProductDTO productDTO);
+    ProductDTO update(ProductDTO productDTO);
 }

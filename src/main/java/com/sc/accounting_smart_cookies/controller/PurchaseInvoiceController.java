@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.controller;
 
+import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import org.springframework.stereotype.Controller;
@@ -12,10 +13,12 @@ public class PurchaseInvoiceController {
 
     private final InvoiceService invoiceService;
     private final InvoiceProductService invoiceProductService;
+    private final ClientVendorService clientVendorService;
 
-    public PurchaseInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService) {
+    public PurchaseInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService, ClientVendorService clientVendorService) {
         this.invoiceService = invoiceService;
         this.invoiceProductService = invoiceProductService;
+        this.clientVendorService = clientVendorService;
     }
 
     @GetMapping("/list")
@@ -29,7 +32,7 @@ public class PurchaseInvoiceController {
 //    @GetMapping("/create")
 //    public String create(Model model) {
 //
-//        model.addAttribute("clientVendor", )
+//        model.addAttribute("clientVendor", clientVendorService.findAll());
 //    }
 
     @GetMapping("/update/{id}")

@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
@@ -22,11 +25,13 @@ public class DashboardController {
     @GetMapping
     public String method1(Model model) {
 
-        //model.addAttribute("Total Cost", invoiceService.totalCost());
-        //model.addAttribute("Total Sales", invoiceService.totalSales());
-        //model.addAttribute("Total Profit/Loss", invoiceService.totalSales()-invoiceService.totalCost());
+        Map<String,Integer> summaryNumbers = new HashMap<>();
+        summaryNumbers.put("totalCost", 2000);
+        summaryNumbers.put("totalSales", 2000);
+        summaryNumbers.put("profitLoss", 2000);
+        model.addAttribute("summaryNumbers", summaryNumbers);
         //model.addAttribute("Last Transactions", invoiceService.listInvoices());
-        model.addAttribute("Exchange Rates", exchangeRateClient.getExchangeRates());
+        model.addAttribute("exchangeRates", exchangeRateClient.getExchangeRates());
 
 
         return "/dashboard";

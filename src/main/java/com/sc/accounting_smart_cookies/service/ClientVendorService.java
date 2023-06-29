@@ -12,7 +12,7 @@ public interface ClientVendorService {
 
     ClientVendorDTO save(ClientVendorDTO clientVendorDTO);
 
-    ClientVendorDTO update(ClientVendorDTO clientVendorDTO);
+    ClientVendorDTO update(Long id, ClientVendorDTO clientVendorDTO);
 
     void deleteById(Long id);
 }

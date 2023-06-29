@@ -47,8 +47,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
 
     @Override
-    public ClientVendorDTO update(ClientVendorDTO clientVendorDTO) {
-        ClientVendor clientVendor = clientVendorRepository.findById(clientVendorDTO.getId()).orElseThrow();
+    public ClientVendorDTO update(Long id, ClientVendorDTO clientVendorDTO) {
+        ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow();
         ClientVendor newClientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
         newClientVendor.setId(clientVendor.getId());
         clientVendorRepository.save(newClientVendor);

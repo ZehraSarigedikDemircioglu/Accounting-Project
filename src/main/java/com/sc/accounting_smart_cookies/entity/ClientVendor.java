@@ -20,7 +20,7 @@ public class ClientVendor extends BaseEntity{
     private String phone;
     private String website;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)

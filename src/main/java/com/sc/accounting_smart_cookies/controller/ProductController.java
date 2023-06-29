@@ -18,7 +18,7 @@ public class ProductController {
 
     @GetMapping
     public String listProduct(Model model){
-        model.addAttribute("product", productService.findAll());
+        model.addAttribute("products", productService.findAll());
         return "product/product-list";
     }
     @GetMapping("/create")
@@ -33,7 +33,7 @@ public class ProductController {
     }
     @GetMapping("/update/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model){
-        model.addAttribute("project", productService.findById(id));
+        model.addAttribute("product", productService.findById(id));
         model.addAttribute("products", productService.findAll());
         return "product/product-update";
     }

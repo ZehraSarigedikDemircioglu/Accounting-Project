@@ -21,4 +21,5 @@ public class UserDTO {
     private RoleDTO role;
     private CompanyDTO company;
     private boolean isOnlyAdmin;
+    private boolean enabled;
 }

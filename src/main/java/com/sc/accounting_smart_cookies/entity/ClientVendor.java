@@ -1,9 +1,11 @@
 package com.sc.accounting_smart_cookies.entity;
 
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -12,6 +14,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Where(clause = "is_deleted=false")
 public class ClientVendor extends BaseEntity{
 
     private String clientVendorName;
@@ -20,7 +24,7 @@ public class ClientVendor extends BaseEntity{
     private String phone;
     private String website;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)

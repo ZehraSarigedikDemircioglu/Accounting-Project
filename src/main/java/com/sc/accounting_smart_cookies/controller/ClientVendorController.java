@@ -27,12 +27,14 @@ public class ClientVendorController {
     @GetMapping("/create")
     public String createClientVendor(Model model){
         model.addAttribute("newClientVendor", new ClientVendorDTO());
+        model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
         return "clientVendor/clientVendor-create";
     }
     @PostMapping("/create")
     public String saveClientVendor(@ModelAttribute("newClientVendor") ClientVendorDTO clientVendorDTO){
         clientVendorService.save(clientVendorDTO);
-        return "redirect:/clientVendor/clientVendor-list";
+//        return "redirect:/clientVendor/clientVendor-list";
+        return "redirect:/clientVendors/list";
     }
     @GetMapping("/update/{id}")
     public String editClientVendor(@PathVariable("id") Long id, Model model){
@@ -44,7 +46,8 @@ public class ClientVendorController {
     @PostMapping("/update/{id}")
     public String updateClientVendor(@ModelAttribute("clientVendor") ClientVendorDTO clientVendorDTO, @PathVariable("id") Long id){
         clientVendorService.update(id, clientVendorDTO);
-        return "redirect:/clientVendor/clientVendor-list";
+//        return "redirect:/clientVendor/clientVendor-list";
+        return "redirect:/clientVendors/list";
     }
     @GetMapping("/delete/{id}")
     public String deleteClientVendor(@PathVariable("id") Long id){

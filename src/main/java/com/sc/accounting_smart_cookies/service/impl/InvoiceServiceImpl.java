@@ -4,12 +4,13 @@ import com.sc.accounting_smart_cookies.converter.InvoiceDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
-import com.sc.accounting_smart_cookies.mapper.InvoiceMapper;
+import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.InvoiceRepository;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,12 +18,12 @@ import java.util.stream.Collectors;
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-    private final InvoiceMapper invoiceMapper;
+    private final MapperUtil mapperUtil;
     private final InvoiceDTOConverter invoiceDTOConverter;
 
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceMapper invoiceMapper, @Lazy InvoiceDTOConverter invoiceDTOConverter) {
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, MapperUtil mapperUtil, @Lazy InvoiceDTOConverter invoiceDTOConverter) {
         this.invoiceRepository = invoiceRepository;
-        this.invoiceMapper = invoiceMapper;
+        this.mapperUtil = mapperUtil;
         this.invoiceDTOConverter = invoiceDTOConverter;
     }
 
@@ -31,25 +32,16 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(InvoiceType.PURCHASE);
 
-        return invoices.stream().map(invoiceMapper::convertToDto)
+        return invoices.stream().map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<InvoiceDTO> findAllPurchaseInvoices() {
+    public List<InvoiceDTO> findInvoicesByType(InvoiceType invoiceType) {
 
-        List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(InvoiceType.PURCHASE);
+        List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(invoiceType);
 
-        return invoices.stream().map(invoiceMapper::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<InvoiceDTO> findAllSalesInvoices() {
-
-        List<Invoice> invoices = invoiceRepository.findAllByInvoiceType(InvoiceType.SALES);
-
-        return invoices.stream().map(invoiceMapper::convertToDto)
+        return invoices.stream().map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
                 .collect(Collectors.toList());
     }
 
@@ -58,6 +50,22 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Invoice invoice = invoiceRepository.findById(id).orElseThrow();
 
-        return invoiceMapper.convertToDto(invoice);
+        return mapperUtil.convert(invoice, new InvoiceDTO());
     }
+
+    @Override
+    public InvoiceDTO getNewInvoice() {
+
+        InvoiceDTO newInvoice = new InvoiceDTO();
+        newInvoice.setDate(LocalDate.now());
+        newInvoice.setInvoiceNo("P-" + getNextInvoiceNo().substring(1));
+
+        return newInvoice;
+    }
+
+    private String getNextInvoiceNo() {
+
+        return (invoiceRepository.findTopByOrderOrderByInvoiceNo()).getInvoiceNo();
+    }
+
 }

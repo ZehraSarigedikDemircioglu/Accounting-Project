@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.controller;
 
+import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,7 @@ public class SalesInvoiceController {
     @GetMapping("/list")
     public String listSalesInvoices(Model model) {
 // Sales Invoices list:
-        model.addAttribute("invoices", invoiceService.findAllSalesInvoices());
+        model.addAttribute("invoices", invoiceService.findInvoicesByType(InvoiceType.SALES));
 
         return "invoice/sales-invoice-list";
     }

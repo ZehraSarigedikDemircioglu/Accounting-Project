@@ -13,4 +13,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findAll();
     List<Invoice> findAllByInvoiceType(InvoiceType invoiceType);
 
+    Invoice findTopByOrderOrderByInvoiceNo();
+
 }

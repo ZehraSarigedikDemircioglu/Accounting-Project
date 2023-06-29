@@ -1,7 +1,10 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.ClientVendorDTO;
+import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.entity.ClientVendor;
+import com.sc.accounting_smart_cookies.entity.Invoice;
+import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.ClientVendorRepository;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
@@ -66,7 +69,14 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         }
     }
 
+    @Override
+    public List<ClientVendorDTO> findVendorsByType(ClientVendorType clientVendorType) {
 
+        List<ClientVendor> vendorList = clientVendorRepository.findAllByClientVendorType(clientVendorType);
+
+        return vendorList.stream().map(vendor -> mapperUtil.convert(vendor, new ClientVendorDTO()))
+                .collect(Collectors.toList());
+    }
 
 
 }

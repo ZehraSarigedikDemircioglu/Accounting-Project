@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
+import com.sc.accounting_smart_cookies.enums.ProductUnit;
 import com.sc.accounting_smart_cookies.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +36,13 @@ public class ProductController {
     public String editProduct(@PathVariable("id") Long id, Model model){
         model.addAttribute("product", productService.findById(id));
         model.addAttribute("products", productService.findAll());
+        model.addAttribute("productUnits", ProductUnit.values());
         return "product/product-update";
     }
     @PostMapping("/update")
     public String updateProduct(@ModelAttribute("product") ProductDTO productDTO){
         productService.update(productDTO);
-        return "redirect:/product/product-list";
+        return "redirect:/products/list";
     }
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id){

@@ -19,12 +19,18 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/list")
-    public String listPurchaseInvoices(Model model) {
+    public String list(Model model) {
 // Purchase Invoices list:
         model.addAttribute("invoices", invoiceService.findAllPurchaseInvoices());
 
         return "invoice/purchase-invoice-list";
     }
+
+//    @GetMapping("/create")
+//    public String create(Model model) {
+//
+//        model.addAttribute("clientVendor", )
+//    }
 
     @GetMapping("/update/{id}")
     public String update(@PathVariable("id") Long id, Model model) {

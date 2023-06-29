@@ -2,7 +2,7 @@ package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.entity.Product;
-import com.sc.accounting_smart_cookies.mapper.ProductMapper;
+import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.ProductRepository;
 import com.sc.accounting_smart_cookies.service.ProductService;
 import org.springframework.stereotype.Service;
@@ -15,17 +15,17 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
+    private final MapperUtil mapperUtil;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, MapperUtil mapperUtil) {
         this.productRepository = productRepository;
-        this.productMapper = productMapper;
+        this.mapperUtil = mapperUtil;
     }
 
     @Override
     public ProductDTO findById(Long id) {
         Product product = productRepository.findById(id).orElseThrow();
-        return productMapper.convertToDto(product);
+        return mapperUtil.convert(product, new ProductDTO());
     }
 
     @Override
@@ -40,20 +40,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> findAll() {
         List<Product> productList = productRepository.findAll();
-        return productList.stream().map(productMapper::convertToDto).collect(Collectors.toList());
+        return productList.stream().map(product -> mapperUtil.convert(product, new ProductDTO())).collect(Collectors.toList());
     }
 
     @Override
-    public void save(ProductDTO productDTO) {
-        Product product = productMapper.convertToEntity(productDTO);
+    public ProductDTO save(ProductDTO productDTO) {
+        Product product = mapperUtil.convert(productDTO, new Product());
         productRepository.save(product);
+        return mapperUtil.convert(product, new ProductDTO());
     }
 
     @Override
-    public void update(ProductDTO productDTO) {
+    public ProductDTO update(ProductDTO productDTO) {
         Product product = productRepository.findById(productDTO.getId()).orElseThrow();
-        Product convertedProduct = productMapper.convertToEntity(productDTO);
+        Product convertedProduct = mapperUtil.convert(productDTO, new Product());
         convertedProduct.setId(product.getId());
         productRepository.save(convertedProduct);
+        return mapperUtil.convert(convertedProduct, new ProductDTO());
     }
 }

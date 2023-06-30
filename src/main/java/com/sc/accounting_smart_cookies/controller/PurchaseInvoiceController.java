@@ -30,6 +30,7 @@ public class PurchaseInvoiceController {
 
     @GetMapping("/list")
     public String list(Model model) {
+
 // Purchase Invoices list:
         model.addAttribute("invoices", invoiceService.findInvoicesByType(InvoiceType.PURCHASE));
 
@@ -39,7 +40,7 @@ public class PurchaseInvoiceController {
     @GetMapping("/create")
     public String create(Model model) {
 
-        model.addAttribute("newPurchaseInvoice", invoiceService.getNewInvoice());
+        model.addAttribute("newPurchaseInvoice", invoiceService.getNewInvoice(InvoiceType.PURCHASE));
 
         model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
 
@@ -51,7 +52,7 @@ public class PurchaseInvoiceController {
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.PURCHASE);
 
-        return "redirect:/project/update/" + invoice.getId();
+        return "redirect:/purchaseInvoices/update/" + invoice.getId();
 
     }
 

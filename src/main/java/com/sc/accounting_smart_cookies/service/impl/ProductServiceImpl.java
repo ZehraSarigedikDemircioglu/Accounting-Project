@@ -51,11 +51,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO update(ProductDTO productDTO) {
-        Product product = productRepository.findById(productDTO.getId()).orElseThrow();
+    public ProductDTO update(Long id, ProductDTO productDTO) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         Product convertedProduct = mapperUtil.convert(productDTO, new Product());
         convertedProduct.setId(product.getId());
         productRepository.save(convertedProduct);
-        return mapperUtil.convert(convertedProduct, new ProductDTO());
+        return mapperUtil.convert(convertedProduct,new ProductDTO());
     }
+
 }

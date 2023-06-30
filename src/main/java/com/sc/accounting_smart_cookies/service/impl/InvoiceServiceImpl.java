@@ -3,6 +3,7 @@ package com.sc.accounting_smart_cookies.service.impl;
 import com.sc.accounting_smart_cookies.converter.InvoiceDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.entity.Invoice;
+import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.InvoiceRepository;
@@ -58,6 +59,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         InvoiceDTO newInvoice = new InvoiceDTO();
         newInvoice.setDate(LocalDate.now());
+
 //        newInvoice.setInvoiceNo("P" + getNextInvoiceNo().substring(1));
 
         return newInvoice;
@@ -68,10 +70,21 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Invoice invoice = invoiceRepository.findById(id).orElseThrow();
 
-
         invoice.setIsDeleted(true);
         invoiceRepository.save(invoice);
 
+    }
+
+    @Override
+    public InvoiceDTO save(InvoiceDTO invoiceDTO, InvoiceType invoiceType) {
+
+        Invoice invoice = mapperUtil.convert(invoiceDTO, new Invoice());
+        invoice.setInvoiceType(invoiceType);
+        invoice.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
+        invoice.setInvoiceNo("S-010");
+        Invoice returnInvoice = invoiceRepository.save(invoice);
+
+        return mapperUtil.convert(returnInvoice, new InvoiceDTO());
     }
 
 //    private String getNextInvoiceNo() {

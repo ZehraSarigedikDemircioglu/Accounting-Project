@@ -1,15 +1,15 @@
 package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
-import com.sc.accounting_smart_cookies.entity.Invoice;
+import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
+import com.sc.accounting_smart_cookies.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -19,11 +19,13 @@ public class PurchaseInvoiceController {
     private final InvoiceService invoiceService;
     private final InvoiceProductService invoiceProductService;
     private final ClientVendorService clientVendorService;
+    private final ProductService productService;
 
-    public PurchaseInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService, ClientVendorService clientVendorService) {
+    public PurchaseInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService, ClientVendorService clientVendorService, ProductService productService) {
         this.invoiceService = invoiceService;
         this.invoiceProductService = invoiceProductService;
         this.clientVendorService = clientVendorService;
+        this.productService = productService;
     }
 
     @GetMapping("/list")
@@ -44,21 +46,14 @@ public class PurchaseInvoiceController {
         return "invoice/purchase-invoice-create";
     }
 
-//    @PostMapping("/create")
-//    public String insert(@ModelAttribute("newPurchaseInvoice") InvoiceDTO project, BindingResult bindingResult, Model model) {
-//
-//        if (bindingResult.hasErrors()) {
-//
-//            model.addAttribute("managers", userService.listAllByRole("manager"));
-//            model.addAttribute("projects", projectService.listAllProjectDetails());
-//
-//            return "/project/create";
-//        }
-//        InvoiceDTO invoice = invoiceService.save(project);
-//
-//        return "redirect:/project/create/" + invoice.getId();
-//
-//    }
+    @PostMapping("/create")
+    public String insert(@ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO) {
+
+        InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.PURCHASE);
+
+        return "redirect:/project/update/" + invoice.getId();
+
+    }
 
     @GetMapping("/update/{id}")
     public String update(@PathVariable("id") Long id, Model model) {
@@ -66,10 +61,12 @@ public class PurchaseInvoiceController {
 // Invoice update Object:
         model.addAttribute("invoice", invoiceService.findById(id));
 
-
+        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
+        model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
+        model.addAttribute("products", productService.findAll());
 
 // InvoiceProduct list:
-        model.addAttribute("invoiceProducts", invoiceProductService.findAll());
+        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
 
         return "invoice/purchase-invoice-update";
     }

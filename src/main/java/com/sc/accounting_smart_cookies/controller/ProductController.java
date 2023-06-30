@@ -2,6 +2,7 @@ package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.enums.ProductUnit;
+import com.sc.accounting_smart_cookies.service.CategoryService;
 import com.sc.accounting_smart_cookies.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +15,11 @@ import java.util.Arrays;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/list")
@@ -29,14 +32,14 @@ public class ProductController {
     public String createProduct(Model model) {
         model.addAttribute("newProduct", new ProductDTO());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
-//        model.addAttribute("categories", categoryService.listAll());
+        model.addAttribute("categories", categoryService.listAllCategories());
         return "product/product-create";
     }
 
     @PostMapping("/create")
     public String saveProduct(@ModelAttribute("product") ProductDTO productDTO) {
         productService.save(productDTO);
-        return "redirect:/products/list";
+        return "redirect:/products/create";
     }
 
     @GetMapping("/update/{id}")
@@ -44,7 +47,7 @@ public class ProductController {
         model.addAttribute("product", productService.findById(id));
         model.addAttribute("products", productService.findAll());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
-//        model.addAttribute("categories", categoryService.listAll());
+        model.addAttribute("categories", categoryService.listAllCategories());
 
         return "product/product-update";
     }

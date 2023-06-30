@@ -1,10 +1,12 @@
 package com.sc.accounting_smart_cookies.service.impl;
 
+import com.sc.accounting_smart_cookies.dto.UserDTO;
 import com.sc.accounting_smart_cookies.entity.User;
 import com.sc.accounting_smart_cookies.entity.common.UserPrincipal;
 import com.sc.accounting_smart_cookies.repository.UserRepository;
 import com.sc.accounting_smart_cookies.service.SecurityService;
 import com.sc.accounting_smart_cookies.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -29,4 +31,9 @@ public class SecurityServiceImpl implements SecurityService {
         return new UserPrincipal(user);
     }
 
+    @Override
+    public UserDTO getLoggedInUser() {
+        var currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.findByUsername(currentUsername);
+    }
 }

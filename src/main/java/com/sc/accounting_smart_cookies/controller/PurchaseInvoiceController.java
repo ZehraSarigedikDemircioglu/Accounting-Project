@@ -8,11 +8,13 @@ import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import com.sc.accounting_smart_cookies.service.ProductService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/purchaseInvoices")
 public class PurchaseInvoiceController {
 
@@ -20,13 +22,6 @@ public class PurchaseInvoiceController {
     private final InvoiceProductService invoiceProductService;
     private final ClientVendorService clientVendorService;
     private final ProductService productService;
-
-    public PurchaseInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService, ClientVendorService clientVendorService, ProductService productService) {
-        this.invoiceService = invoiceService;
-        this.invoiceProductService = invoiceProductService;
-        this.clientVendorService = clientVendorService;
-        this.productService = productService;
-    }
 
     @GetMapping("/list")
     public String list(Model model) {
@@ -73,7 +68,8 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/addInvoiceProduct/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute("invoice") InvoiceDTO invoiceDTO, Model model) {
+    public String update(@PathVariable("id") Long id, @ModelAttribute("invoice") InvoiceDTO invoiceDTO,
+                         @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO, Model model) {
 
 // Invoice update Object:
         model.addAttribute("invoice", invoiceDTO);
@@ -85,6 +81,8 @@ public class PurchaseInvoiceController {
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
 
+        invoiceProductService.save(invoiceProductDTO);
+
         return "redirect:/purchaseInvoices/addInvoiceProduct/" + invoiceDTO.getId();
     }
 
@@ -95,5 +93,13 @@ public class PurchaseInvoiceController {
 
         return "redirect:/purchaseInvoices/list";
     }
+
+//    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
+//    public String delete(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
+//
+//        invoiceService.deleteById(invoiceId);
+//ty
+//        return "redirect:/purchaseInvoices/list";
+//    }
 
 }

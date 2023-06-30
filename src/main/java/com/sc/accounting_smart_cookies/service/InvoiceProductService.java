@@ -1,6 +1,8 @@
 package com.sc.accounting_smart_cookies.service;
 
+import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
+import com.sc.accounting_smart_cookies.enums.InvoiceType;
 
 import java.util.List;
 
@@ -10,5 +12,6 @@ public interface InvoiceProductService {
 
     InvoiceProductDTO findById(Long id);
 
+    InvoiceProductDTO save(InvoiceProductDTO invoiceProductDTO);
 
 }

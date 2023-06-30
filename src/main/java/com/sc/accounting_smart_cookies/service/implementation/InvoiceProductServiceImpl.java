@@ -43,4 +43,13 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         return invoiceProductDTOConverter.convert(id);
     }
+
+    @Override
+    public InvoiceProductDTO save(InvoiceProductDTO invoiceProductDTO) {
+
+        InvoiceProduct invoiceProduct = invoiceProductRepository.save(
+                mapperUtil.convert(invoiceProductDTO, new InvoiceProduct()));
+
+        return mapperUtil.convert(invoiceProduct, new InvoiceProductDTO());
+    }
 }

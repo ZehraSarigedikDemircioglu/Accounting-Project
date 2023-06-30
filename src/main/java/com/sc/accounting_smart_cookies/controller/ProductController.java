@@ -45,16 +45,16 @@ public class ProductController {
     @GetMapping("/update/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.findById(id));
-        model.addAttribute("products", productService.findAll());
+//        model.addAttribute("products", productService.findAll());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
         model.addAttribute("categories", categoryService.listAllCategories());
 
         return "product/product-update";
     }
 
-    @PostMapping("/update")
-    public String updateProduct(@ModelAttribute("product") ProductDTO productDTO) {
-        productService.update(productDTO);
+    @PostMapping("/update/{id}")
+    public String updateProduct(@PathVariable("id") Long id, @ModelAttribute("product") ProductDTO productDTO) {
+        productService.update(id, productDTO);
         return "redirect:/products/list";
     }
 

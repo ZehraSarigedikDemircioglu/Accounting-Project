@@ -11,6 +11,5 @@ public interface ExchangeRateClient {
     @GetMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     ExchangeRates getExchangeRates();
 
-    //https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json
 
 }

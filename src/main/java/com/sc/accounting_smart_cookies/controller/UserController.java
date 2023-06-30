@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.UserDTO;
+import com.sc.accounting_smart_cookies.service.CompanyService;
 import com.sc.accounting_smart_cookies.service.RoleService;
 import com.sc.accounting_smart_cookies.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -13,11 +14,12 @@ public class UserController {
 
     private final RoleService roleService;
     private final UserService userService;
-//    private final CompanyService companyService;
+    private final CompanyService companyService;
 
-    public UserController(RoleService roleService, UserService userService) {
+    public UserController(RoleService roleService, UserService userService, CompanyService companyService) {
         this.roleService = roleService;
         this.userService = userService;
+        this.companyService = companyService;
     }
 
 
@@ -38,7 +40,7 @@ public class UserController {
 
         model.addAttribute("userRoles", roleService.getAllRoles());
 
-//        model.addAttribute("companies",companyService.listAllCompanies());
+        model.addAttribute("companies",companyService.listAllCompanies());
 
         model.addAttribute("users", userService.getAllUsers());
 
@@ -58,7 +60,7 @@ public class UserController {
 
         model.addAttribute("userRoles", roleService.getAllRoles());
 
-//        model.addAttribute("companies",companyService.listAllCompanies());
+        model.addAttribute("companies",companyService.listAllCompanies());
 
         return "/user/user-create";
     }

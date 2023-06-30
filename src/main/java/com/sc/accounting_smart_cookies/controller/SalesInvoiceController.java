@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.controller;
 
+import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import org.springframework.stereotype.Controller;
@@ -24,4 +25,14 @@ public class SalesInvoiceController {
 
         return "invoice/sales-invoice-list";
     }
+
+//    @GetMapping("/create")
+//    public String create(Model model) {
+//
+//        model.addAttribute("newSalesInvoice", invoiceService.getNewInvoice());
+//
+//        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
+//
+//        return "invoice/purchase-invoice-create";
+//    }
 }

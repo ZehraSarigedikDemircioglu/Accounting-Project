@@ -15,5 +15,4 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     Invoice findTopByOrderByInvoiceNoDesc();
 
-    Invoice findByInvoiceNo(String invoiceNo);
 }

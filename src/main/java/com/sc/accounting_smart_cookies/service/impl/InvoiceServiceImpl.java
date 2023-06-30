@@ -58,7 +58,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         InvoiceDTO newInvoice = new InvoiceDTO();
         newInvoice.setDate(LocalDate.now());
-        newInvoice.setInvoiceNo("P" + getNextInvoiceNo().substring(1));
+//        newInvoice.setInvoiceNo("P" + getNextInvoiceNo().substring(1));
 
         return newInvoice;
     }
@@ -72,25 +72,16 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setIsDeleted(true);
         invoiceRepository.save(invoice);
 
-//// check if User can be deleted:
-//        if (checkIfUserCanBeDeleted(user)) {
-//            // change isDeleted field to true
-//            user.setIsDeleted(true);
-//            user.setUserName(user.getUserName() + "-" + user.getId());
-//            // ^^ keeps this altered username in DB for future reference while
-//            // allowing for creation of the same username in the future
+    }
+
+//    private String getNextInvoiceNo() {
 //
-//            // save the Object in DB
-//            userRepository.save(user);
-//        }
-//        // no else, just won't be able to delete User
-//        // can throw an exception in the future
-
-    }
-
-    private String getNextInvoiceNo() {
-
-        return (invoiceRepository.findTopByOrderByInvoiceNoDesc()).getInvoiceNo();
-    }
+//        Integer invoiceNo = Integer.parseInt((invoiceRepository.
+//                findTopByOrderByInvoiceNoDesc()).getInvoiceNo());
+//
+//        if ()
+//
+//        return "P-" + (invoiceNo + 1);
+//    }
 
 }

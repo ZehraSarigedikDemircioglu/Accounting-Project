@@ -15,4 +15,6 @@ public interface InvoiceService {
     InvoiceDTO findById(Long id);
 
     InvoiceDTO getNewInvoice();
+
+    void deleteById(Long id);
 }

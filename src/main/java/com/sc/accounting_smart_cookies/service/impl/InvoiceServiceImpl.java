@@ -63,6 +63,31 @@ public class InvoiceServiceImpl implements InvoiceService {
         return newInvoice;
     }
 
+    @Override
+    public void deleteById(Long id) {
+
+        Invoice invoice = invoiceRepository.findById(id).orElseThrow();
+
+
+        invoice.setIsDeleted(true);
+        invoiceRepository.save(invoice);
+
+//// check if User can be deleted:
+//        if (checkIfUserCanBeDeleted(user)) {
+//            // change isDeleted field to true
+//            user.setIsDeleted(true);
+//            user.setUserName(user.getUserName() + "-" + user.getId());
+//            // ^^ keeps this altered username in DB for future reference while
+//            // allowing for creation of the same username in the future
+//
+//            // save the Object in DB
+//            userRepository.save(user);
+//        }
+//        // no else, just won't be able to delete User
+//        // can throw an exception in the future
+
+    }
+
     private String getNextInvoiceNo() {
 
         return (invoiceRepository.findTopByOrderByInvoiceNoDesc()).getInvoiceNo();

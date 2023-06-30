@@ -45,7 +45,6 @@ public class ProductController {
     @GetMapping("/update/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.findById(id));
-//        model.addAttribute("products", productService.findAll());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
         model.addAttribute("categories", categoryService.listAllCategories());
 

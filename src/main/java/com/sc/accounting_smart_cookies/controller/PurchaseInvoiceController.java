@@ -72,6 +72,22 @@ public class PurchaseInvoiceController {
         return "invoice/purchase-invoice-update";
     }
 
+    @PostMapping("/update")
+    public String update(@ModelAttribute InvoiceDTO invoiceDTO, Model model) {
+
+// Invoice update Object:
+//        model.addAttribute("invoice", invoiceService.findById(id));
+
+        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
+        model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
+        model.addAttribute("products", productService.findAll());
+
+// InvoiceProduct list:
+//        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
+
+        return "invoice/purchase-invoice-update";
+    }
+
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
 

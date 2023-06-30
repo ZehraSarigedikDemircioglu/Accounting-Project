@@ -1,8 +1,7 @@
-package com.sc.accounting_smart_cookies.service.impl;
+package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.UserDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
-import com.sc.accounting_smart_cookies.entity.Role;
 import com.sc.accounting_smart_cookies.entity.User;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
@@ -13,7 +12,6 @@ import com.sc.accounting_smart_cookies.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

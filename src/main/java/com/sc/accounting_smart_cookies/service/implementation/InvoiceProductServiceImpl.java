@@ -1,4 +1,4 @@
-package com.sc.accounting_smart_cookies.service.impl;
+package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.converter.InvoiceProductDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;

@@ -1,4 +1,4 @@
-package com.sc.accounting_smart_cookies.service.impl;
+package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.converter.InvoiceDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
@@ -11,7 +11,6 @@ import com.sc.accounting_smart_cookies.repository.InvoiceRepository;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import com.sc.accounting_smart_cookies.service.SecurityService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

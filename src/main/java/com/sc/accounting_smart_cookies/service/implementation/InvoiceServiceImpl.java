@@ -90,6 +90,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         return mapperUtil.convert(returnInvoice, new InvoiceDTO());
     }
 
+    @Override
+    public void approveInvoiceById(Long id) {
+
+        Optional<Invoice> invoice = invoiceRepository.findById(id);
+
+        if (invoice.isPresent()) {
+            invoice.get().setInvoiceStatus(InvoiceStatus.APPROVED);
+            invoiceRepository.save(invoice.get());
+        }
+
+    }
+
     private String generateInvoiceNo(InvoiceType invoiceType) {
 
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());

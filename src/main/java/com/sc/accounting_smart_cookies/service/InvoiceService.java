@@ -20,4 +20,6 @@ public interface InvoiceService {
     void deleteById(Long id);
 
     InvoiceDTO save(InvoiceDTO invoiceDTO, InvoiceType invoiceType);
+
+    void approveInvoiceById(Long id);
 }

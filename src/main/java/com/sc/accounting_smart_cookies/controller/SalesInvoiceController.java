@@ -4,10 +4,7 @@ import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
-import com.sc.accounting_smart_cookies.service.ClientVendorService;
-import com.sc.accounting_smart_cookies.service.InvoiceProductService;
-import com.sc.accounting_smart_cookies.service.InvoiceService;
-import com.sc.accounting_smart_cookies.service.ProductService;
+import com.sc.accounting_smart_cookies.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +19,7 @@ public class SalesInvoiceController {
     private final ClientVendorService clientVendorService;
     private final ProductService productService;
     private final InvoiceProductService invoiceProductService;
+    private final CompanyService companyService;
 
     @GetMapping("/list")
     public String listSalesInvoices(Model model) {
@@ -32,7 +30,7 @@ public class SalesInvoiceController {
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
+    public String createInvoice(Model model) {
 
         model.addAttribute("newSalesInvoice", invoiceService.getNewInvoice(InvoiceType.SALES));
 
@@ -42,7 +40,7 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/create")
-    public String insert(@ModelAttribute("newSalesInvoice") InvoiceDTO invoiceDTO) {
+    public String saveInvoice(@ModelAttribute("newSalesInvoice") InvoiceDTO invoiceDTO) {
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.SALES);
 
@@ -97,4 +95,24 @@ public class SalesInvoiceController {
 
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
+
+    @GetMapping("/approve/{id}")
+    public String approveInvoice(@PathVariable("id") Long id) {
+
+        invoiceService.approveInvoiceById(id);
+
+        return "redirect:/salesInvoices/list";
+    }
+
+    @GetMapping("/print/{id}")
+    public String printInvoice(@PathVariable("id") Long id, Model model) {
+
+        model.addAttribute("invoice", invoiceService.findById(id));
+        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
+
+//        model.addAttribute("company", companyService.findCompanyByInvoice_Id(id));
+
+        return "invoice/invoice_print";
+    }
+
 }

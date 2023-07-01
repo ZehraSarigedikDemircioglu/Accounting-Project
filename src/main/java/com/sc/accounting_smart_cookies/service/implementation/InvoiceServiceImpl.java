@@ -4,6 +4,7 @@ import com.sc.accounting_smart_cookies.converter.InvoiceDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Invoice;
+import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,11 +70,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public void deleteById(Long id) {
 
-        Invoice invoice = invoiceRepository.findById(id).orElseThrow();
+        Optional<Invoice> invoice = invoiceRepository.findById(id);
 
-        invoice.setIsDeleted(true);
-        invoiceRepository.save(invoice);
-
+        if (invoice.isPresent()) {
+            invoice.get().setIsDeleted(true);
+            invoiceRepository.save(invoice.get());
+        }
     }
 
     @Override

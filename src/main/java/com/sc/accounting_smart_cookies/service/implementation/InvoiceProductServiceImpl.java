@@ -9,6 +9,8 @@ import com.sc.accounting_smart_cookies.entity.Product;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.InvoiceProductRepository;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
+import com.sc.accounting_smart_cookies.service.InvoiceService;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +19,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     private final InvoiceProductRepository invoiceProductRepository;
     private final MapperUtil mapperUtil;
     private final InvoiceProductDTOConverter invoiceProductDTOConverter;
-
-    public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository, MapperUtil mapperUtil,
-                                     @Lazy InvoiceProductDTOConverter invoiceProductDTOConverter) {
-        this.invoiceProductRepository = invoiceProductRepository;
-        this.mapperUtil = mapperUtil;
-        this.invoiceProductDTOConverter = invoiceProductDTOConverter;
-    }
+    private final InvoiceService invoiceService;
 
     @Override
     public List<InvoiceProductDTO> findAllByInvoiceId(Long invoiceId) {
@@ -49,10 +46,14 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public InvoiceProductDTO save(InvoiceProductDTO invoiceProductDTO) {
+    public InvoiceProductDTO save(InvoiceProductDTO invoiceProductDTO, Long invoiceId) {
 
-        InvoiceProduct invoiceProduct = invoiceProductRepository.save(
-                mapperUtil.convert(invoiceProductDTO, new InvoiceProduct()));
+        Invoice invoice = mapperUtil.convert(invoiceService.findById(invoiceId), new Invoice());
+        InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDTO, new InvoiceProduct());
+
+        invoiceProduct.setInvoice(invoice);
+
+        invoiceProductRepository.save(invoiceProduct);
 
         return mapperUtil.convert(invoiceProduct, new InvoiceProductDTO());
     }

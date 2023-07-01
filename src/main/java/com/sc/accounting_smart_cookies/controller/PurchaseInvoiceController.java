@@ -68,38 +68,48 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/addInvoiceProduct/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute("invoice") InvoiceDTO invoiceDTO,
-                         @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO, Model model) {
+    public String update(@PathVariable("id") Long id,
+                         @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO) {
 
-// Invoice update Object:
-        model.addAttribute("invoice", invoiceDTO);
-        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
+        invoiceProductService.save(invoiceProductDTO, id);
 
-        model.addAttribute("newInvoiceProduct", invoiceProductService.findById(id));
-        model.addAttribute("products", productService.findAll());
-
-// InvoiceProduct list:
-        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
-
-        invoiceProductService.save(invoiceProductDTO);
-
-        return "redirect:/purchaseInvoices/addInvoiceProduct/" + invoiceDTO.getId();
+        return "redirect:/purchaseInvoices/update/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public String deleteInvoice(@PathVariable("id") Long id) {
 
         invoiceService.deleteById(id);
 
         return "redirect:/purchaseInvoices/list";
     }
 
-//    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
-//    public String delete(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
-//
-//        invoiceService.deleteById(invoiceId);
-//ty
-//        return "redirect:/purchaseInvoices/list";
-//    }
+    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
+    public String deleteInvoiceProduct(@PathVariable("invoiceId") Long invoiceId,
+                         @PathVariable("invoiceProductId") Long invoiceProductId) {
+
+        invoiceProductService.deleteById(invoiceProductId);
+
+        return "redirect:/purchaseInvoices/update";
+    }
+
+    @GetMapping("/approve/{id}")
+    public String approveInvoice(@PathVariable("id") Long id) {
+
+        invoiceService.approveInvoiceById(id);
+
+        return "redirect:/purchaseInvoices/list";
+    }
+
+    @GetMapping("/print/{id}")
+    public String printInvoice(@PathVariable("id") Long id, Model model) {
+
+        model.addAttribute("invoice", invoiceService.findById(id));
+        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
+
+//        model.addAttribute("company", companyService.findCompanyByInvoice_Id(id));
+
+        return "invoice/invoice_print";
+    }
 
 }

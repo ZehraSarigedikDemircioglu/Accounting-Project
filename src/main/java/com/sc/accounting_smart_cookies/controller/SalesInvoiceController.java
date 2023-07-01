@@ -52,33 +52,24 @@ public class SalesInvoiceController {
 
 // Invoice update Object:
         model.addAttribute("invoice", invoiceService.findById(id));
-        model.addAttribute("clients", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
+        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
 
         model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
-        model.addAttribute("products", productService.findAll());       // findAllByInvoice???????????
-
-// InvoiceProduct list:
-        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
-
-        return "invoice/sales-invoice-update";
-    }
-
-    @PostMapping("/addInvoiceProduct/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute("invoice") InvoiceDTO invoiceDTO, Model model) {
-
-// Invoice update Object:
-        model.addAttribute("invoice", invoiceDTO);
-        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
-
-        model.addAttribute("newInvoiceProduct", invoiceProductService.findById(id));
         model.addAttribute("products", productService.findAll());
 
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
 
-        invoiceService.save(invoiceDTO, InvoiceType.SALES);
+        return "invoice/purchase-invoice-update";
+    }
 
-        return "redirect:/salesInvoices/update/" + invoiceDTO.getId();
+    @PostMapping("/addInvoiceProduct/{id}")
+    public String update(@PathVariable("id") Long id,
+                         @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO) {
+
+        invoiceProductService.save(invoiceProductDTO, id);
+
+        return "redirect:/purchaseInvoices/update/" + id;
     }
 
     @GetMapping("/delete/{id}")

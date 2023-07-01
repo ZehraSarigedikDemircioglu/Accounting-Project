@@ -18,7 +18,7 @@ public class InvoiceDTO {
     private String invoiceNo;
     private InvoiceStatus invoiceStatus;
     private InvoiceType invoiceType;
-    private LocalDate localDate;
+    private LocalDate date;
     private CompanyDTO company;
     private ClientVendorDTO clientVendor;
     private BigDecimal price;

@@ -4,6 +4,7 @@ import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "invoices")
 @Entity
+@Where(clause = "is_deleted=false")
 public class Invoice extends BaseEntity {
 
     private String invoiceNo;

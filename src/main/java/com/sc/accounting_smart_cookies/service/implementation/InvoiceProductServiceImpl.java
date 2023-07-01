@@ -44,6 +44,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     public InvoiceProductDTO findById(Long id) {
 
         InvoiceProduct invoiceProduct = invoiceProductRepository.findById(id).orElseThrow();
+
         return mapperUtil.convert(invoiceProduct, new InvoiceProductDTO());
     }
 

@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.converter;
 
+import com.sc.accounting_smart_cookies.dto.CategoryDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
@@ -8,7 +9,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InvoiceProductDTOConverter implements Converter<Long, InvoiceProductDTO> {
+public class InvoiceProductDTOConverter implements Converter<String, InvoiceProductDTO> {
 
     private final InvoiceProductService invoiceProductService;
 
@@ -17,8 +18,10 @@ public class InvoiceProductDTOConverter implements Converter<Long, InvoiceProduc
     }
 
     @Override
-    public InvoiceProductDTO convert(Long id) {
-
-        return invoiceProductService.findById(id);
+    public InvoiceProductDTO convert(String source) {
+        if (source == null || source.equals("")) {
+            return null;
+        }
+        return invoiceProductService.findById(Long.parseLong(source));
     }
 }

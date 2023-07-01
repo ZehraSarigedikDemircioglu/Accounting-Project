@@ -72,7 +72,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         invoice.setIsDeleted(true);
         invoiceRepository.save(invoice);
-
     }
 
     @Override

@@ -46,7 +46,7 @@ public class SalesInvoiceController {
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.SALES);
 
-        return "redirect:/salesInvoices/update/" + invoice.getId();
+        return "redirect:/salesInvoices/addInvoiceProduct/" + invoice.getId();
     }
 
     @GetMapping("/update/{id}")
@@ -57,7 +57,7 @@ public class SalesInvoiceController {
         model.addAttribute("clients", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
 
         model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
-        model.addAttribute("products", productService.findAll());
+        model.addAttribute("products", productService.findAll());       // findAllByInvoice???????????
 
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
@@ -73,7 +73,7 @@ public class SalesInvoiceController {
         model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
 
         model.addAttribute("newInvoiceProduct", invoiceProductService.findById(id));
-        model.addAttribute("products", productService.findAllByInvoice(invoiceDTO));
+        model.addAttribute("products", productService.findAll());
 
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
@@ -93,8 +93,8 @@ public class SalesInvoiceController {
     public String deleteInvoiceProduct(@PathVariable("invoiceId") Long invoiceId,
                                        @PathVariable("invoiceProductId") Long invoiceProductId) {
 
-        invoiceService.deleteById(invoiceId);
+        invoiceProductService.deleteById(invoiceProductId);
 
-        return "redirect:/purchaseInvoices/list";
+        return "redirect:/salesInvoices/update/" + invoiceId;
     }
 }

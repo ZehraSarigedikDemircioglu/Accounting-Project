@@ -19,5 +19,5 @@ public class InvoiceProductDTO {
    private BigDecimal profitLoss;
    private Integer remainingQty;
    private InvoiceDTO invoice;
-   private ProductDTO product;;
+   private ProductDTO product;
 }

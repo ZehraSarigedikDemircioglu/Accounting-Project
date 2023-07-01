@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.service;
 
 
+import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface ProductService {
 
     ProductDTO update(Long id, ProductDTO productDTO);
 
+    List<InvoiceDTO> findAllByInvoice(InvoiceDTO invoiceDTO);
 }

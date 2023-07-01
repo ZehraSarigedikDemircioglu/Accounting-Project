@@ -1,7 +1,9 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.converter.InvoiceProductDTOConverter;
+import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
+import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.InvoiceProductRepository;
@@ -39,9 +41,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     @Override
     public InvoiceProductDTO findById(Long id) {
 
-//        Optional<InvoiceProduct> invoiceProduct = invoiceProductRepository.findById(id);
+        InvoiceProduct invoiceProduct = invoiceProductRepository.findById(id).orElseThrow();
 
-        return invoiceProductDTOConverter.convert(id);
+        return mapperUtil.convert(invoiceProduct, new InvoiceProductDTO());
     }
 
     @Override

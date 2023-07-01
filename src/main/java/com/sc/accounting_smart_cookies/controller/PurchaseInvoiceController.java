@@ -24,7 +24,7 @@ public class PurchaseInvoiceController {
     private final ProductService productService;
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String listPurchaseInvoices(Model model) {
 
 // Purchase Invoices list:
         model.addAttribute("invoices", invoiceService.findInvoicesByType(InvoiceType.PURCHASE));
@@ -33,7 +33,7 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
+    public String createInvoice(Model model) {
 
         model.addAttribute("newPurchaseInvoice", invoiceService.getNewInvoice(InvoiceType.PURCHASE));
 
@@ -43,7 +43,7 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/create")
-    public String insert(@ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO) {
+    public String saveInvoice(@ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO) {
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.PURCHASE);
 

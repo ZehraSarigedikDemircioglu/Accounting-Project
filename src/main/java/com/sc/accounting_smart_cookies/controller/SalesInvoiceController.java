@@ -44,7 +44,7 @@ public class SalesInvoiceController {
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.SALES);
 
-        return "redirect:/salesInvoices/addInvoiceProduct/" + invoice.getId();
+        return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 
     @GetMapping("/update/{id}")
@@ -76,7 +76,9 @@ public class SalesInvoiceController {
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
 
-        return "redirect:/salesInvoices/addInvoiceProduct/" + invoiceDTO.getId();
+        invoiceService.save(invoiceDTO, InvoiceType.SALES);
+
+        return "redirect:/salesInvoices/update/" + invoiceDTO.getId();
     }
 
     @GetMapping("/delete/{id}")

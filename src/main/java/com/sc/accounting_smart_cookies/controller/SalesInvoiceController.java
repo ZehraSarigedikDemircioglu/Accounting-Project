@@ -73,7 +73,7 @@ public class SalesInvoiceController {
         model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
 
         model.addAttribute("newInvoiceProduct", invoiceProductService.findById(id));
-        model.addAttribute("products", productService.findAllByInvoice(invoiceDTO));
+        model.addAttribute("products", productService.findAll());
 
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));

@@ -6,19 +6,22 @@ import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
+import com.sc.accounting_smart_cookies.service.SecurityService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, SecurityService securityService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
+        this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -52,16 +55,31 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
-//    @Override
-//    public void activateCompany(Long companyId) {
-//       companyRepository.updateStatusById(companyId, CompanyStatus.ACTIVE);
-//
-//    }
-//
-//    @Override
-//    public void deactivateCompany(Long companyId) {
-//        companyRepository.updateStatusById(companyId, CompanyStatus.PASSIVE);
-//    }
+    @Override
+    public CompanyDTO getCompanyOfLoggedInUser() {
+        return securityService.getLoggedInUser().getCompany();
+    }
 
+    @Override
+    public CompanyDTO activateCompany(Long companyId) {
+        Company company= companyRepository.findById(companyId).orElseThrow();
+         company.setCompanyStatus(CompanyStatus.ACTIVE);
+         companyRepository.save(company);
+         return mapperUtil.convert(company, new CompanyDTO());
+    }
 
+    @Override
+    public CompanyDTO deactivateCompany(Long companyId) {
+        Company company= companyRepository.findById(companyId).orElseThrow();
+        company.setCompanyStatus(CompanyStatus.PASSIVE);
+        companyRepository.save(company);
+        return mapperUtil.convert(company, new CompanyDTO());
+    }
+
+//    @Override
+//    public List <CompanyDTO> getSortedCompanies() {
+//        List <Company> companies = companyRepository.getByCompanyStatusOrderByCompanyStatusAsc();
+//        return mapperUtil.convert(companies, new ArrayList<>());
+//
+//   }
 }

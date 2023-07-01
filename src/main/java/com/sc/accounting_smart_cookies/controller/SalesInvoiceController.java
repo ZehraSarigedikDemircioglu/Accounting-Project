@@ -52,7 +52,7 @@ public class SalesInvoiceController {
 
 // Invoice update Object:
         model.addAttribute("invoice", invoiceService.findById(id));
-        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
+        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
 
         model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
         model.addAttribute("products", productService.findAll());
@@ -60,7 +60,7 @@ public class SalesInvoiceController {
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
 
-        return "invoice/purchase-invoice-update";
+        return "invoice/sales-invoice-update";
     }
 
     @PostMapping("/addInvoiceProduct/{id}")
@@ -69,7 +69,7 @@ public class SalesInvoiceController {
 
         invoiceProductService.save(invoiceProductDTO, id);
 
-        return "redirect:/purchaseInvoices/update/" + id;
+        return "redirect:/salesInvoices/update/" + id;
     }
 
     @GetMapping("/delete/{id}")

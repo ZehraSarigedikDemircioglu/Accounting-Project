@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,9 +31,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     @Override
     public List<InvoiceProductDTO> findAllByInvoiceId(Long invoiceId) {
 
-        List<InvoiceProduct> invoices = invoiceProductRepository.findAllByInvoice_Id(invoiceId);
+        List<InvoiceProduct> invoiceProducts = invoiceProductRepository.findAllByInvoice_Id(invoiceId);
 
-        return invoices.stream().map(invoiceProduct ->
+        return invoiceProducts.stream().map(invoiceProduct ->
                         mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
                 .collect(Collectors.toList());
     }
@@ -46,16 +47,17 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public InvoiceProductDTO save(InvoiceProductDTO invoiceProductDTO, Long invoiceId) {
+    public void save(InvoiceProductDTO invoiceProductDTO, Long invoiceId) {
 
         Invoice invoice = mapperUtil.convert(invoiceService.findById(invoiceId), new Invoice());
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDTO, new InvoiceProduct());
 
         invoiceProduct.setInvoice(invoice);
+        invoiceProduct.setId(null);
+        invoiceProduct.setProfitLoss(BigDecimal.ZERO);
 
         invoiceProductRepository.save(invoiceProduct);
 
-        return mapperUtil.convert(invoiceProduct, new InvoiceProductDTO());
     }
 
     @Override

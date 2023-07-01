@@ -211,14 +211,14 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="invoice:${invoices}">
-                                                <td th:text="${invoice.invoiceNo}"></td>
-                                                <td th:text="${invoice.clientVendor.getClientVendorName}"></td>
-                                                <td th:text="${invoice.date}"></td>
-                                                <td th:text="${invoice.price}"></td>
-                                                <td th:text="${invoice.tax}"></td>
-                                                <td th:text="${invoice.total}"></td>
-                                            </tr>
+<!--                                            <tr th:each="invoice:${invoices}">-->
+<!--                                                <td th:text="${invoice.invoiceNo}"></td>-->
+<!--                                                <td th:text="${invoice.clientVendor.getClientVendorName}"></td>-->
+<!--                                                <td th:text="${invoice.date}"></td>-->
+<!--                                                <td th:text="${invoice.price}"></td>-->
+<!--                                                <td th:text="${invoice.tax}"></td>-->
+<!--                                                <td th:text="${invoice.total}"></td>-->
+<!--                                            </tr>-->
                                             </tbody>
                                         </table>
                                     </div>
@@ -240,23 +240,23 @@
                                             <tbody>
                                             <tr>
                                                 <td>Euro</td>
-                                                <td th:text="${exchangeRates.getEuro()}"></td>
+                                                <td th:text="${exchangeRates.getUsd().getEuro()}"></td>
                                             </tr>
                                             <tr>
                                                 <td>British Pound</td>
-                                                <td th:text="${exchangeRates.getBritishPound()}"></td>
+                                                <td th:text="${exchangeRates.getUsd().getBritishPound()}"></td>
                                             </tr>
                                             <tr>
                                                 <td>Canadian Dollar</td>
-                                                <td th:text="${exchangeRates.getCanadianDollar()}"></td>
+                                                <td th:text="${exchangeRates.getUsd().getCanadianDollar()}"></td>
                                             </tr>
                                             <tr>
                                                 <td>Japanese Yen</td>
-                                                <td th:text="${exchangeRates.getJapaneseYen()}"></td>
+                                                <td th:text="${exchangeRates.getUsd().getJapaneseYen()}"></td>
                                             </tr>
                                             <tr>
                                                 <td>Indian Rupee</td>
-                                                <td th:text="${exchangeRates.getIndianRupee()}"></td>
+                                                <td th:text="${exchangeRates.getUsd().getIndianRupee()}"></td>
                                             </tr>
                                             </tbody>
                                         </table>

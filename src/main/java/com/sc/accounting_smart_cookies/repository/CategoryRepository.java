@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.repository;
 
 import com.sc.accounting_smart_cookies.entity.Category;
+import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Role;
 import com.sc.accounting_smart_cookies.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,5 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+    List<Category> findAllByCompany(Company company);
 }

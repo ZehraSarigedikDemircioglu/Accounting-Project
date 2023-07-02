@@ -68,7 +68,6 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(convertedProduct);
         return mapperUtil.convert(convertedProduct, new ProductDTO());
     }
-
     @Override
     public List<ProductDTO> findAllByCompany() {
         return productRepository.findAllByCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company())).stream()

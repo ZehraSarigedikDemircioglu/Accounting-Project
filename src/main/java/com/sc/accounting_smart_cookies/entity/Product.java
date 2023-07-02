@@ -19,7 +19,6 @@ public class Product extends BaseEntity{
     private String name;
     private int quantityInStock;
     private int lowLimitAlert;
-
     @Enumerated(EnumType.STRING)
     private ProductUnit productUnit;
     @ManyToOne(fetch = FetchType.LAZY)

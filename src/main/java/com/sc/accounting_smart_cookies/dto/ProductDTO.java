@@ -27,5 +27,4 @@ public class ProductDTO {
     private ProductUnit productUnit;
     @NotNull(message =  "Category is a required field.")
     private CategoryDTO category;
-
 }

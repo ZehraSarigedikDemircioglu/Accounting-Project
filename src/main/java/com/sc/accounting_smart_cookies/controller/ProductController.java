@@ -6,8 +6,10 @@ import com.sc.accounting_smart_cookies.service.CategoryService;
 import com.sc.accounting_smart_cookies.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 
 @Controller
@@ -22,9 +24,15 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
+//    @GetMapping("/list")
+//    public String listProduct(Model model) {
+//        model.addAttribute("products", productService.findAll());
+//        return "product/product-list";
+//    }
+
     @GetMapping("/list")
-    public String listProduct(Model model) {
-        model.addAttribute("products", productService.findAll());
+    public String listProductByCompany(Model model) {
+        model.addAttribute("products", productService.findAllByCompany());
         return "product/product-list";
     }
 
@@ -37,9 +45,13 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String saveProduct(@ModelAttribute("product") ProductDTO productDTO) {
+    public String saveProduct(@Valid @ModelAttribute("newProduct") ProductDTO productDTO,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "product/product-create";
+        }
         productService.save(productDTO);
-        return "redirect:/products/create";
+        return "redirect:/products/list";
     }
 
     @GetMapping("/update/{id}")
@@ -52,7 +64,12 @@ public class ProductController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable("id") Long id, @ModelAttribute("product") ProductDTO productDTO) {
+    public String updateProduct(@PathVariable("id") Long id,
+                                @Valid @ModelAttribute("product") ProductDTO productDTO,
+                                BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "product/product-update";
+        }
         productService.update(id, productDTO);
         return "redirect:/products/list";
     }

@@ -55,6 +55,20 @@ public class CompanyController {
         return "redirect:/companies/list";
     }
 
+    @RequestMapping(value = "/activate/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String activateCompany (@PathVariable ("id") Long companyId, Model model){
+        companyService.activateCompany(companyId);
+//        model.addAttribute("companies", companyService.getSortedCompanies());
+        return "redirect:/companies/list";
+    }
+
+
+    @RequestMapping(value = "/deactivate/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String deactivateCompany (@PathVariable ("id") Long companyId, Model model){
+        companyService.deactivateCompany(companyId);
+//        model.addAttribute("companies", companyService.getSortedCompanies());
+        return "redirect:/companies/list";
+    }
 
  }
 

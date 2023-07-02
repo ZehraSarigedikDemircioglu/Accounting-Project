@@ -1,12 +1,15 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.*;
-import com.sc.accounting_smart_cookies.entity.Category;
-import com.sc.accounting_smart_cookies.entity.Product;
-import com.sc.accounting_smart_cookies.entity.Role;
+import com.sc.accounting_smart_cookies.entity.*;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CategoryRepository;
+import com.sc.accounting_smart_cookies.repository.CompanyRepository;
+import com.sc.accounting_smart_cookies.repository.UserRepository;
 import com.sc.accounting_smart_cookies.service.CategoryService;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +20,14 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
     private final MapperUtil mapperUtil;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyRepository companyRepository, MapperUtil mapperUtil) {
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
         this.mapperUtil = mapperUtil;
     }
 
@@ -33,9 +40,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> listAllCategories() {
-        List<Category> categoryList=categoryRepository.findAll();
-        return categoryList.stream().map(category -> mapperUtil.convert(category, new CategoryDTO()))
-                .collect(Collectors.toList());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        User LoggedInUser = userRepository.findByUsername(auth.getName());
+
+            Company company = companyRepository.findById(LoggedInUser.getCompany().getId()).orElseThrow();
+
+            List<Category> categoryList = categoryRepository.findAllByCompany(company);
+            return categoryList.stream().map(category -> mapperUtil.convert(category, new CategoryDTO())).
+                    collect(Collectors.toList());
+
     }
 
 
@@ -63,4 +77,12 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(convertedCategory);
         return mapperUtil.convert(convertedCategory, new CategoryDTO());
     }
+
+//    @Override
+//    public List<CategoryDTO> listAllCategoriesByCompany(Company company) {
+//
+//        Category category = categoryRepository.findAllByCompany()
+//
+//        return null;
+//    }
 }

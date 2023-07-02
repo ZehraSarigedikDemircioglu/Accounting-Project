@@ -20,8 +20,11 @@ public class InvoiceProductDTOConverter implements Converter<String, InvoiceProd
 
     @SneakyThrows
     @Override
-    public InvoiceProductDTO convert(String id){
-        return invoiceProductService.findById(Long.parseLong(id));
+    public InvoiceProductDTO convert(String source){
+        if (source == null || source.equals("")) {
+            return null;
+        }
+        return invoiceProductService.findById(Long.parseLong(source));
     }
 
 }

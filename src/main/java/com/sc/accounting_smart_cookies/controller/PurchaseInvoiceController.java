@@ -90,7 +90,7 @@ public class PurchaseInvoiceController {
 
         invoiceProductService.deleteById(invoiceProductId);
 
-        return "redirect:/purchaseInvoices/update";
+        return "redirect:/purchaseInvoices/update" + invoiceId;
     }
 
     @GetMapping("/approve/{id}")

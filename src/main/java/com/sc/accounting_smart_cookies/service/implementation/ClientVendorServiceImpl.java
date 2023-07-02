@@ -36,7 +36,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public List<ClientVendorDTO> findAll() {
-        List<ClientVendor> clientVendors = clientVendorRepository.findAll();
+        List<ClientVendor> clientVendors = clientVendorRepository.getClientVendorsSortedByTitleAndName();
         return clientVendors.stream().map(clientVendor1 -> mapperUtil.convert(clientVendor1, new ClientVendorDTO())).collect(Collectors.toList());
     }
 

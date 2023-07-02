@@ -19,6 +19,6 @@ public interface CategoryService {
 
     CategoryDTO update(CategoryDTO categoryDTO, Long id);
 
-    //List<CategoryDTO> listAllCategoriesByCompany(Company company);
+
 
 }

@@ -90,7 +90,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO getCompanyOfLoggedInUser() {
-        return  mapperUtil.convert(securityService.getLoggedInUser(),new CompanyDTO());
+        return  securityService.getLoggedInUser().getCompany();
     }
 
 

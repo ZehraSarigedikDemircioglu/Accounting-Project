@@ -1,10 +1,7 @@
 package com.sc.accounting_smart_cookies.dto;
 
 import com.sc.accounting_smart_cookies.annotation.UniqueEmail;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
@@ -13,6 +10,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @UniqueEmail
+@Builder
 public class UserDTO {
 
     private Long id;

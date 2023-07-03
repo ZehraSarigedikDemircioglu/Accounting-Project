@@ -1,16 +1,14 @@
 package com.sc.accounting_smart_cookies.dto;
 
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClientVendorDTO{
 
     private Long id;

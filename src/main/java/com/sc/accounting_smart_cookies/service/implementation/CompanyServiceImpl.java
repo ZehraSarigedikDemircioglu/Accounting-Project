@@ -91,6 +91,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDTO getCompanyOfLoggedInUser() {
         return   securityService.getLoggedInUser().getCompany();
+
     }
 
 

@@ -22,4 +22,6 @@ public interface InvoiceService {
     InvoiceDTO save(InvoiceDTO invoiceDTO, InvoiceType invoiceType);
 
     void approveInvoiceById(Long id);
+
+    InvoiceDTO update(Long id, InvoiceDTO invoiceDTO);
 }

@@ -63,6 +63,14 @@ public class SalesInvoiceController {
         return "invoice/sales-invoice-update";
     }
 
+    @PostMapping("/update/{id}")
+    public String updateList(@PathVariable("id") Long id, @ModelAttribute("invoice") InvoiceDTO invoiceDTO) {
+
+        invoiceService.update(id, invoiceDTO);
+
+        return "redirect:/salesInvoices/list";
+    }
+
     @PostMapping("/addInvoiceProduct/{id}")
     public String update(@PathVariable("id") Long id,
                          @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO) {

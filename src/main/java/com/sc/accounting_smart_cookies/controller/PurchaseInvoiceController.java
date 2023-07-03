@@ -67,6 +67,14 @@ public class PurchaseInvoiceController {
         return "invoice/purchase-invoice-update";
     }
 
+    @PostMapping("/update/{id}")
+    public String updateList(@PathVariable("id") Long id, @ModelAttribute("invoice") InvoiceDTO invoiceDTO) {
+
+        invoiceService.update(id, invoiceDTO);
+
+        return "redirect:/purchaseInvoices/list";
+    }
+
     @PostMapping("/addInvoiceProduct/{id}")
     public String update(@PathVariable("id") Long id,
                          @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO) {
@@ -86,11 +94,11 @@ public class PurchaseInvoiceController {
 
     @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
     public String deleteInvoiceProduct(@PathVariable("invoiceId") Long invoiceId,
-                         @PathVariable("invoiceProductId") Long invoiceProductId) {
+                                       @PathVariable("invoiceProductId") Long invoiceProductId) {
 
         invoiceProductService.deleteById(invoiceProductId);
 
-        return "redirect:/purchaseInvoices/update" + invoiceId;
+        return "redirect:/purchaseInvoices/update/" + invoiceId;
     }
 
     @GetMapping("/approve/{id}")

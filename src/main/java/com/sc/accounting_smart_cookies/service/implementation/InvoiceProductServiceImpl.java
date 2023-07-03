@@ -48,7 +48,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDTO, new InvoiceProduct());
 
         invoiceProduct.setInvoice(invoice);
-        invoiceProduct.setId(null);
+//        invoiceProduct.setId(null);
         invoiceProduct.setProfitLoss(BigDecimal.ZERO);
 
         invoiceProductRepository.save(invoiceProduct);

@@ -2,6 +2,7 @@ package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.converter.InvoiceDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
+import com.sc.accounting_smart_cookies.entity.ClientVendor;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
@@ -26,7 +27,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
     private final MapperUtil mapperUtil;
-    private final InvoiceDTOConverter invoiceDTOConverter;
     private final SecurityService securityService;
 
     @Override
@@ -100,6 +100,16 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceRepository.save(invoice.get());
         }
 
+    }
+
+    @Override
+    public InvoiceDTO update(Long id, InvoiceDTO invoiceDTO) {
+
+        Invoice invoice = invoiceRepository.findById(id).orElseThrow();
+
+        invoice.setClientVendor(mapperUtil.convert(invoiceDTO.getClientVendor(), new ClientVendor()));
+
+        return mapperUtil.convert(invoiceRepository.save(invoice), new InvoiceDTO());
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType) {

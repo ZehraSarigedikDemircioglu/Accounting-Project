@@ -7,6 +7,8 @@ public interface UserService {
 
     List<UserDTO>getAllUsers();
 
+    boolean findByUsername1(String username);
+
     UserDTO findByUsername(String username);
 
     UserDTO findById(Long id);

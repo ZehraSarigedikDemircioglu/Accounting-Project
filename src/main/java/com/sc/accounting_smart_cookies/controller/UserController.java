@@ -6,7 +6,10 @@ import com.sc.accounting_smart_cookies.service.RoleService;
 import com.sc.accounting_smart_cookies.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -21,7 +24,6 @@ public class UserController {
         this.userService = userService;
         this.companyService = companyService;
     }
-
 
     @GetMapping("/list")
     public String getAllUsers(Model model) {
@@ -38,9 +40,9 @@ public class UserController {
 
         model.addAttribute("user", userService.findById(id));
 
-        model.addAttribute("userRoles", roleService.getAllRoles());
+        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
 
-        model.addAttribute("companies",companyService.listAllCompanies());
+        model.addAttribute("companies", companyService.getAllCompaniesForCurrentUser());
 
         model.addAttribute("users", userService.getAllUsers());
 
@@ -48,26 +50,51 @@ public class UserController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateUser(@ModelAttribute("user") UserDTO dto, @PathVariable("id") Long id) {
+    public String updateUser(@Valid @ModelAttribute("user") UserDTO dto, BindingResult bindingResult, @PathVariable("id") Long id, Model model) {
+        boolean emailExist=userService.findByUsername1(dto.getUsername());
 
+        if (bindingResult.hasErrors()) {
+            if (emailExist) {
+                bindingResult.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
+            }
+
+            model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+
+            model.addAttribute("companies", companyService.getAllCompaniesForCurrentUser());
+
+            model.addAttribute("users", userService.getAllUsers());
+            return "user/user-update";
+
+        }
+        dto.setUsername(dto.getUsername());
         userService.updateUser(dto);
         return "redirect:/users/list";
     }
 
     @GetMapping("/create")
     public String createUser(Model model) {
-        model.addAttribute("newUser", new UserDTO());
+        model.addAttribute("user", new UserDTO());
 
-        model.addAttribute("userRoles", roleService.getAllRoles());
+        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
 
-        model.addAttribute("companies",companyService.listAllCompanies());
+        model.addAttribute("companies", companyService.getAllCompaniesForCurrentUser());
 
-        return "/user/user-create";
+        return "user/user-create";
     }
 
     @PostMapping("/create")
-    public String createUser(@ModelAttribute("user") UserDTO dto) {
+    public String createUser(@Valid @ModelAttribute("user") UserDTO dto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+
+            model.addAttribute("companies", companyService.getAllCompaniesForCurrentUser());
+
+            return "/user/user-create";
+        }
+
         userService.save(dto);
+
         return "redirect:/users/list";
     }
 

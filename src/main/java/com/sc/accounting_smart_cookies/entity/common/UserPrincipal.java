@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.entity.common;
 
 import com.sc.accounting_smart_cookies.entity.User;
+import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,7 +44,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getCompany().getCompanyStatus().equals(CompanyStatus.PASSIVE);
     }
 
     @Override

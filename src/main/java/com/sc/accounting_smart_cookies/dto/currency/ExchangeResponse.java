@@ -1,15 +1,12 @@
-package com.sc.accounting_smart_cookies.dto;
+package com.sc.accounting_smart_cookies.dto.currency;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExchangeRates {
+public class ExchangeResponse {
 
     private String date;
     private USD usd;
-
 }

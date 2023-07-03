@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
+import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Product;
@@ -74,4 +75,5 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> mapperUtil.convert(product, new ProductDTO()))
                 .collect(Collectors.toList());
     }
+
 }

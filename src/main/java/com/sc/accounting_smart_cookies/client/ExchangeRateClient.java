@@ -1,6 +1,6 @@
 package com.sc.accounting_smart_cookies.client;
 
-import com.sc.accounting_smart_cookies.dto.ExchangeRates;
+import com.sc.accounting_smart_cookies.dto.currency.ExchangeResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface ExchangeRateClient {
 
     @GetMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ExchangeRates getExchangeRates();
+    ExchangeResponse getExchangeRates();
 
 
 }

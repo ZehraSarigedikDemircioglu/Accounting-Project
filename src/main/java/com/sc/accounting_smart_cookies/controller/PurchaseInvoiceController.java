@@ -4,10 +4,7 @@ import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
-import com.sc.accounting_smart_cookies.service.ClientVendorService;
-import com.sc.accounting_smart_cookies.service.InvoiceProductService;
-import com.sc.accounting_smart_cookies.service.InvoiceService;
-import com.sc.accounting_smart_cookies.service.ProductService;
+import com.sc.accounting_smart_cookies.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +19,7 @@ public class PurchaseInvoiceController {
     private final InvoiceProductService invoiceProductService;
     private final ClientVendorService clientVendorService;
     private final ProductService productService;
+    private final CompanyService companyService;
 
     @GetMapping("/list")
     public String listPurchaseInvoices(Model model) {
@@ -115,7 +113,7 @@ public class PurchaseInvoiceController {
         model.addAttribute("invoice", invoiceService.findById(id));
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
 
-//        model.addAttribute("company", companyService.findCompanyByInvoice_Id(id));
+        model.addAttribute("company", companyService.getCompanyOfLoggedInUser());
 
         return "invoice/invoice_print";
     }

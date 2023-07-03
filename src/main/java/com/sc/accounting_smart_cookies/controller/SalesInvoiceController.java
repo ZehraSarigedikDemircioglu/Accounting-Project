@@ -52,7 +52,7 @@ public class SalesInvoiceController {
 
 // Invoice update Object:
         model.addAttribute("invoice", invoiceService.findById(id));
-        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
+        model.addAttribute("clients", clientVendorService.findVendorsByType(ClientVendorType.CLIENT));
 
         model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
         model.addAttribute("products", productService.findAll());

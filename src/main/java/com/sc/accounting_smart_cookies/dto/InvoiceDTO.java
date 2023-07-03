@@ -2,14 +2,14 @@ package com.sc.accounting_smart_cookies.dto;
 
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvoiceDTO {
@@ -24,4 +24,5 @@ public class InvoiceDTO {
     private BigDecimal price;
     private Integer tax;
     private BigDecimal total;
+    private List<InvoiceProductDTO> invoiceProducts;
 }

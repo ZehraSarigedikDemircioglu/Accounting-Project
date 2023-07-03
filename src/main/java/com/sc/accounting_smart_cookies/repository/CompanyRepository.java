@@ -17,9 +17,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
 //    List<Company> getByCompanyStatusOrderByCompanyStatusAsc();
 
-
       @Query (value = "select * from Company where id!=1", nativeQuery= true)
       List <Company> getCompaniesById();
-
 
 }

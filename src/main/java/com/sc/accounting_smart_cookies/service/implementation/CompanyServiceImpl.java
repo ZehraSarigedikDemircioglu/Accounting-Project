@@ -70,16 +70,21 @@ public class CompanyServiceImpl implements CompanyService {
        }
     }
 
-//    @Override
-//    public void activateCompany(Long companyId) {
+    @Override
+    public void activateCompany(Long companyId) {
 //       companyRepository.updateStatusById(companyId, CompanyStatus.ACTIVE);
-//
-//    }
-//
-//    @Override
-//    public void deactivateCompany(Long companyId) {
+
+    }
+
+    @Override
+    public void deactivateCompany(Long companyId) {
 //        companyRepository.updateStatusById(companyId, CompanyStatus.PASSIVE);
-//    }
+    }
+
+    @Override
+    public CompanyDTO getCompanyOfLoggedInUser() {
+        return  mapperUtil.convert(securityService.getLoggedInUser(),new CompanyDTO());
+    }
 
 
 }

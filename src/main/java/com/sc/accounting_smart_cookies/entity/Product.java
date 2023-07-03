@@ -4,6 +4,7 @@ import com.sc.accounting_smart_cookies.enums.ProductUnit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -12,17 +13,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "products")
+@Where(clause = "is_deleted=false")
 public class Product extends BaseEntity{
 
     private String name;
-    private Integer quantityInStock;
-    private Integer lowLimitAlert;
-
+    private int quantityInStock;
+    private int lowLimitAlert;
     @Enumerated(EnumType.STRING)
     private ProductUnit productUnit;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 }

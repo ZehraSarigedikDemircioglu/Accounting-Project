@@ -18,5 +18,5 @@ public interface ClientVendorService {
 
     void deleteById(Long id);
 
-    List<ClientVendorDTO> findVendorsByType(ClientVendorType clientVendorType);
+   List<ClientVendorDTO> findVendorsByType(ClientVendorType clientVendorType);
 }

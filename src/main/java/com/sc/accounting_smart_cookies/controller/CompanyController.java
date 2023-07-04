@@ -30,13 +30,13 @@ public class CompanyController {
     @GetMapping("/create")
     public String createCompany( Model model) {
         model.addAttribute("newCompany", new CompanyDTO());
-        model.addAttribute("address", new AddressDTO());
+//        model.addAttribute("address", new AddressDTO());
 
         return "/company/company-create";
     }
 
     @PostMapping("/create")
-    public String insertCompany (@Valid @ModelAttribute("company") CompanyDTO companyDTO, BindingResult bindingResult) {
+    public String insertCompany (@Valid @ModelAttribute("newCompany") CompanyDTO companyDTO, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "company/company-create";

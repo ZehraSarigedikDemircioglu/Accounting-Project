@@ -1,10 +1,7 @@
 package com.sc.accounting_smart_cookies.dto;
 
 import com.sc.accounting_smart_cookies.enums.CompanyStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
@@ -13,7 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

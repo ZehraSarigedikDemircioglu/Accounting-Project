@@ -1,10 +1,7 @@
 package com.sc.accounting_smart_cookies;
 
 import com.sc.accounting_smart_cookies.dto.*;
-import com.sc.accounting_smart_cookies.entity.Category;
-import com.sc.accounting_smart_cookies.entity.ClientVendor;
-import com.sc.accounting_smart_cookies.entity.Company;
-import com.sc.accounting_smart_cookies.entity.User;
+import com.sc.accounting_smart_cookies.entity.*;
 import com.sc.accounting_smart_cookies.enums.*;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import org.modelmapper.ModelMapper;
@@ -99,6 +96,10 @@ public class TestDocumentInitializer {
                 .build();
     }
 
+    public static Invoice getInvoiceProductEntity(){
+        return mapperUtil.convert(getInvoiceProduct(), new Invoice());
+    }
+
     public static InvoiceDTO getInvoice(InvoiceStatus status, InvoiceType type){
         return InvoiceDTO.builder()
                 .invoiceNo("T-001")
@@ -112,5 +113,9 @@ public class TestDocumentInitializer {
                 .tax(10)
                 .total(BigDecimal.TEN.multiply(BigDecimal.valueOf(1000)))
                 .build();
+    }
+
+    public static Invoice getInvoiceEntity(InvoiceStatus status, InvoiceType type){
+        return mapperUtil.convert(getInvoice(status, type), new Invoice());
     }
 }

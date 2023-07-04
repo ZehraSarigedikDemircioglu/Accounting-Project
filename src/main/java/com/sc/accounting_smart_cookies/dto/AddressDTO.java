@@ -35,6 +35,7 @@ public class AddressDTO {
     @Column(nullable = false)
     private String state;
 
+    @NotBlank(message = "Country is a required field.")
     private String country;
 
     @NotBlank(message = "Zipcode is a required field.")

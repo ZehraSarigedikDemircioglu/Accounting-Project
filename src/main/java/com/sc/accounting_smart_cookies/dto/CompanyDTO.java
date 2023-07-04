@@ -25,7 +25,10 @@ public class CompanyDTO {
     @Size(min = 2, max = 100, message = "Title should be 2-100 characters long.")
     private String title;
 
-    @Pattern(regexp = "^\\+1\\s?\\(?\\d{3}\\)?[-\\s]?\\d{3}[-\\s]?\\d{4}$")
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" // +111 (202) 555-0125  +1 (202) 555-0125
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"                                  // +111 123 456 789
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$", message = "Phone number is required field and may be in any valid phone number format.")
+    // +111 123 45 67 89
     private String phone;
 
     @NotBlank(message = "Website is a required field.")

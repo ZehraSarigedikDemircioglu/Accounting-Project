@@ -30,6 +30,7 @@ public class UserDTO {
     @Size(max = 50, min = 2)
     private String lastname;
     @NotNull
+    @Pattern(regexp = "^\\d{10}$")
     private String phone;
     @NotNull
     private RoleDTO role;

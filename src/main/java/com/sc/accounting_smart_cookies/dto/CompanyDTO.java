@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -31,7 +32,7 @@ public class CompanyDTO {
     @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
     private String website;
 
-
+    @Valid
     private AddressDTO address;
 
     private CompanyStatus companyStatus;

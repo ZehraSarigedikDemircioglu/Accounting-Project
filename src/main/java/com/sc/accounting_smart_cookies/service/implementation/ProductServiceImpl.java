@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -71,6 +72,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> findAllByCompany() {
         return productRepository.findAllByCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company())).stream()
+                .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
+                        .thenComparing(Product::getName))
                 .map(product -> mapperUtil.convert(product, new ProductDTO()))
                 .collect(Collectors.toList());
     }

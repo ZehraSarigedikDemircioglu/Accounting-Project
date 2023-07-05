@@ -29,9 +29,9 @@
                                                                 <div class="controls">
                                                                     <label>Category</label>
                                                                     <select id="category" name="category" class="custom-select">
-<!--                                                                        <option th:if="${categories.size() > 1}"-->
-<!--                                                                                th:value="''"-->
-<!--                                                                                th:text="'Select'"></option>-->
+                                                                        <option th:if="${categories.size() > 1}"
+                                                                                th:value="''"
+                                                                                th:text="'Select'"></option>
                                                                         <option th:each="category:${categories}"
                                                                                 th:value="${category.id}"
                                                                                 th:text="${category.description}"></option>

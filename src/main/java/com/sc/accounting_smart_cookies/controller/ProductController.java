@@ -46,8 +46,10 @@ public class ProductController {
 
     @PostMapping("/create")
     public String saveProduct(@Valid @ModelAttribute("newProduct") ProductDTO productDTO,
-                              BindingResult bindingResult) {
+                              BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
+            model.addAttribute("categories", categoryService.listAllCategories());
             return "product/product-create";
         }
         productService.save(productDTO);

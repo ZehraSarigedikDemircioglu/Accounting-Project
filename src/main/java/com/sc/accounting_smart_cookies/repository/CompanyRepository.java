@@ -18,5 +18,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("SELECT c FROM Company c where c.id!=?1")
     List<Company>getAllCompanyForRoot(Long id);
 
+    boolean existsByTitle(String title);
+
+
 
 }

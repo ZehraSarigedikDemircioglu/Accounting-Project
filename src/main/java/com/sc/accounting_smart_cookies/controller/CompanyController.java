@@ -4,8 +4,10 @@ import com.sc.accounting_smart_cookies.dto.AddressDTO;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import com.sc.accounting_smart_cookies.service.CompanyService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,15 +38,21 @@ public class CompanyController {
     }
 
     @PostMapping("/create")
-    public String insertCompany (@Valid @ModelAttribute("newCompany") CompanyDTO companyDTO, BindingResult bindingResult, Model model) {
+    public String insertCompany (@Valid @ModelAttribute("newCompany") CompanyDTO companyDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "company/company-create";
         }
 
-           companyService.create(companyDTO);
-           return "redirect:/companies/list";
-    }
+        try{
+            companyService.create(companyDTO);
+        }catch (DataIntegrityViolationException e){
+            bindingResult.rejectValue("title", "duplicate.title", "Title already exists");
+            return "company/company-create";
+        }
+             return "redirect:/companies/list";
+        }
+
 
     @GetMapping("/update/{id}") ///companies/update/{id}
     public String updateCompany (@PathVariable ("id") Long id,  Model model){
@@ -56,11 +64,15 @@ public class CompanyController {
     @PostMapping("update/{id}")
     public String updateCompany (@Valid @ModelAttribute ("company" ) CompanyDTO companyDTO, BindingResult bindingResult,  @PathVariable("id") Long id){
         if (bindingResult.hasErrors()) {
-
+            return "company/company-update";
+        }
+        try {
+            companyService.update(companyDTO, id);
+        }catch (DataIntegrityViolationException e) {
+            bindingResult.rejectValue("title", "duplicate.title", "Title already exists");
             return "company/company-update";
         }
 
-        companyService.update(companyDTO, id);
         return "redirect:/companies/list";
     }
 

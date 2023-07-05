@@ -11,6 +11,9 @@ import com.sc.accounting_smart_cookies.service.CompanyService;
 import com.sc.accounting_smart_cookies.service.SecurityService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,6 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
             companyRepository.save(company1);
             return mapperUtil.convert(company1, new CompanyDTO());
     }
+
 
     @Override
     public void create (CompanyDTO companyDTO) {

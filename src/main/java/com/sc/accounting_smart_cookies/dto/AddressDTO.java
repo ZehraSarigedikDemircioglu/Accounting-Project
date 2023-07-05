@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.UniqueElements;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -17,21 +18,28 @@ import javax.validation.constraints.Size;
 public class AddressDTO {
 
     private Long id;
+
+    @Size(min = 2, max = 100, message = "Address should be 2-100 characters long.")
     @NotBlank(message = "Address is a required field.")
-    @Size(min = 2, max = 100, message = "Address should have 2-100 characters.")
     private String addressLine1;
-    @Size(max = 100, message = "Address should have a maximum of 100 characters.")
+
+    @Size(max = 100, message = "Address should be 2-100 characters long.")
     private String addressLine2;
+
     @NotBlank(message = "City is a required field.")
-    @Size(min = 2, max = 50, message = "City should have 2-50 characters.")
+    @Size(min = 2, max = 50, message = "City should have 2-50 characters long.")
     private String city;
+
     @NotBlank(message = "State is a required field.")
-    @Size(min = 2, max = 50, message = "State should have 2-50 characters.")
+    @Size(min = 2, max = 50, message = "State should have 2-50 characters long.")
+    @Column(nullable = false)
     private String state;
-    @NotNull(message = "Country is a required field.")
-    @Size(min = 2, max = 50, message = "Country should have 2-50 characters.")
+
+    @NotBlank(message = "Country is a required field.")
     private String country;
-    @NotBlank(message = "Zip Code is a required field.")
-    @Pattern(regexp = "^\\d{5}(-\\d{4})?$", message = "Zip Code should have a valid format.")
+
+    @NotBlank(message = "Zipcode is a required field.")
+    @Pattern(regexp = "\\d{5}([-]\\d{4})?$", message = "Zipcode should have a valid form")
+    @Column(nullable = false)
     private String zipCode;
 }

@@ -1,10 +1,7 @@
 package com.sc.accounting_smart_cookies.dto;
 
 import com.sc.accounting_smart_cookies.annotation.UniqueEmail;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
@@ -13,6 +10,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @UniqueEmail
+@Builder
 public class UserDTO {
 
     private Long id;
@@ -31,7 +29,10 @@ public class UserDTO {
     @NotBlank
     @Size(max = 50, min = 2)
     private String lastname;
-    @NotNull
+
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" // +111 (202) 555-0125  +1 (202) 555-0125
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"                                  // +111 123 456 789
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")                     // +111 123 45 67 89
     private String phone;
     @NotNull
     private RoleDTO role;

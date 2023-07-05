@@ -112,6 +112,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return mapperUtil.convert(invoiceRepository.save(invoice), new InvoiceDTO());
     }
 
+    @Override
+    public List<InvoiceDTO> findTop3ByOrderByDateDesc() {
+        return invoiceRepository.findTop3ByOrderByDateDesc().stream()
+                .map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
+                .collect(Collectors.toList());
+    }
+
     private String generateInvoiceNo(InvoiceType invoiceType) {
 
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());

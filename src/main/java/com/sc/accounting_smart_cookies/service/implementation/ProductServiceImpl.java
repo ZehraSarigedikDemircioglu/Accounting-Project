@@ -79,4 +79,14 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isProductNameExist(ProductDTO productDTO) {
+
+        Product existedProduct = productRepository.findByNameAndCategoryCompany(productDTO.getName(), mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company()));
+        if (existedProduct == null) {
+            return false;
+        }
+        return !existedProduct.getId().equals(productDTO.getId());
+    }
+
 }

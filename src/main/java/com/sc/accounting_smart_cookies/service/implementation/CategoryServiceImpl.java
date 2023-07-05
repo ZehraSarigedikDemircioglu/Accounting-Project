@@ -7,13 +7,12 @@ import com.sc.accounting_smart_cookies.repository.CategoryRepository;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.repository.UserRepository;
 import com.sc.accounting_smart_cookies.service.CategoryService;
-import org.springframework.data.domain.Sort;
+import com.sc.accounting_smart_cookies.service.CompanyService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +21,14 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final CompanyService companyService;
     private final MapperUtil mapperUtil;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyRepository companyRepository, MapperUtil mapperUtil) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyRepository companyRepository, CompanyService companyService, MapperUtil mapperUtil) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
+        this.companyService = companyService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -35,6 +36,12 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO findById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow();
         return mapperUtil.convert(category, new CategoryDTO());
+    }
+
+    @Override
+    public boolean findByDescription(String description) {
+        Category category = categoryRepository.findByDescription(description);
+        return description != null;
     }
 
 
@@ -46,25 +53,24 @@ public class CategoryServiceImpl implements CategoryService {
 
             Company company = companyRepository.findById(LoggedInUser.getCompany().getId()).orElseThrow();
 
-            List<Category> categoryList = categoryRepository.findAllByCompany(company);
+            List<Category> categoryList = categoryRepository.findAllByCompanyAndIsDeleted(company, false);
             return categoryList.stream().map(category -> mapperUtil.convert(category, new CategoryDTO())).
                     collect(Collectors.toList());
 
     }
 
-
     @Override
     public void deleteById(Long id) {
-        Optional<Category> foundCategory = categoryRepository.findById(id);
-        if (foundCategory.isPresent()) {
-            foundCategory.get().setIsDeleted(true);
-            categoryRepository.save(foundCategory.get());
-        }
+        Category category = categoryRepository.findByIdAndIsDeleted(id, false);
+        category.setIsDeleted(true);
+        categoryRepository.save(category);
+
     }
 
     @Override
     public CategoryDTO save(CategoryDTO categoryDTO) {
         Category category = mapperUtil.convert(categoryDTO, new Category());
+        category.setCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company()));
         categoryRepository.save(category);
         return mapperUtil.convert(category, new CategoryDTO());
     }
@@ -74,15 +80,18 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(id).orElseThrow();
         Category convertedCategory = mapperUtil.convert(categoryDTO, new Category());
         convertedCategory.setId(category.getId());
+        convertedCategory.setCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company()));
         categoryRepository.save(convertedCategory);
         return mapperUtil.convert(convertedCategory, new CategoryDTO());
     }
 
-//    @Override
-//    public List<CategoryDTO> listAllCategoriesByCompany(Company company) {
-//
-//        Category category = categoryRepository.findAllByCompany()
-//
-//        return null;
-//    }
+    @Override
+    public boolean isCategoryDescriptionUnique(CategoryDTO categoryDTO) {
+
+        categoryRepository.existsByDescription(categoryDTO.getDescription());
+
+        return categoryDTO != null;
+    }
+
+
 }

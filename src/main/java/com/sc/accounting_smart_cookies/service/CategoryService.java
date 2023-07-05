@@ -12,12 +12,15 @@ public interface CategoryService {
     List<CategoryDTO> listAllCategories();
 
     CategoryDTO findById(Long id);
+    boolean findByDescription(String description);
 
     void deleteById(Long id);
 
     CategoryDTO save(CategoryDTO categoryDTO);
 
     CategoryDTO update(CategoryDTO categoryDTO, Long id);
+
+    boolean isCategoryDescriptionUnique(CategoryDTO categoryDTO);
 
 
 

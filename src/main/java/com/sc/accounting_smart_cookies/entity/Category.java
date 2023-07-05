@@ -5,18 +5,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "categories")
-@Where(clause = "is_deleted=false")
+//@Where(clause = "is_deleted=false")
 public class Category extends BaseEntity{
 
+    //@Column(unique = true)
     private String description;
 
     @ManyToOne

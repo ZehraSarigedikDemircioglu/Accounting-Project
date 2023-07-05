@@ -6,7 +6,10 @@ import com.sc.accounting_smart_cookies.enums.ProductUnit;
 import com.sc.accounting_smart_cookies.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/categories")
@@ -36,7 +39,13 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public String saveCategory(@ModelAttribute("category") CategoryDTO categoryDTO){
+    public String saveCategory(@Valid @ModelAttribute("newCategory") CategoryDTO categoryDTO, BindingResult bindingResult){
+        boolean categoryDescriptionNotUnique = categoryService.isCategoryDescriptionUnique(categoryDTO);
+        if (categoryDescriptionNotUnique) {
+                    bindingResult.rejectValue("description", " ", "This category description already exists");
+            return "category/category-create";
+        }
+
         categoryService.save(categoryDTO);
         return "redirect:/categories/list";
     }
@@ -51,7 +60,11 @@ public class CategoryController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateCategory(@PathVariable("id") Long id, @ModelAttribute("category") CategoryDTO categoryDTO){
+    public String updateCategory(@Valid @PathVariable("id") Long id, @ModelAttribute("category") CategoryDTO categoryDTO, BindingResult bindingResult, Model model){
+
+        if (bindingResult.hasErrors()) {
+            return "category/category-update";
+        }
         categoryService.update(categoryDTO, id);
         return "redirect:/categories/list";
     }

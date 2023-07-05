@@ -5,8 +5,10 @@ import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 
 @Controller
@@ -31,7 +33,11 @@ public class ClientVendorController {
         return "clientVendor/clientVendor-create";
     }
     @PostMapping("/create")
-    public String saveClientVendor(@ModelAttribute("newClientVendor") ClientVendorDTO clientVendorDTO){
+    public String saveClientVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDTO clientVendorDTO, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()){
+            model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+            return "clientVendor/clientVendor-create";
+        }
         clientVendorService.save(clientVendorDTO);
 //        return "redirect:/clientVendor/clientVendor-list";
         return "redirect:/clientVendors/list";
@@ -54,4 +60,6 @@ public class ClientVendorController {
         clientVendorService.deleteById(id);
         return "redirect:/clientVendors/list";
     }
+
+
 }

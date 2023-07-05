@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +16,7 @@ import javax.persistence.*;
 @Table(name = "companies")
 public class Company extends BaseEntity {
 
+    @Column (unique = true)
     private String title;
     private String phone;
     private String website;

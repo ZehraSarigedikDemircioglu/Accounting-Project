@@ -20,5 +20,5 @@ public interface ClientVendorService {
 
    List<ClientVendorDTO> findVendorsByType(ClientVendorType clientVendorType);
 
-    List<ClientVendorDTO> getListOfClientVendors(ClientVendorDTO clientVendor);
+
 }

@@ -32,6 +32,7 @@ public class ClientVendorDTO{
     private String website;
     @Valid
     private AddressDTO address;
+    @Valid
     private CompanyDTO company;
 
 }

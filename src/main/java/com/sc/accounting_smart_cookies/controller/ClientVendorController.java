@@ -33,8 +33,9 @@ public class ClientVendorController {
         return "clientVendor/clientVendor-create";
     }
     @PostMapping("/create")
-    public String saveClientVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDTO clientVendorDTO, BindingResult bindingResult){
+    public String saveClientVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDTO clientVendorDTO, BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()){
+            model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
             return "clientVendor/clientVendor-create";
         }
         clientVendorService.save(clientVendorDTO);

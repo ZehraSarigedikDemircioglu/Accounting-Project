@@ -48,15 +48,55 @@ class InvoiceServiceImplTest {
     @Spy
     static MapperUtil mapperUtil = new MapperUtil(new ModelMapper());
 
+    private List<Invoice> getInvoices() {
 
-//    @Test
-//    void find_all_success() {
-//
-//        // when
-//        when(invoiceRepository.findAllByInvoiceType(InvoiceType.PURCHASE)).thenReturn(new ArrayList<>());
-//        //then
-//
-//    }
+        Invoice invoice = TestDocumentInitializer.getInvoiceEntity(
+                any(InvoiceStatus.class), any(InvoiceType.class));
+        Invoice invoice2 = TestDocumentInitializer.getInvoiceEntity(
+                any(InvoiceStatus.class), any(InvoiceType.class));
+
+        return List.of(invoice, invoice2);
+    }
+
+    private List<InvoiceDTO> getInvoiceDTOs() {
+
+        InvoiceDTO invoiceDTO = TestDocumentInitializer.getInvoice(
+                any(InvoiceStatus.class), any(InvoiceType.class));
+        InvoiceDTO invoiceDTO2 = TestDocumentInitializer.getInvoice(
+                any(InvoiceStatus.class), any(InvoiceType.class));
+
+        return List.of(invoiceDTO, invoiceDTO2);
+    }
+
+    @Test
+    void PASS_find_all_invoices1() {
+
+        // when
+        when(invoiceRepository.findAllByInvoiceType(any())).thenReturn(getInvoices());
+
+        List<InvoiceDTO> expectedList = getInvoiceDTOs();
+
+        List<InvoiceDTO> actualList = service.findAll();
+
+        //then
+        assertThat(actualList).usingRecursiveComparison().isEqualTo(expectedList);
+    }
+
+    @Test
+    void PASS_find_all_invoices() {
+
+        // when
+        List<Invoice> invoiceList = invoiceRepository.findAllByInvoiceType(any());
+        List<InvoiceDTO> invoiceDTOList = invoiceList.stream().map(invoice ->
+                        mapperUtil.convert(invoiceList, new InvoiceDTO()))
+                .collect(Collectors.toList());
+
+        List<InvoiceDTO> returnInvoices = service.findAll();
+
+        //then
+        assertThat(returnInvoices).usingRecursiveComparison().isEqualTo(invoiceDTOList);
+                            //      ^^ compares VALUES instead of OBJECTS
+    }
 
 //    @Test
 //    void findInvoicesByType() {

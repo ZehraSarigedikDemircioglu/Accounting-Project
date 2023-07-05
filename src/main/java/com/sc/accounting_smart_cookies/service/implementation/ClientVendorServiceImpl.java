@@ -8,6 +8,8 @@ import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.ClientVendorRepository;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
+import com.sc.accounting_smart_cookies.service.CompanyService;
+import com.sc.accounting_smart_cookies.service.SecurityService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +20,10 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
+    SecurityService securityService;
+    CompanyService companyService;
+    ClientVendorDTO clientVendor;
+
 
 
     public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil) {
@@ -78,5 +84,27 @@ public class ClientVendorServiceImpl implements ClientVendorService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ClientVendorDTO> getListOfClientVendors(ClientVendorDTO clientVendor) {
+        return null;
+    }
 
-}
+
+//    @Override
+//    public List<ClientVendorDTO> getListOfClientVendors() {
+//        if (securityService.getLoggedInUser().getRole().getDescription().equals("Root User")) {
+//
+//            return clientVendorRepository.getClientVendorsSortedByTitleAndName()
+//                    .stream()
+//                    .map(clientVendor -> mapperUtil.convert(clientVendor, new ClientVendorDTO()))
+//                    .collect(Collectors.toList());
+//        } else {
+//            return clientVendorRepository.findAllByCompanyTitleAndSortByTypeAndName(
+//                            companyService.getCompanyDTOByLoggedInUser().getTitle()).stream()
+//                    .map(clientVendor -> mapperUtil.convert(clientVendor, new ClientVendorDTO()))
+//                    .collect(Collectors.toList());
+//        }
+
+    }
+
+

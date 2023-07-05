@@ -54,23 +54,24 @@ public class InvoiceServiceImpl implements InvoiceService {
         BigDecimal tax = getTotalTaxOfInvoice(dto);
 
         dto.setPrice(price);
-//        dto.setTax(tax);
+        dto.setTax(tax.intValue());
         dto.setTotal(price.add(tax));
     }
 
     private BigDecimal getTotalTaxOfInvoice(InvoiceDTO dto) {
 
+        List<InvoiceProductDTO> invoiceProductDTOS = invoiceProductService.findAllByInvoiceId(dto.getId());
 
-        return null;
+        return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getTax())))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
     private BigDecimal getTotalPriceOfInvoice(InvoiceDTO dto) {
 
         List<InvoiceProductDTO> invoiceProductDTOS = invoiceProductService.findAllByInvoiceId(dto.getId());
 
-//        invoiceProductDTOS.stream().reduce()
-
-        return null;
+        return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(BigDecimal.valueOf((long)p.getQuantity())))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
     @Override

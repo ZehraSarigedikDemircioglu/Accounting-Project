@@ -20,14 +20,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final CompanyRepository companyRepository;
     private final CompanyService companyService;
     private final MapperUtil mapperUtil;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyRepository companyRepository, CompanyService companyService, MapperUtil mapperUtil) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyService companyService, MapperUtil mapperUtil) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
         this.companyService = companyService;
         this.mapperUtil = mapperUtil;
     }
@@ -47,15 +45,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> listAllCategories() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        User LoggedInUser = userRepository.findByUsername(auth.getName());
-
-            Company company = companyRepository.findById(LoggedInUser.getCompany().getId()).orElseThrow();
-
-            List<Category> categoryList = categoryRepository.findAllByCompanyAndIsDeleted(company, false);
-            return categoryList.stream().map(category -> mapperUtil.convert(category, new CategoryDTO())).
-                    collect(Collectors.toList());
+        Company company = mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company());
+        List<Category> categoryList = categoryRepository.findAllByCompanyAndIsDeleted(company, false);
+        return categoryList.stream().map(category -> mapperUtil.convert(category, new CategoryDTO())).
+                collect(Collectors.toList());
 
     }
 
@@ -87,10 +80,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean isCategoryDescriptionUnique(CategoryDTO categoryDTO) {
-
-        categoryRepository.existsByDescription(categoryDTO.getDescription());
-
-        return categoryDTO != null;
+        Company company = mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company());
+        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), company);
+        if (existingCategory == null) return false;
+        return !existingCategory.getId().equals(categoryDTO.getId());
     }
 
 

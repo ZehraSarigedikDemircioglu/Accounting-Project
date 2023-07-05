@@ -14,9 +14,9 @@ public class CategoryDTO {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Category description is a required field.")
     @NotNull
-    @Size(max = 100, min = 2)
+    @Size(max = 100, min = 2, message ="Category Name should be between 2 and 50 characters long.")
     private String description;
 
     private CompanyDTO company;

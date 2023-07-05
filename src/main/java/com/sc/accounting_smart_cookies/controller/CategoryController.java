@@ -42,7 +42,10 @@ public class CategoryController {
     public String saveCategory(@Valid @ModelAttribute("newCategory") CategoryDTO categoryDTO, BindingResult bindingResult){
         boolean categoryDescriptionNotUnique = categoryService.isCategoryDescriptionUnique(categoryDTO);
         if (categoryDescriptionNotUnique) {
-                    bindingResult.rejectValue("description", " ", "This category description already exists");
+            bindingResult.rejectValue("description", " ", "This category description already exists");
+        }
+
+        if (bindingResult.hasErrors()) {
             return "category/category-create";
         }
 

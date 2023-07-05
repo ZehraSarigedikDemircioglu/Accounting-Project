@@ -30,7 +30,7 @@ public class DashboardController {
         summaryNumbers.put("totalSales", 2000);
         summaryNumbers.put("profitLoss", 2000);
         model.addAttribute("summaryNumbers", summaryNumbers);
-        //model.addAttribute("Last Transactions", invoiceService.listInvoices());
+        model.addAttribute("invoices", invoiceService.findTop3ByOrderByDateDesc());
         model.addAttribute("exchangeRates", exchangeRateClient.getExchangeRates());
 
 

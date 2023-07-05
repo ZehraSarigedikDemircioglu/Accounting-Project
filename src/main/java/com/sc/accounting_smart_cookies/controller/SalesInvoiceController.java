@@ -8,7 +8,10 @@ import com.sc.accounting_smart_cookies.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @AllArgsConstructor
@@ -40,7 +43,13 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/create")
-    public String saveInvoice(@ModelAttribute("newSalesInvoice") InvoiceDTO invoiceDTO) {
+    public String saveInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDTO invoiceDTO,
+                              BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()){
+            model.addAttribute("clients", clientVendorService.findAll());
+            return "invoice/sales-invoice-create";
+        }
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.SALES);
 

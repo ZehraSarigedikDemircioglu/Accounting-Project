@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -48,6 +49,18 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<InvoiceDTO> findInvoicesByType(InvoiceType invoiceType) {
+
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType);
+
+        return invoices.stream().map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
+                .peek(this::calculateInvoiceDetails)
+                .collect(Collectors.toList());
+    }
+
     private void calculateInvoiceDetails(InvoiceDTO dto) {
 
         BigDecimal price = getTotalPriceOfInvoice(dto);
@@ -62,7 +75,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         List<InvoiceProductDTO> invoiceProductDTOS = invoiceProductService.findAllByInvoiceId(dto.getId());
 
-        return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getTax())))
+        return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(
+                BigDecimal.valueOf(p.getQuantity() * p.getTax() /100d))
+                        .setScale(2, RoundingMode.HALF_UP))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
@@ -72,17 +87,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(BigDecimal.valueOf((long)p.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-    }
-
-    @Override
-    public List<InvoiceDTO> findInvoicesByType(InvoiceType invoiceType) {
-
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-
-        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType);
-
-        return invoices.stream().map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
-                .collect(Collectors.toList());
     }
 
     @Override

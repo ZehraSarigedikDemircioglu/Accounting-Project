@@ -54,7 +54,9 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDTO save(ClientVendorDTO clientVendorDTO) {
+        Company company = mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company());
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
+        clientVendor.setCompany(company);
         clientVendorRepository.save(clientVendor);
         return mapperUtil.convert(clientVendor, new ClientVendorDTO());
     }
@@ -62,9 +64,11 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDTO update(Long id, ClientVendorDTO clientVendorDTO) {
+        Company company = mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company());
         ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow();
         ClientVendor newClientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
         newClientVendor.setId(clientVendor.getId());
+        newClientVendor.setCompany(company);
         clientVendorRepository.save(newClientVendor);
         return mapperUtil.convert(newClientVendor, new ClientVendorDTO());
     }

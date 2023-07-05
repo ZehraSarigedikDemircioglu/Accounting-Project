@@ -7,7 +7,7 @@ import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.InvoiceProductRepository;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,12 +16,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     private final InvoiceProductRepository invoiceProductRepository;
     private final MapperUtil mapperUtil;
     private final InvoiceService invoiceService;
+
+    public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository, MapperUtil mapperUtil,
+                                     @Lazy InvoiceService invoiceService) {
+        this.invoiceProductRepository = invoiceProductRepository;
+        this.mapperUtil = mapperUtil;
+        this.invoiceService = invoiceService;
+    }
 
     @Override
     public List<InvoiceProductDTO> findAllByInvoiceId(Long invoiceId) {

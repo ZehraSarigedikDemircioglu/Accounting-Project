@@ -1,12 +1,10 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
-import com.sc.accounting_smart_cookies.converter.InvoiceDTOConverter;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.entity.ClientVendor;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Invoice;
-import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
@@ -14,7 +12,7 @@ import com.sc.accounting_smart_cookies.repository.InvoiceRepository;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import com.sc.accounting_smart_cookies.service.SecurityService;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,13 +23,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
     private final InvoiceProductService invoiceProductService;
+
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, MapperUtil mapperUtil,
+                              SecurityService securityService, @Lazy InvoiceProductService invoiceProductService) {
+        this.invoiceRepository = invoiceRepository;
+        this.mapperUtil = mapperUtil;
+        this.securityService = securityService;
+        this.invoiceProductService = invoiceProductService;
+    }
 
     @Override
     public List<InvoiceDTO> findAll() {
@@ -49,7 +54,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         BigDecimal tax = getTotalTaxOfInvoice(dto);
 
         dto.setPrice(price);
-        dto.setTax(tax);
+//        dto.setTax(tax);
         dto.setTotal(price.add(tax));
     }
 
@@ -63,7 +68,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         List<InvoiceProductDTO> invoiceProductDTOS = invoiceProductService.findAllByInvoiceId(dto.getId());
 
-        invoiceProductDTOS.stream().reduce()
+//        invoiceProductDTOS.stream().reduce()
 
         return null;
     }

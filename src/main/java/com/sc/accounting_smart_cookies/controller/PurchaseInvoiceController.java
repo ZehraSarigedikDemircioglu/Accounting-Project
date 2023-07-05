@@ -34,7 +34,7 @@ public class PurchaseInvoiceController {
 
         model.addAttribute("newPurchaseInvoice", invoiceService.getNewInvoice(InvoiceType.PURCHASE));
 
-        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
+        model.addAttribute("vendors", clientVendorService.findAll());
 
         return "invoice/purchase-invoice-create";
     }
@@ -53,7 +53,7 @@ public class PurchaseInvoiceController {
 
 // Invoice update Object:
         model.addAttribute("invoice", invoiceService.findById(id));
-        model.addAttribute("vendors", clientVendorService.findVendorsByType(ClientVendorType.VENDOR));
+        model.addAttribute("vendors", clientVendorService.findAll());
 
         model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
         model.addAttribute("products", productService.findAll());

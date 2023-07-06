@@ -66,8 +66,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         BigDecimal price = getTotalPriceOfInvoice(dto);
         BigDecimal tax = getTotalTaxOfInvoice(dto);
-        List<InvoiceProductDTO> invoiceProductDTOs = dto.getInvoiceProducts()
-                .stream().map(invoiceProductService::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
+//        List<InvoiceProductDTO> invoiceProductDTOs = dto.getInvoiceProducts()
+//                .stream().map(invoiceProductService::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
 
         dto.setPrice(price);
         dto.setTax(tax.intValue());

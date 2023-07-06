@@ -37,11 +37,14 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
 //        invoiceProducts.stream().map(invoiceProductService::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
 
-        List<InvoiceProductDTO> invoiceProductDTOs = invoiceProducts.stream().map(invoiceProduct ->
+//        List<InvoiceProductDTO> invoiceProductDTOs = invoiceProducts.stream().map(invoiceProduct ->
+//                        mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
+//                .collect(Collectors.toList());
+
+//        return invoiceProductDTOs.stream().map(this::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
+        return invoiceProducts.stream().map(invoiceProduct ->
                         mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
                 .collect(Collectors.toList());
-
-        return invoiceProductDTOs.stream().map(this::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
     }
 
     @Override

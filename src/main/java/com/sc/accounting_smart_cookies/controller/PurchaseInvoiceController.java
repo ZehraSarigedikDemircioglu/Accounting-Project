@@ -114,6 +114,8 @@ public class PurchaseInvoiceController {
 
         invoiceService.approveInvoiceById(id);
 
+//        productService.updateProductQuantity();
+
         return "redirect:/purchaseInvoices/list";
     }
 
@@ -127,11 +129,5 @@ public class PurchaseInvoiceController {
 
         return "invoice/invoice_print";
     }
-
-//    @ModelAttribute
-//    public String commonAttributes(Model model) {
-//
-//
-//    }
 
 }

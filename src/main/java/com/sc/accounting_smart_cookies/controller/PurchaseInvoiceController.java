@@ -6,11 +6,14 @@ import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.service.*;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 @AllArgsConstructor
@@ -42,7 +45,13 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/create")
-    public String saveInvoice(@Valid  @ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO) {
+    public String saveInvoice(@Valid @ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO,
+                              BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()){
+            model.addAttribute("vendors", clientVendorService.findAll());
+            return "invoice/purchase-invoice-create";
+        }
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.PURCHASE);
 

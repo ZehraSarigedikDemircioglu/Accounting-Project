@@ -47,6 +47,11 @@ public class ProductController {
     @PostMapping("/create")
     public String saveProduct(@Valid @ModelAttribute("newProduct") ProductDTO productDTO,
                               BindingResult bindingResult, Model model) {
+
+        if (productService.isProductNameExist(productDTO)){
+            bindingResult.rejectValue("name", " ", "This Product Name already exists.");
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
             model.addAttribute("categories", categoryService.listAllCategories());

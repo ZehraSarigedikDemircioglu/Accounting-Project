@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/purchaseInvoices")
@@ -40,7 +42,7 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/create")
-    public String saveInvoice(@ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO) {
+    public String saveInvoice(@Valid  @ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO) {
 
         InvoiceDTO invoice = invoiceService.save(invoiceDTO, InvoiceType.PURCHASE);
 

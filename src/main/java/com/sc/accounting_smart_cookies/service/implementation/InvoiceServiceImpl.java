@@ -66,10 +66,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         BigDecimal price = getTotalPriceOfInvoice(dto);
         BigDecimal tax = getTotalTaxOfInvoice(dto);
+        List<InvoiceProductDTO> invoiceProductDTOs = dto.getInvoiceProducts()
+                .stream().map(invoiceProductService::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
 
         dto.setPrice(price);
         dto.setTax(tax.intValue());
         dto.setTotal(price.add(tax));
+//        dto.setInvoiceProducts(invoiceProductDTOs);
     }
 
     private BigDecimal getTotalTaxOfInvoice(InvoiceDTO dto) {
@@ -77,7 +80,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         List<InvoiceProductDTO> invoiceProductDTOS = invoiceProductService.findAllByInvoiceId(dto.getId());
 
         return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(
-                BigDecimal.valueOf(p.getQuantity() * p.getTax() /100d))
+                                BigDecimal.valueOf(p.getQuantity() * p.getTax() / 100d))
                         .setScale(2, RoundingMode.HALF_UP))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
@@ -86,7 +89,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         List<InvoiceProductDTO> invoiceProductDTOS = invoiceProductService.findAllByInvoiceId(dto.getId());
 
-        return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(BigDecimal.valueOf((long)p.getQuantity())))
+        return invoiceProductDTOS.stream().map(p -> p.getPrice().multiply(BigDecimal.valueOf((long) p.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
@@ -95,7 +98,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Invoice invoice = invoiceRepository.findById(id).orElseThrow();
 
-        return mapperUtil.convert(invoice, new InvoiceDTO());
+        InvoiceDTO dto = mapperUtil.convert(invoice, new InvoiceDTO());
+        calculateInvoiceDetails(dto);
+
+        return dto;
     }
 
     @Override
@@ -129,7 +135,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice returnInvoice = invoiceRepository.save(invoice);
 
         return mapperUtil.convert(returnInvoice, new InvoiceDTO());
-
 
     }
 

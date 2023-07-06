@@ -128,4 +128,10 @@ public class PurchaseInvoiceController {
         return "invoice/invoice_print";
     }
 
+//    @ModelAttribute
+//    public String commonAttributes(Model model) {
+//
+//
+//    }
+
 }

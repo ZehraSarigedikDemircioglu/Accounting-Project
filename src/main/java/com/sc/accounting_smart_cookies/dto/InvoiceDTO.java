@@ -24,19 +24,16 @@ public class InvoiceDTO {
     private InvoiceStatus invoiceStatus;
     private InvoiceType invoiceType;
     private LocalDate date;
-    @Valid
     private CompanyDTO company;
-    @Valid
-    @NotNull(message = "Its cant be null")
     private ClientVendorDTO clientVendor;
-    @NotBlank(message = "Price is required field")
-    @Range(min = 0, message = " Limit should be at least 1.")
+
+
     private BigDecimal price;
-    @NotBlank(message = "tax is required field")
-    @Range(min =0, message = "Low Limit Alert should be at least 1.")
+
+
     private Integer tax;
-    @NotBlank(message = "total is required field")
+
     private BigDecimal total;
-    @Valid
+
     private List<InvoiceProductDTO> invoiceProducts;
 }

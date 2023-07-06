@@ -3,7 +3,11 @@ package com.sc.accounting_smart_cookies.dto;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import lombok.*;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -22,8 +26,14 @@ public class InvoiceDTO {
     private LocalDate date;
     private CompanyDTO company;
     private ClientVendorDTO clientVendor;
+
+
     private BigDecimal price;
+
+
     private Integer tax;
+
     private BigDecimal total;
+
     private List<InvoiceProductDTO> invoiceProducts;
 }

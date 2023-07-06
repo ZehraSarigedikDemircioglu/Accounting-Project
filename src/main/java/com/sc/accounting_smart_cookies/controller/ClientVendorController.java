@@ -50,11 +50,20 @@ public class ClientVendorController {
         return "clientVendor/clientVendor-update";
     }
     @PostMapping("/update/{id}")
-    public String updateClientVendor(@ModelAttribute("clientVendor") ClientVendorDTO clientVendorDTO, @PathVariable("id") Long id){
+    public String updateClientVendor(@Valid @ModelAttribute("clientVendor") ClientVendorDTO clientVendorDTO, BindingResult bindingResult, @PathVariable("id") Long id, Model model){
+        if (clientVendorService.isClientVendorByCompanyNameExist(clientVendorDTO)) {
+            bindingResult.rejectValue("clientVendorName", "",
+                    "This Client/Vendor in current company already exists.");
+        }
+        if (bindingResult.hasErrors()) {
+            return "clientVendor/clientVendor-update";
+        }
         clientVendorService.update(id, clientVendorDTO);
-//        return "redirect:/clientVendor/clientVendor-list";
         return "redirect:/clientVendors/list";
     }
+
+
+
     @GetMapping("/delete/{id}")
     public String deleteClientVendor(@PathVariable("id") Long id){
         clientVendorService.deleteById(id);

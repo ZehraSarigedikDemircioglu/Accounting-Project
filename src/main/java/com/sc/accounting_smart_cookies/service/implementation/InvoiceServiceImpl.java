@@ -15,6 +15,7 @@ import com.sc.accounting_smart_cookies.service.SecurityService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -128,6 +129,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice returnInvoice = invoiceRepository.save(invoice);
 
         return mapperUtil.convert(returnInvoice, new InvoiceDTO());
+
+
     }
 
     @Override
@@ -174,5 +177,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         int newOrder = Integer.parseInt(lastCreatedInvoiceOfTheCompany.getInvoiceNo().substring(2)) + 1;
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
+
 
 }

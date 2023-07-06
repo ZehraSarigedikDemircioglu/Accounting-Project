@@ -17,5 +17,4 @@ public interface InvoiceProductService {
 
     void deleteById(Long invoiceProductId);
 
-    InvoiceProductDTO getTotalOfEachInvoiceProduct(InvoiceProductDTO invoiceProductDTO);
 }

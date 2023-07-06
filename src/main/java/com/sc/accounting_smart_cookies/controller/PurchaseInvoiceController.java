@@ -67,7 +67,7 @@ public class PurchaseInvoiceController {
         model.addAttribute("vendors", clientVendorService.findAll());
 
         model.addAttribute("newInvoiceProduct", new InvoiceProductDTO());
-        model.addAttribute("products", productService.findAll());
+        model.addAttribute("products", productService.findAllByCompany());
 
 // InvoiceProduct list:
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
@@ -122,7 +122,7 @@ public class PurchaseInvoiceController {
     @GetMapping("/print/{id}")
     public String printInvoice(@PathVariable("id") Long id, Model model) {
 
-        model.addAttribute("invoice", invoiceService.findById(id));
+        model.addAttribute("invoice", invoiceService.printInvoice(id));
         model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
 
         model.addAttribute("company", companyService.getCompanyOfLoggedInUser());

@@ -35,30 +35,11 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         List<InvoiceProduct> invoiceProducts = invoiceProductRepository.findAllByInvoice_Id(invoiceId);
 
-//        invoiceProducts.stream().map(invoiceProductService::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
-
-//        List<InvoiceProductDTO> invoiceProductDTOs = invoiceProducts.stream().map(invoiceProduct ->
-//                        mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
-//                .collect(Collectors.toList());
-
-//        return invoiceProductDTOs.stream().map(this::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
         return invoiceProducts.stream().map(invoiceProduct ->
                         mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
+                .peek(dto -> dto.setTotal(dto.getPrice().multiply(BigDecimal.valueOf(dto.getQuantity() *
+                        (dto.getTax()+100)/100d))))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public InvoiceProductDTO getTotalOfEachInvoiceProduct(InvoiceProductDTO invoiceProductDTO) {
-
-        BigDecimal subtotal = invoiceProductDTO.getPrice().multiply(BigDecimal.valueOf(
-                (long) invoiceProductDTO.getQuantity()));
-        BigDecimal tax = invoiceProductDTO.getPrice().multiply(
-                        BigDecimal.valueOf(invoiceProductDTO.getQuantity() * invoiceProductDTO.getTax() / 100d))
-                .setScale(2, RoundingMode.HALF_UP);
-
-        invoiceProductDTO.setTotal(subtotal.multiply(tax));
-
-        return invoiceProductDTO;
     }
 
     @Override

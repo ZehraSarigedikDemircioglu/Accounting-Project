@@ -66,13 +66,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         BigDecimal price = getTotalPriceOfInvoice(dto);
         BigDecimal tax = getTotalTaxOfInvoice(dto);
-//        List<InvoiceProductDTO> invoiceProductDTOs = dto.getInvoiceProducts()
-//                .stream().map(invoiceProductService::getTotalOfEachInvoiceProduct).collect(Collectors.toList());
 
         dto.setPrice(price);
         dto.setTax(tax.intValue());
         dto.setTotal(price.add(tax));
-//        dto.setInvoiceProducts(invoiceProductDTOs);
     }
 
     private BigDecimal getTotalTaxOfInvoice(InvoiceDTO dto) {
@@ -165,6 +162,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.findTop3ByOrderByDateDesc().stream()
                 .map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public InvoiceDTO printInvoice(Long id) {
+        InvoiceDTO invoiceDto = mapperUtil.convert(invoiceRepository.findById(id).get(), new InvoiceDTO());
+        calculateInvoiceDetails(invoiceDto);
+        return invoiceDto;
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType) {

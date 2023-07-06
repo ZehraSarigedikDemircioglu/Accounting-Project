@@ -1,12 +1,15 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
+import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
+import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.entity.Product;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.ProductRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
+import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
+    private final InvoiceProductService invoiceProductService;
 
     @Override
     public ProductDTO findById(Long id) {
@@ -87,6 +91,13 @@ public class ProductServiceImpl implements ProductService {
             return false;
         }
         return !existedProduct.getId().equals(productDTO.getId());
+    }
+
+    @Override
+    public boolean checkProductHasInvoice(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        List<InvoiceProductDTO> invoiceProductDTOs = invoiceProductService.findAllByInvoiceId(id);
+        return invoiceProductDTOs.size() > 0 || product.getQuantityInStock() > 0;
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -82,7 +83,11 @@ public class ProductController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable("id") Long id) {
+    public String deleteProduct(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        if (productService.checkProductHasInvoice(id))  {
+            redirectAttributes.addFlashAttribute("error", "This product can not be deleted.");
+            return "redirect:/products/list";
+        }
         productService.deleteById(id);
         return "redirect:/products/list";
     }

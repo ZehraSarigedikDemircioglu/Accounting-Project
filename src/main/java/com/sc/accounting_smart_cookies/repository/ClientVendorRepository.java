@@ -1,8 +1,10 @@
 package com.sc.accounting_smart_cookies.repository;
 
+import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.entity.ClientVendor;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
+import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,4 +20,6 @@ public interface ClientVendorRepository extends JpaRepository<ClientVendor, Long
     List<ClientVendor> getClientVendorsSortedByTitleAndName();
 
     List<ClientVendor> findAllByCompany(Company company);
+
+   ClientVendor findByClientVendorNameAndCompany (String clientVendorName, Company company);
 }

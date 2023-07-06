@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.ClientVendorDTO;
+import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.entity.ClientVendor;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
@@ -8,6 +9,7 @@ import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.ClientVendorRepository;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import com.sc.accounting_smart_cookies.service.CompanyService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -16,25 +18,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ClientVendorServiceImpl implements ClientVendorService {
 
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
-
     private final CompanyService companyService;
-
-
-    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil, CompanyService companyService) {
-        this.clientVendorRepository = clientVendorRepository;
-        this.mapperUtil = mapperUtil;
-        this.companyService = companyService;
-    }
-
 
 
     @Override
     public ClientVendorDTO findById(Long id) {
-        ClientVendor clientVendor= clientVendorRepository.findById(id).orElseThrow();
+        ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow();
         return mapperUtil.convert(clientVendor, new ClientVendorDTO());
     }
 
@@ -47,7 +41,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
                 .sorted(Comparator.comparing(ClientVendor::getClientVendorType)
                         .reversed()
                         .thenComparing(ClientVendor::getClientVendorName))
-                .map(cv ->  mapperUtil.convert(cv, new ClientVendorDTO()))
+                .map(cv -> mapperUtil.convert(cv, new ClientVendorDTO()))
                 .collect(Collectors.toList());
     }
 
@@ -74,11 +68,10 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     }
 
 
-
     @Override
     public void deleteById(Long id) {
         Optional<ClientVendor> clientVendor = clientVendorRepository.findById(id);
-        if(clientVendor.isPresent()){
+        if (clientVendor.isPresent()) {
             clientVendor.get().setIsDeleted(true);
             clientVendorRepository.save(clientVendor.get());
         }
@@ -93,5 +86,17 @@ public class ClientVendorServiceImpl implements ClientVendorService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isClientVendorByCompanyNameExist(ClientVendorDTO clientVendorDTO) {
+        ClientVendor clientVendor = clientVendorRepository.findByClientVendorNameAndCompany(clientVendorDTO.getClientVendorName()
+                ,mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company()));
 
+        if (clientVendor == null) return false;
+        return !clientVendor.getId().equals(clientVendorDTO.getId());
+
+    }
 }
+
+
+
+

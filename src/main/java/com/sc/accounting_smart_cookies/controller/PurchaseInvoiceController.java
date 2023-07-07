@@ -2,9 +2,11 @@ package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
+import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.service.*;
 import lombok.AllArgsConstructor;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,7 +47,7 @@ public class PurchaseInvoiceController {
     public String saveInvoice(@Valid @ModelAttribute("newPurchaseInvoice") InvoiceDTO invoiceDTO,
                               BindingResult bindingResult, Model model) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("vendors", clientVendorService.findAll());
             return "invoice/purchase-invoice-create";
         }
@@ -81,8 +83,27 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/addInvoiceProduct/{id}")
-    public String update(@PathVariable("id") Long id,
-                         @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO) {
+    public String update(@Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO,
+                         BindingResult bindingResult, @PathVariable("id") Long id, Model model) {
+//        if(invoiceProductService.isValidQuantity(invoiceProductDTO)){
+//            bindingResult.rejectValue("quantity","","Quantity cannot be greater than 100 or less than 1. ");
+//        }
+
+
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("invoice", invoiceService.findById(id));
+            model.addAttribute("vendors", clientVendorService.findAll());
+
+            model.addAttribute("newInvoiceProduct",  invoiceProductDTO);
+            model.addAttribute("products", productService.findAllByCompany());
+
+// InvoiceProduct list:
+            model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
+
+
+            return "invoice/purchase-invoice-update";
+        }
 
         invoiceProductService.save(invoiceProductDTO, id);
 

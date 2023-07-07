@@ -15,4 +15,6 @@ public interface InvoiceProductService {
     void save(InvoiceProductDTO invoiceProductDTO, Long id);
 
     void deleteById(Long invoiceProductId);
+
+    void completeApproval(Long invoiceId, InvoiceType type);
 }

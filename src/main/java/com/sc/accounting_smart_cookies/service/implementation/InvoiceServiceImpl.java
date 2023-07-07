@@ -140,6 +140,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         if (invoice.isPresent()) {
             invoice.get().setInvoiceStatus(InvoiceStatus.APPROVED);
+            invoice.get().setDate(LocalDate.now());
             invoiceRepository.save(invoice.get());
         }
 
@@ -160,6 +161,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.findTop3ByOrderByDateDesc().stream()
                 .map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public InvoiceDTO printInvoice(Long id) {
+        InvoiceDTO invoiceDto = mapperUtil.convert(invoiceRepository.findById(id).get(), new InvoiceDTO());
+        calculateInvoiceDetails(invoiceDto);
+        return invoiceDto;
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType) {

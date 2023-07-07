@@ -4,7 +4,6 @@ import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface InvoiceProductService {
@@ -17,4 +16,5 @@ public interface InvoiceProductService {
 
     void deleteById(Long invoiceProductId);
 
+    void completeApproval(Long invoiceId, InvoiceType type);
 }

@@ -2,7 +2,6 @@ package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
-import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.service.*;
 import lombok.AllArgsConstructor;

@@ -39,8 +39,6 @@ public class ProductController {
     @GetMapping("/create")
     public String createProduct(Model model) {
         model.addAttribute("newProduct", new ProductDTO());
-        model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
-        model.addAttribute("categories", categoryService.listAllCategories());
         return "product/product-create";
     }
 
@@ -53,8 +51,6 @@ public class ProductController {
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
-            model.addAttribute("categories", categoryService.listAllCategories());
             return "product/product-create";
         }
         productService.save(productDTO);
@@ -64,9 +60,6 @@ public class ProductController {
     @GetMapping("/update/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.findById(id));
-        model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
-        model.addAttribute("categories", categoryService.listAllCategories());
-
         return "product/product-update";
     }
 
@@ -92,6 +85,11 @@ public class ProductController {
         }
         productService.deleteById(id);
         return "redirect:/products/list";
+    }
+    @ModelAttribute
+    public void commonAttributes(Model model){
+        model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
+        model.addAttribute("categories", categoryService.listAllCategories());
     }
 
 }

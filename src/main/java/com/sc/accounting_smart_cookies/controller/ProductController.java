@@ -30,7 +30,6 @@ public class ProductController {
 //        model.addAttribute("products", productService.findAll());
 //        return "product/product-list";
 //    }
-
     @GetMapping("/list")
     public String listProductByCompany(Model model) {
         model.addAttribute("products", productService.findAllByCompany());
@@ -75,6 +74,9 @@ public class ProductController {
     public String updateProduct(@PathVariable("id") Long id,
                                 @Valid @ModelAttribute("product") ProductDTO productDTO,
                                 BindingResult bindingResult) {
+        if (productService.isProductNameExist(productDTO)){
+            bindingResult.rejectValue("name", " ", "This Product Name already exists.");
+        }
         if (bindingResult.hasErrors()) {
             return "product/product-update";
         }

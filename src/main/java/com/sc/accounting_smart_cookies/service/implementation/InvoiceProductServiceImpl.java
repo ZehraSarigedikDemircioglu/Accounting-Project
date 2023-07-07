@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         return invoiceProducts.stream().map(invoiceProduct ->
                         mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
+                .peek(dto -> dto.setTotal(dto.getPrice().multiply(BigDecimal.valueOf(dto.getQuantity() *
+                        (dto.getTax()+100)/100d))))
                 .collect(Collectors.toList());
     }
 
@@ -70,4 +73,5 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
             invoiceProductRepository.save(invoiceProduct.get());
         }
     }
+
 }

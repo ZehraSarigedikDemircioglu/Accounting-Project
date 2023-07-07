@@ -143,6 +143,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoice.isPresent()) {
             invoice.get().setInvoiceStatus(InvoiceStatus.APPROVED);
             invoice.get().setDate(LocalDate.now());
+//            invoiceProductService.completeApproval(id, invoice.get().getInvoiceType());
             invoiceRepository.save(invoice.get());
         }
 

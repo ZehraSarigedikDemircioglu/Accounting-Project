@@ -17,4 +17,6 @@ public interface InvoiceProductService {
     void deleteById(Long invoiceProductId);
 
     void completeApproval(Long invoiceId, InvoiceType type);
+
+    boolean isValidQuantity(InvoiceProductDTO invoiceProductDTO);
 }

@@ -111,6 +111,12 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
     }
 
+    @Override
+    public boolean isValidQuantity(InvoiceProductDTO invoiceProductDTO) {
+
+        return invoiceProductDTO.getQuantity() >= 1 && invoiceProductDTO.getQuantity() <= 100;
+    }
+
 
     private void updateProductQuantity(InvoiceProduct invoiceProduct, InvoiceType type) {
 

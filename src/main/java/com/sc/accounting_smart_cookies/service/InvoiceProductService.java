@@ -18,5 +18,5 @@ public interface InvoiceProductService {
 
     void completeApproval(Long invoiceId, InvoiceType type);
 
-    boolean isValidQuantity(InvoiceProductDTO invoiceProductDTO);
+    boolean insufficientQuantity(InvoiceProductDTO invoiceProductDTO);
 }

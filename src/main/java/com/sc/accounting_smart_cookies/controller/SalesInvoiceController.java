@@ -75,10 +75,10 @@ public class SalesInvoiceController {
     public String update(@Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO,
                          BindingResult bindingResult, @PathVariable("id") Long id, Model model) {
 
-//        if (invoiceProductService.isValidQuantity(invoiceProductDTO)) {
-//            bindingResult.rejectValue("quantity", " ",
-//                    "Quantity cannot be greater than 100 or less than 1.");
-//        }
+        if (invoiceProductService.insufficientQuantity(invoiceProductDTO)) {
+            bindingResult.rejectValue("quantity", " ",
+                    "Insufficient quantity of: " + invoiceProductDTO.getProduct().getName());
+        }
 
         if (bindingResult.hasErrors()) {
 

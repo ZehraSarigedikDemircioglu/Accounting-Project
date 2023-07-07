@@ -3,6 +3,7 @@ package com.sc.accounting_smart_cookies.service.implementation;
 import com.sc.accounting_smart_cookies.dto.UserDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.User;
+import com.sc.accounting_smart_cookies.exceptions.UserNotFoundException;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.repository.UserRepository;
@@ -55,7 +56,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("User can not found")
+               // () -> new NoSuchElementException("User can not be found")
+                () -> new UserNotFoundException("This user can not be found in the system")
         );
         return mapperUtil.convert(user, new UserDTO());
     }

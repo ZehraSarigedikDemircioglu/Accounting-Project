@@ -111,6 +111,8 @@ public class SalesInvoiceController {
 
         invoiceService.approveInvoiceById(id);
 
+//        productService.updateProductQuantity();
+
         return "redirect:/salesInvoices/list";
     }
 

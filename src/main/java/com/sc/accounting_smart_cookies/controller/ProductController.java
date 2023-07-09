@@ -1,5 +1,7 @@
 package com.sc.accounting_smart_cookies.controller;
 
+import com.sc.accounting_smart_cookies.annotation.ExecutionTime;
+import com.sc.accounting_smart_cookies.annotation.LoggingAnnotation;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.enums.ProductUnit;
 import com.sc.accounting_smart_cookies.service.CategoryService;
@@ -25,7 +27,7 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
-//    @GetMapping("/list")
+    //    @GetMapping("/list")
 //    public String listProduct(Model model) {
 //        model.addAttribute("products", productService.findAll());
 //        return "product/product-list";
@@ -36,17 +38,19 @@ public class ProductController {
         return "product/product-list";
     }
 
+    @ExecutionTime
     @GetMapping("/create")
     public String createProduct(Model model) {
         model.addAttribute("newProduct", new ProductDTO());
         return "product/product-create";
     }
 
+    @ExecutionTime
     @PostMapping("/create")
     public String saveProduct(@Valid @ModelAttribute("newProduct") ProductDTO productDTO,
                               BindingResult bindingResult, Model model) {
 
-        if (productService.isProductNameExist(productDTO)){
+        if (productService.isProductNameExist(productDTO)) {
             bindingResult.rejectValue("name", " ", "This Product Name already exists.");
         }
 
@@ -67,7 +71,7 @@ public class ProductController {
     public String updateProduct(@PathVariable("id") Long id,
                                 @Valid @ModelAttribute("product") ProductDTO productDTO,
                                 BindingResult bindingResult) {
-        if (productService.isProductNameExist(productDTO)){
+        if (productService.isProductNameExist(productDTO)) {
             bindingResult.rejectValue("name", " ", "This Product Name already exists.");
         }
         if (bindingResult.hasErrors()) {
@@ -79,15 +83,16 @@ public class ProductController {
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        if (productService.checkProductHasInvoice(id))  {
+        if (productService.checkProductHasInvoice(id)) {
             redirectAttributes.addFlashAttribute("error", "This product can not be deleted.");
             return "redirect:/products/list";
         }
         productService.deleteById(id);
         return "redirect:/products/list";
     }
+
     @ModelAttribute
-    public void commonAttributes(Model model){
+    public void commonAttributes(Model model) {
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
         model.addAttribute("categories", categoryService.listAllCategories());
     }

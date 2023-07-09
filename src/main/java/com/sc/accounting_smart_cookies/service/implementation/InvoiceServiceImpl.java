@@ -5,6 +5,7 @@ import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.entity.ClientVendor;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Invoice;
+import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
@@ -115,6 +116,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     public void deleteById(Long id) {
 
         Optional<Invoice> invoice = invoiceRepository.findById(id);
+         List<InvoiceProductDTO>invoiceProductDTOS=invoiceProductService.findAllByInvoiceId(id);
+        for (InvoiceProductDTO dto : invoiceProductDTOS){
+            invoiceProductService.deleteById(dto.getId());
+        }
 
         if (invoice.isPresent()) {
             invoice.get().setIsDeleted(true);
@@ -144,6 +149,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceProductService.completeApproval(id, invoice.get().getInvoiceType());
             invoice.get().setInvoiceStatus(InvoiceStatus.APPROVED);
             invoice.get().setDate(LocalDate.now());
+          invoiceProductService.completeApproval(id, invoice.get().getInvoiceType());
             invoiceRepository.save(invoice.get());
             mapperUtil.convert(invoice, new InvoiceDTO());
         }

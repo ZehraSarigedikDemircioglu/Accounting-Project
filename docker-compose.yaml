@@ -4,7 +4,7 @@ services:                             # Which cantainers I need...
     networks:                         # Which network this container will use...
       - accounting-network
     container_name: accounting
-    image : "owermaiden/accounting:latest"
+    image : "cemils/accounting:latest"
     environment:                      # Attach this environment variables to my container
       SPRING_PROFILES_ACTIVE: default # Which profile you want to use dev / test etc.
       DATABASE_HOST: db               # Who is the host for database, localhost or do you have other container

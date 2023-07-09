@@ -45,7 +45,7 @@ public class SalesInvoiceController {
     public String saveInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDTO invoiceDTO,
                               BindingResult bindingResult, Model model) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("clients", clientVendorService.findAll());
             return "invoice/sales-invoice-create";
         }
@@ -71,21 +71,39 @@ public class SalesInvoiceController {
         return "invoice/sales-invoice-update";
     }
 
+    @PostMapping("/addInvoiceProduct/{id}")
+    public String update(@Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO,
+                         BindingResult bindingResult, @PathVariable("id") Long id, Model model) {
+
+        if (invoiceProductService.insufficientQuantity(invoiceProductDTO)) {
+            bindingResult.rejectValue("quantity", " ",
+                    "Insufficient quantity of: " + invoiceProductDTO.getProduct().getName());
+        }
+
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("invoice", invoiceService.findById(id));
+            model.addAttribute("clients", clientVendorService.findAll());
+
+            model.addAttribute("newInvoiceProduct", invoiceProductDTO);
+            model.addAttribute("products", productService.findAllByCompany());
+
+            model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceId(id));
+
+            return "invoice/sales-invoice-update";
+        }
+
+        invoiceProductService.save(invoiceProductDTO, id);
+
+        return "redirect:/salesInvoices/update/" + id;
+    }
+
     @PostMapping("/update/{id}")
     public String updateList(@PathVariable("id") Long id, @ModelAttribute("invoice") InvoiceDTO invoiceDTO) {
 
         invoiceService.update(id, invoiceDTO);
 
         return "redirect:/salesInvoices/list";
-    }
-
-    @PostMapping("/addInvoiceProduct/{id}")
-    public String update(@PathVariable("id") Long id,
-                         @ModelAttribute("newInvoiceProduct") InvoiceProductDTO invoiceProductDTO) {
-
-        invoiceProductService.save(invoiceProductDTO, id);
-
-        return "redirect:/salesInvoices/update/" + id;
     }
 
     @GetMapping("/delete/{id}")

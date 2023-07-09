@@ -4,9 +4,9 @@ import com.sc.accounting_smart_cookies.dto.*;
 import com.sc.accounting_smart_cookies.entity.*;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.service.ProductService;
-import com.sc.accounting_smart_cookies.service.repository.CategoryRepository;
-import com.sc.accounting_smart_cookies.service.repository.ProductRepository;
-import com.sc.accounting_smart_cookies.service.repository.UserRepository;
+import com.sc.accounting_smart_cookies.repository.CategoryRepository;
+import com.sc.accounting_smart_cookies.repository.ProductRepository;
+import com.sc.accounting_smart_cookies.repository.UserRepository;
 import com.sc.accounting_smart_cookies.service.CategoryService;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import org.springframework.stereotype.Service;
@@ -18,21 +18,18 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
+
     private final CompanyService companyService;
     private final MapperUtil mapperUtil;
 
     private final ProductService productService;
 
-    private final ProductRepository productRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyService companyService, MapperUtil mapperUtil, ProductService productService, ProductRepository productRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CompanyService companyService, MapperUtil mapperUtil, ProductService productService) {
         this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
         this.companyService = companyService;
         this.mapperUtil = mapperUtil;
         this.productService = productService;
-        this.productRepository = productRepository;
     }
 
     @Override

@@ -1,5 +1,6 @@
-package com.sc.accounting_smart_cookies.repository;
+package com.sc.accounting_smart_cookies.service.repository;
 
+import com.sc.accounting_smart_cookies.entity.Category;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
         List<Product> findAllByCompany(Company company);
         Product findByNameAndCategoryCompany(String productName, Company company);
+
+        List<Product> findAllByCategory(Category category);
+
+    List<Product> findByCategory(Category category);
 }

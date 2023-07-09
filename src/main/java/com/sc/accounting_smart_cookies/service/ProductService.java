@@ -21,4 +21,6 @@ public interface ProductService {
     boolean isProductNameExist(ProductDTO productDTO);
 
     boolean checkProductHasInvoice(Long id);
+
+    List<ProductDTO> getProductsByCategory(Long id);
 }

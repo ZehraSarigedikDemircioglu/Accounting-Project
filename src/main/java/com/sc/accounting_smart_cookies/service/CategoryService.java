@@ -22,6 +22,5 @@ public interface CategoryService {
 
     boolean isCategoryDescriptionUnique(CategoryDTO categoryDTO);
 
-
-
+    boolean hasProducts(CategoryDTO categoryDTO);
 }

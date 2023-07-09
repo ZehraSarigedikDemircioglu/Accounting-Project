@@ -1,4 +1,4 @@
-package com.sc.accounting_smart_cookies.repository;
+package com.sc.accounting_smart_cookies.service.repository;
 
 import com.sc.accounting_smart_cookies.entity.Category;
 import com.sc.accounting_smart_cookies.entity.Company;
@@ -23,4 +23,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByDescription(String description);
 
     Category findByDescriptionAndCompany(String description, Company company);
+
+
 }

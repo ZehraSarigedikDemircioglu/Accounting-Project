@@ -1,13 +1,13 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
-import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
+import com.sc.accounting_smart_cookies.entity.Category;
 import com.sc.accounting_smart_cookies.entity.Company;
-import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.entity.Product;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
-import com.sc.accounting_smart_cookies.repository.ProductRepository;
+import com.sc.accounting_smart_cookies.service.repository.CategoryRepository;
+import com.sc.accounting_smart_cookies.service.repository.ProductRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.ProductService;
@@ -15,10 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +26,8 @@ public class ProductServiceImpl implements ProductService {
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
     private final InvoiceProductService invoiceProductService;
+
+    private final CategoryRepository categoryRepository;
 
     @Override
     public ProductDTO findById(Long id) {
@@ -98,6 +97,16 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         List<InvoiceProductDTO> invoiceProductDTOs = invoiceProductService.findAllByInvoiceId(id);
         return invoiceProductDTOs.size() > 0 || product.getQuantityInStock() > 0;
+    }
+
+    @Override
+    public List<ProductDTO> getProductsByCategory(Long id) {
+
+        Category category = categoryRepository.findById(id).orElseThrow();
+
+        List<Product> products = productRepository.findByCategory(category);
+
+        return products.stream().map(product -> mapperUtil.convert(product, new ProductDTO())).collect(Collectors.toList());
     }
 
 }

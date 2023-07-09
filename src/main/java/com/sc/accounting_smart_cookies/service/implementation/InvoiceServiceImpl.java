@@ -146,10 +146,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         Optional<Invoice> invoice = invoiceRepository.findById(id);
 
         if (invoice.isPresent()) {
+            invoiceProductService.completeApproval(id, invoice.get().getInvoiceType());
             invoice.get().setInvoiceStatus(InvoiceStatus.APPROVED);
             invoice.get().setDate(LocalDate.now());
           invoiceProductService.completeApproval(id, invoice.get().getInvoiceType());
             invoiceRepository.save(invoice.get());
+            mapperUtil.convert(invoice, new InvoiceDTO());
         }
 
     }
@@ -158,10 +160,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     public InvoiceDTO update(Long id, InvoiceDTO invoiceDTO) {
 
         Invoice invoice = invoiceRepository.findById(id).orElseThrow();
-
         invoice.setClientVendor(mapperUtil.convert(invoiceDTO.getClientVendor(), new ClientVendor()));
+        invoiceRepository.save(invoice);
 
-        return mapperUtil.convert(invoiceRepository.save(invoice), new InvoiceDTO());
+        return mapperUtil.convert(invoice, new InvoiceDTO());
     }
 
     @Override

@@ -111,6 +111,11 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
     }
 
+    @Override
+    public boolean insufficientQuantity(InvoiceProductDTO invoiceProductDTO) {
+
+        return invoiceProductDTO.getQuantity() > invoiceProductDTO.getProduct().getQuantityInStock();
+    }
 
     private void updateProductQuantity(InvoiceProduct invoiceProduct, InvoiceType type) {
 

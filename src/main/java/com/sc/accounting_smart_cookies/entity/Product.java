@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.entity;
 
 import com.sc.accounting_smart_cookies.enums.ProductUnit;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
 @Where(clause = "is_deleted=false")

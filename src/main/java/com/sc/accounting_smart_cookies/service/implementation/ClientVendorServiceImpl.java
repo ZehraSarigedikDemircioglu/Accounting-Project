@@ -7,8 +7,10 @@ import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.ClientVendorRepository;
+import com.sc.accounting_smart_cookies.repository.InvoiceRepository;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import com.sc.accounting_smart_cookies.service.CompanyService;
+import com.sc.accounting_smart_cookies.service.InvoiceService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
+    private final InvoiceService invoiceService;
 
 
     @Override
@@ -70,12 +73,14 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public void deleteById(Long id) {
+
         Optional<ClientVendor> clientVendor = clientVendorRepository.findById(id);
         if (clientVendor.isPresent()) {
             clientVendor.get().setIsDeleted(true);
             clientVendorRepository.save(clientVendor.get());
         }
     }
+
 
     @Override
     public List<ClientVendorDTO> findVendorsByType(ClientVendorType clientVendorType) {
@@ -86,6 +91,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public boolean isClientVendorByCompanyNameExist(ClientVendorDTO clientVendorDTO) {
         ClientVendor clientVendor = clientVendorRepository.findByClientVendorNameAndCompany(clientVendorDTO.getClientVendorName()
@@ -94,6 +100,11 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         if (clientVendor == null) return false;
         return !clientVendor.getId().equals(clientVendorDTO.getId());
 
+    }
+
+    @Override
+    public boolean isClientVendorHasInvoice(Long id) {
+        return invoiceService.existsByClientVendorId(id);
     }
 }
 

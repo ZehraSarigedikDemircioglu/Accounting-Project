@@ -29,4 +29,6 @@ public interface InvoiceService {
     List<InvoiceDTO> findTop3ByOrderByDateDesc();
 
     InvoiceDTO printInvoice(Long id);
+
+    boolean existsByClientVendorId(Long id);
 }

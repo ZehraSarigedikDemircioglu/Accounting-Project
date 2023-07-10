@@ -180,6 +180,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceDto;
     }
 
+
+
     private String generateInvoiceNo(InvoiceType invoiceType) {
 
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
@@ -197,4 +199,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
 
+    @Override
+    public boolean existsByClientVendorId(Long id) {
+
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        return invoiceRepository.existsByCompanyAndClientVendorId(company, id);
+    }
 }

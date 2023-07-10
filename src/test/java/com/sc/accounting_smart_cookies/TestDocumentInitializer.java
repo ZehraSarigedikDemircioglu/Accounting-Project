@@ -85,6 +85,9 @@ public class TestDocumentInitializer {
                 .lowLimitAlert(5)
                 .build();
     }
+    public static Product getProductEntity(){
+        return mapperUtil.convert(getProduct(), new Product());
+    }
 
     public static InvoiceProductDTO getInvoiceProduct(){
         return InvoiceProductDTO.builder()

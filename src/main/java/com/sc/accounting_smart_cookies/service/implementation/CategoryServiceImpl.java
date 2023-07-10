@@ -6,7 +6,6 @@ import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.service.ProductService;
 import com.sc.accounting_smart_cookies.repository.CategoryRepository;
 import com.sc.accounting_smart_cookies.repository.ProductRepository;
-import com.sc.accounting_smart_cookies.repository.UserRepository;
 import com.sc.accounting_smart_cookies.service.CategoryService;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import org.springframework.stereotype.Service;

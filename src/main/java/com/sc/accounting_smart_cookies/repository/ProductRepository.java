@@ -1,4 +1,4 @@
-package com.sc.accounting_smart_cookies.service.repository;
+package com.sc.accounting_smart_cookies.repository;
 
 import com.sc.accounting_smart_cookies.entity.Category;
 import com.sc.accounting_smart_cookies.entity.Company;

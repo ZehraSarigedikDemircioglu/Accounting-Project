@@ -5,6 +5,7 @@ import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.entity.ClientVendor;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
+import com.sc.accounting_smart_cookies.exceptions.ClientVendorNotFoundException;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.ClientVendorRepository;
 import com.sc.accounting_smart_cookies.repository.InvoiceRepository;
@@ -31,7 +32,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDTO findById(Long id) {
-        ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow();
+        ClientVendor clientVendor = clientVendorRepository.findById(id)
+                .orElseThrow(() -> new ClientVendorNotFoundException("This Client or Vendor can not be found in the system."));
         return mapperUtil.convert(clientVendor, new ClientVendorDTO());
     }
 
@@ -62,7 +64,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public ClientVendorDTO update(Long id, ClientVendorDTO clientVendorDTO) {
         Company company = mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company());
-        ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow();
+        ClientVendor clientVendor = clientVendorRepository.findById(id)
+                .orElseThrow(() -> new ClientVendorNotFoundException("This Client or Vendor with id number " + id + " can not be found in the system."));
         ClientVendor newClientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
         newClientVendor.setId(clientVendor.getId());
         newClientVendor.setCompany(company);

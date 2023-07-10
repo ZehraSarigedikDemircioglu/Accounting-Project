@@ -2,8 +2,10 @@ package com.sc.accounting_smart_cookies.service;
 
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
+import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface InvoiceProductService {
@@ -19,4 +21,6 @@ public interface InvoiceProductService {
     void completeApproval(Long invoiceId, InvoiceType type);
 
     boolean insufficientQuantity(InvoiceProductDTO invoiceProductDTO);
+
+    BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct);
 }

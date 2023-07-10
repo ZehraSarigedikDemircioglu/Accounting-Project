@@ -33,92 +33,92 @@ public class ReportingServiceImpl implements ReportingService {
     private final SecurityService securityService;
     private final InvoiceProductService invoiceProductService;
     private final InvoiceProductRepository invoiceProductRepository;
+//
+//    @Override
+//    public BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct) {
+//
+//        List<InvoiceProduct> purchasedProducts = invoiceProductRepository
+//                .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(
+//               InvoiceType.PURCHASE,toBeSoldProduct.getProduct(),0);
+//
+//        BigDecimal profitLoss = BigDecimal.ZERO;
+//
+//
+//        for (InvoiceProduct purchasedProduct : purchasedProducts) {
+//            if (toBeSoldProduct.getRemainingQuantity()==null){
+//                break;
+//            }
+//            if (toBeSoldProduct.getRemainingQuantity() <= purchasedProduct.getRemainingQuantity()) {
+//                BigDecimal costTotalForQty = purchasedProduct.getPrice().
+//                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+//                        .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
+//                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
+//                        multiply(BigDecimal.valueOf(toBeSoldProduct.getQuantity()))
+//                        .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
+//                profitLoss = costTotalForQty.subtract(salesTotalForQty);
+//
+//                purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
+//                toBeSoldProduct.setProfitLoss(profitLoss);
+//                toBeSoldProduct.setRemainingQuantity(0);
+//                invoiceProductService.save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
+//                        purchasedProduct.getInvoice().getId());
+//                invoiceProductService.save(mapperUtil.convert(toBeSoldProduct, new InvoiceProductDTO()),
+//                        toBeSoldProduct.getInvoice().getId());
+//
+//                break;
+//            } else {
+//                BigDecimal costTotalForQty = purchasedProduct.getPrice().
+//                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+//                        .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
+//                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
+//                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+//                        .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
+//                profitLoss = costTotalForQty.subtract(salesTotalForQty);
+//                purchasedProduct.setRemainingQuantity(0);
+//                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity());
+//                purchasedProduct.setProfitLoss(profitLoss);
+//                toBeSoldProduct.setProfitLoss(profitLoss);
+//                invoiceProductService.save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
+//                        purchasedProduct.getInvoice().getId());
+//                invoiceProductService.save(mapperUtil.convert(toBeSoldProduct, new InvoiceProductDTO()),
+//                        toBeSoldProduct.getInvoice().getId());
+//
+//            }
+//        }
+//        return profitLoss;
+//    }
 
     @Override
-    public BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct) {
+    public Map<String, BigDecimal> listMonthlyProfitLoss() {
+        List<InvoiceProduct> salesList = invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
+                InvoiceStatus.APPROVED, InvoiceType.SALES, securityService.getLoggedInUser().getCompany().getTitle());
 
-        List<InvoiceProduct> purchasedProducts = invoiceProductRepository
-                .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(
-               InvoiceType.PURCHASE,toBeSoldProduct.getProduct(),0);
+        Map<String, BigDecimal> monthlyProfitLoss = new HashMap<>();
 
-        BigDecimal profitLoss = BigDecimal.ZERO;
+        salesList.forEach(invoiceProduct -> {
+            String month = invoiceProduct.getInvoice().getDate().getMonth().toString();
+            BigDecimal profitLoss = invoiceProduct.getProfitLoss();
 
+            monthlyProfitLoss.put(month, monthlyProfitLoss.getOrDefault(month, BigDecimal.ZERO).add(profitLoss));
+        });
 
-        for (InvoiceProduct purchasedProduct : purchasedProducts) {
-            if (toBeSoldProduct.getRemainingQuantity()==null){
-                break;
-            }
-            if (toBeSoldProduct.getRemainingQuantity() <= purchasedProduct.getRemainingQuantity()) {
-                BigDecimal costTotalForQty = purchasedProduct.getPrice().
-                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
-                        .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
-                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
-                        multiply(BigDecimal.valueOf(toBeSoldProduct.getQuantity()))
-                        .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
-                profitLoss = costTotalForQty.subtract(salesTotalForQty);
-
-                purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
-                toBeSoldProduct.setProfitLoss(profitLoss);
-                toBeSoldProduct.setRemainingQuantity(0);
-                invoiceProductService.save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
-                        purchasedProduct.getInvoice().getId());
-                invoiceProductService.save(mapperUtil.convert(toBeSoldProduct, new InvoiceProductDTO()),
-                        toBeSoldProduct.getInvoice().getId());
-
-                break;
-            } else {
-                BigDecimal costTotalForQty = purchasedProduct.getPrice().
-                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
-                        .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
-                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
-                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
-                        .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
-                profitLoss = costTotalForQty.subtract(salesTotalForQty);
-                purchasedProduct.setRemainingQuantity(0);
-                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity());
-                purchasedProduct.setProfitLoss(profitLoss);
-                toBeSoldProduct.setProfitLoss(profitLoss);
-                invoiceProductService.save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
-                        purchasedProduct.getInvoice().getId());
-                invoiceProductService.save(mapperUtil.convert(toBeSoldProduct, new InvoiceProductDTO()),
-                        toBeSoldProduct.getInvoice().getId());
-
-            }
-        }
-        return profitLoss;
+        return monthlyProfitLoss;
     }
-
-//    @Override
-//    public Map<String, BigDecimal> listMonthlyProfitLoss() {
-//        List<InvoiceProduct> salesList = invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
-//                InvoiceStatus.APPROVED, InvoiceType.SALES, securityService.getLoggedInUser().getCompany().getTitle());
+//@Override
+//public Map<String, BigDecimal> listMonthlyProfitLoss() {
+//    List<InvoiceProduct> salesList = invoiceProductRepository.findAll();
+//    Map<String, BigDecimal> monthlyProfitLoss = new HashMap<>();
 //
-//        Map<String, BigDecimal> monthlyProfitLoss = new HashMap<>();
+//    for (InvoiceProduct invoiceProduct : salesList) {
+//        String month=invoiceProduct.getInvoice().getDate().getMonth().toString();
 //
-//        salesList.forEach(invoiceProduct -> {
-//            String month = invoiceProduct.getInvoice().getDate().getMonth().toString();
-//            BigDecimal profitLoss = invoiceProduct.getProfitLoss();
+//        BigDecimal monthlyProfitLoss1=(invoiceProductService.setProfitLossOfInvoiceProductsForSalesInvoice(invoiceProduct));
+//        monthlyProfitLoss.put(month,monthlyProfitLoss1);
 //
-//            monthlyProfitLoss.put(month, monthlyProfitLoss.getOrDefault(month, BigDecimal.ZERO).add(profitLoss));
-//        });
-//
-//        return monthlyProfitLoss;
 //    }
-@Override
-public Map<String, BigDecimal> listMonthlyProfitLoss() {
-    List<InvoiceProduct> salesList = invoiceProductRepository.findAll();
-    Map<String, BigDecimal> monthlyProfitLoss = new HashMap<>();
-
-    for (InvoiceProduct invoiceProduct : salesList) {
-        String month=invoiceProduct.getInvoice().getDate().getMonth().toString();
-
-        BigDecimal monthlyProfitLoss1=(setProfitLossOfInvoiceProductsForSalesInvoice(invoiceProduct));
-        monthlyProfitLoss.put(month,monthlyProfitLoss1);
-
-    }
-
-    return monthlyProfitLoss;
-}
+//
+//    return monthlyProfitLoss;
+//}
 
 
 }

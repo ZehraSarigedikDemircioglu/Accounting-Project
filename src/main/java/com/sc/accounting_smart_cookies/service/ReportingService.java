@@ -7,7 +7,7 @@ import java.time.YearMonth;
 import java.util.Map;
 
 public interface ReportingService {
-    BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct);
+//    BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct);
     Map<String, BigDecimal> listMonthlyProfitLoss();
 
 

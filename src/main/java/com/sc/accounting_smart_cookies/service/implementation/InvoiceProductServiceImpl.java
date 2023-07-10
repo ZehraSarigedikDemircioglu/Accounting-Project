@@ -102,6 +102,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
                     each.setRemainingQuantity(each.getQuantity());
 
+                    each.setProfitLoss(setProfitLossOfInvoiceProductsForSalesInvoice(each));
                     invoiceProductRepository.save(each);
 
                 } else {
@@ -128,4 +129,59 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
         productService.update(productDTO.getId(), productDTO);
     }
+
+    @Override
+    public BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct) {
+
+        List<InvoiceProduct> purchasedProducts = invoiceProductRepository
+                .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(
+                        InvoiceType.PURCHASE,toBeSoldProduct.getProduct(),0);
+
+        BigDecimal profitLoss = BigDecimal.ZERO;
+
+
+        for (InvoiceProduct purchasedProduct : purchasedProducts) {
+            if (toBeSoldProduct.getRemainingQuantity()==null){
+                break;
+            }
+            if (toBeSoldProduct.getRemainingQuantity() <= purchasedProduct.getRemainingQuantity()) {
+                BigDecimal costTotalForQty = purchasedProduct.getPrice().
+                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+                        .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
+                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
+                        multiply(BigDecimal.valueOf(toBeSoldProduct.getQuantity()))
+                        .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
+                profitLoss = costTotalForQty.subtract(salesTotalForQty);
+
+                purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
+                toBeSoldProduct.setProfitLoss(profitLoss);
+                toBeSoldProduct.setRemainingQuantity(0);
+                save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
+                        purchasedProduct.getInvoice().getId());
+                save(mapperUtil.convert(toBeSoldProduct, new InvoiceProductDTO()),
+                        toBeSoldProduct.getInvoice().getId());
+
+                break;
+            } else {
+                BigDecimal costTotalForQty = purchasedProduct.getPrice().
+                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+                        .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
+                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
+                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+                        .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
+                profitLoss = costTotalForQty.subtract(salesTotalForQty);
+                purchasedProduct.setRemainingQuantity(0);
+                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity());
+                purchasedProduct.setProfitLoss(profitLoss);
+                toBeSoldProduct.setProfitLoss(profitLoss);
+                save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
+                        purchasedProduct.getInvoice().getId());
+                save(mapperUtil.convert(toBeSoldProduct, new InvoiceProductDTO()),
+                        toBeSoldProduct.getInvoice().getId());
+
+            }
+        }
+        return profitLoss;
+    }
+
 }

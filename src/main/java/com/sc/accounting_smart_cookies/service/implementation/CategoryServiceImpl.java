@@ -2,6 +2,7 @@ package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.*;
 import com.sc.accounting_smart_cookies.entity.*;
+import com.sc.accounting_smart_cookies.exceptions.CategoryNotFoundException;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.service.ProductService;
 import com.sc.accounting_smart_cookies.repository.CategoryRepository;
@@ -33,7 +34,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO findById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow();
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("This Category can not be found in the system."));
         return mapperUtil.convert(category, new CategoryDTO());
     }
 

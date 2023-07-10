@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.repository;
 
+import com.sc.accounting_smart_cookies.entity.ClientVendor;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
@@ -21,5 +23,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findInvoicesByCompanyAndInvoiceType(Company company, InvoiceType invoiceType);
 
     List<Invoice> findTop3ByOrderByDateDesc();
+
+    boolean existsByCompanyAndClientVendorId(Company company, Long id);
+
 
 }

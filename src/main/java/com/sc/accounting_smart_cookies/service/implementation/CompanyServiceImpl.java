@@ -5,6 +5,7 @@ import com.sc.accounting_smart_cookies.dto.UserDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.User;
 import com.sc.accounting_smart_cookies.enums.CompanyStatus;
+import com.sc.accounting_smart_cookies.exceptions.CompanyNotFoundException;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
@@ -36,7 +37,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO findById(Long id) {
-        Company company = companyRepository.findById(id).orElseThrow();
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("This Company can not be found in the system"));
         return mapperUtil.convert(company, new CompanyDTO());
     }
 
@@ -51,7 +53,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDTO update(CompanyDTO companyDTO, Long id) {
 
-            Company company = companyRepository.findById(id).orElseThrow();
+            Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyNotFoundException("This Company with id number " + id + " can not be found in the system." ));
             Company company1 = mapperUtil.convert(companyDTO, new Company());
             company1.setId(company.getId());
             company1.setCompanyStatus(company.getCompanyStatus());

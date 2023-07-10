@@ -1,10 +1,7 @@
 package com.sc.accounting_smart_cookies;
 
 import com.sc.accounting_smart_cookies.dto.*;
-import com.sc.accounting_smart_cookies.entity.Category;
-import com.sc.accounting_smart_cookies.entity.ClientVendor;
-import com.sc.accounting_smart_cookies.entity.Company;
-import com.sc.accounting_smart_cookies.entity.User;
+import com.sc.accounting_smart_cookies.entity.*;
 import com.sc.accounting_smart_cookies.enums.*;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import org.modelmapper.ModelMapper;
@@ -87,6 +84,9 @@ public class TestDocumentInitializer {
                 .quantityInStock(10)
                 .lowLimitAlert(5)
                 .build();
+    }
+    public static Product getProductEntity(){
+        return mapperUtil.convert(getProduct(), new Product());
     }
 
     public static InvoiceProductDTO getInvoiceProduct(){

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -65,6 +66,9 @@ public class CategoryController {
     @PostMapping("/update/{id}")
     public String updateCategory(@Valid @PathVariable("id") Long id, @ModelAttribute("category") CategoryDTO categoryDTO, BindingResult bindingResult, Model model){
 
+        if (categoryService.hasProducts(categoryDTO)){
+            bindingResult.rejectValue("description", " ", "This category already has product/products! Make sure the new description that will be provided is proper.");
+        }
         if (bindingResult.hasErrors()) {
             return "category/category-update";
         }
@@ -73,7 +77,11 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Long id){
+    public String deleteCategory(@PathVariable("id") Long id, RedirectAttributes redirectAttributes, @ModelAttribute("category") CategoryDTO categoryDTO){
+//        if(categoryService.hasProducts(categoryDTO)){
+//            redirectAttributes.addFlashAttribute("error", "Can not be deleted! This category has product/products");
+//            return "redirect:/category-list";
+//        }
         categoryService.deleteById(id);
         return "redirect:/categories/list";
     }

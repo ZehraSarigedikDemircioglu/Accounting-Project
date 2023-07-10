@@ -3,13 +3,12 @@ package com.sc.accounting_smart_cookies.service.implementation;
 import com.sc.accounting_smart_cookies.dto.*;
 import com.sc.accounting_smart_cookies.entity.*;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
-import com.sc.accounting_smart_cookies.repository.CategoryRepository;
-import com.sc.accounting_smart_cookies.repository.CompanyRepository;
-import com.sc.accounting_smart_cookies.repository.UserRepository;
+import com.sc.accounting_smart_cookies.service.ProductService;
+import com.sc.accounting_smart_cookies.service.repository.CategoryRepository;
+import com.sc.accounting_smart_cookies.service.repository.ProductRepository;
+import com.sc.accounting_smart_cookies.service.repository.UserRepository;
 import com.sc.accounting_smart_cookies.service.CategoryService;
 import com.sc.accounting_smart_cookies.service.CompanyService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +22,17 @@ public class CategoryServiceImpl implements CategoryService {
     private final CompanyService companyService;
     private final MapperUtil mapperUtil;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyService companyService, MapperUtil mapperUtil) {
+    private final ProductService productService;
+
+    private final ProductRepository productRepository;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, UserRepository userRepository, CompanyService companyService, MapperUtil mapperUtil, ProductService productService, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.companyService = companyService;
         this.mapperUtil = mapperUtil;
+        this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -85,6 +90,16 @@ public class CategoryServiceImpl implements CategoryService {
         if (existingCategory == null) return false;
         return !existingCategory.getId().equals(categoryDTO.getId());
     }
+
+    @Override
+    public boolean hasProducts(CategoryDTO categoryDTO) {
+        List<ProductDTO> products = productService.getProductsByCategory(categoryDTO.getId());
+        return !products.isEmpty();
+
+    }
+
+
+
 
 
 }

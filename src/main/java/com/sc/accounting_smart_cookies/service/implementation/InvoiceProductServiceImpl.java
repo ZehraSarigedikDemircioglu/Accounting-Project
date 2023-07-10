@@ -4,12 +4,14 @@ import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
+import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.InvoiceProductRepository;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.InvoiceService;
 import com.sc.accounting_smart_cookies.service.ProductService;
+import com.sc.accounting_smart_cookies.service.SecurityService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +27,15 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     private final MapperUtil mapperUtil;
     private final InvoiceService invoiceService;
     private final ProductService productService;
+    private final SecurityService securityService;
 
     public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository, MapperUtil mapperUtil,
-                                     @Lazy InvoiceService invoiceService, @Lazy ProductService productService) {
+                                     @Lazy InvoiceService invoiceService, @Lazy ProductService productService, SecurityService securityService) {
         this.invoiceProductRepository = invoiceProductRepository;
         this.mapperUtil = mapperUtil;
         this.invoiceService = invoiceService;
         this.productService = productService;
+        this.securityService = securityService;
     }
 
     @Override
@@ -103,6 +107,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                     each.setRemainingQuantity(each.getQuantity());
 
                     each.setProfitLoss(setProfitLossOfInvoiceProductsForSalesInvoice(each));
+
                     invoiceProductRepository.save(each);
 
                 } else {
@@ -135,26 +140,24 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         List<InvoiceProduct> purchasedProducts = invoiceProductRepository
                 .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(
-                        InvoiceType.PURCHASE,toBeSoldProduct.getProduct(),0);
+                        InvoiceType.PURCHASE, toBeSoldProduct.getProduct(), 0);
 
         BigDecimal profitLoss = BigDecimal.ZERO;
 
-
         for (InvoiceProduct purchasedProduct : purchasedProducts) {
-            if (toBeSoldProduct.getRemainingQuantity()==null){
-                break;
-            }
+
             if (toBeSoldProduct.getRemainingQuantity() <= purchasedProduct.getRemainingQuantity()) {
+
                 BigDecimal costTotalForQty = purchasedProduct.getPrice().
-                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+                        multiply(BigDecimal.valueOf(purchasedProduct.getRemainingQuantity()))
                         .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
                 BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
-                        multiply(BigDecimal.valueOf(toBeSoldProduct.getQuantity()))
+                        multiply(BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity()))
                         .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
-                profitLoss = costTotalForQty.subtract(salesTotalForQty);
+                profitLoss = salesTotalForQty.subtract(costTotalForQty);
 
                 purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
-                toBeSoldProduct.setProfitLoss(profitLoss);
+                toBeSoldProduct.setProfitLoss(toBeSoldProduct.getProfitLoss().add(profitLoss));
                 toBeSoldProduct.setRemainingQuantity(0);
                 save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
                         purchasedProduct.getInvoice().getId());
@@ -164,14 +167,14 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 break;
             } else {
                 BigDecimal costTotalForQty = purchasedProduct.getPrice().
-                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+                        multiply(BigDecimal.valueOf(purchasedProduct.getRemainingQuantity()))
                         .multiply(BigDecimal.valueOf((purchasedProduct.getTax() + 100) / 100d));
                 BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().
-                        multiply(BigDecimal.valueOf(purchasedProduct.getQuantity()))
+                        multiply(BigDecimal.valueOf(purchasedProduct.getRemainingQuantity()))
                         .multiply(BigDecimal.valueOf((toBeSoldProduct.getTax() + 100) / 100d));
-                profitLoss = costTotalForQty.subtract(salesTotalForQty);
+                profitLoss = salesTotalForQty.subtract(costTotalForQty);
+                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity() - purchasedProduct.getRemainingQuantity());
                 purchasedProduct.setRemainingQuantity(0);
-                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity());
                 purchasedProduct.setProfitLoss(profitLoss);
                 toBeSoldProduct.setProfitLoss(profitLoss);
                 save(mapperUtil.convert(purchasedProduct, new InvoiceProductDTO()),
@@ -181,7 +184,20 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
             }
         }
-        return profitLoss;
+        return toBeSoldProduct.getProfitLoss();
+    }
+
+    @Override
+    public List<InvoiceProductDTO> getAllProductWithStatusTypeAndCompanyTitle
+            (InvoiceStatus status, InvoiceType type, String title) {
+
+        List<InvoiceProduct>invoiceProductList=
+                invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
+                        InvoiceStatus.APPROVED,InvoiceType.SALES,securityService.getLoggedInUser()
+                                .getCompany().getTitle());
+
+        return invoiceProductList.stream().map(invoiceProduct ->
+                mapperUtil.convert(invoiceProduct,new InvoiceProductDTO())).collect(Collectors.toList());
     }
 
 }

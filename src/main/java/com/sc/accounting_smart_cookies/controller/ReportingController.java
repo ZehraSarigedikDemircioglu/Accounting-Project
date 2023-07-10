@@ -1,7 +1,5 @@
 package com.sc.accounting_smart_cookies.controller;
 
-
-import com.sc.accounting_smart_cookies.service.InvoiceProductService;
 import com.sc.accounting_smart_cookies.service.ReportingService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/reports")
 public class ReportingController {
 
-    private final InvoiceProductService invoiceProductService;
     private final ReportingService reportingService;
     @GetMapping("/profitLossData")
     public String getAllProfitLossReport(Model model){

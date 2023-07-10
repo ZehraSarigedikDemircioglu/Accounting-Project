@@ -141,12 +141,6 @@ class ProductServiceImplTest {
 
     @Test
     void should_save_product() {
-        /*
-        Product product = mapperUtil.convert(productDTO, new Product());
-        product.setCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company()));
-        productRepository.save(product);
-        return mapperUtil.convert(product, new ProductDTO());
-         */
         CompanyDTO company = TestDocumentInitializer.getCompany(CompanyStatus.ACTIVE);
 //        doReturn(company).when(companyService).getCompanyOfLoggedInUser();
         when(companyService.getCompanyOfLoggedInUser()).thenReturn(company);
@@ -157,13 +151,6 @@ class ProductServiceImplTest {
 
     @Test
     void should_find_all_products_by_company() {
-        /*
-        return productRepository.findAllByCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company())).stream()
-                .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
-                        .thenComparing(Product::getName))
-                .map(product -> mapperUtil.convert(product, new ProductDTO()))
-                .collect(Collectors.toList());
-         */
 //        doReturn(product).when(productRepository).findAllByCompany(any(Company.class));
         List<Product> productList = new ArrayList<>();
         productList.add(TestDocumentInitializer.getProductEntity());

@@ -1,12 +1,16 @@
 package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.PaymentDto;
+import com.sc.accounting_smart_cookies.dto.payment.ChargeRequest;
 import com.sc.accounting_smart_cookies.service.PaymentService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.time.LocalDate;
 
 @Controller
@@ -14,6 +18,8 @@ import java.time.LocalDate;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    @Value("${Stripe_Public_Key}")
+    private String api_Key;
 
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
@@ -24,24 +30,51 @@ public class PaymentController {
 
         int selectedYear1 = (selectedYear == null || selectedYear.isEmpty()) ? LocalDate.now().getYear() : Integer.parseInt(selectedYear);
         paymentService.createPaymentsIfNotExist(selectedYear1);
-        model.addAttribute("payments",paymentService.getAllPaymentsByYear(selectedYear1));
+        model.addAttribute("payments", paymentService.getAllPaymentsByYear(selectedYear1));
         model.addAttribute("year", selectedYear1);
         return "payment/payment-list";
     }
 
 
-    @GetMapping("/newpayment/{id}")
-    public String checkout(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/newpayment/{modelId}")
+    public String checkout(@PathVariable("modelId") Long id, Model model) {
 
         PaymentDto dto = paymentService.getPaymentById(id);
-        model.addAttribute("payment", dto);
+        int amount=dto.getAmount();
+        model.addAttribute("amount", amount);
+        model.addAttribute("stripePublicKey", api_Key);
+        model.addAttribute("currency", ChargeRequest.Currency.EUR);
 
         return "payment/payment-method";
     }
 
+    @PostMapping("/charge/{modelId}")
+    public String charge(@PathVariable("modelId") PaymentDto dto,ChargeRequest chargeRequest, Model model)
+            throws StripeException, AuthenticationException {
 
+        chargeRequest.setCurrency(ChargeRequest.Currency.valueOf(String.valueOf(ChargeRequest.Currency.EUR)));
+        chargeRequest.setDescription("Cydeo accounting subscription fee for : "+dto.getYear().getYear()+" "+dto.getMonth());
+        Charge charge = paymentService.charge(chargeRequest);
+        model.addAttribute("id", dto.getId());
+        model.addAttribute("status", charge.getStatus());
+        model.addAttribute("chargeId", charge.getId());
+        model.addAttribute("balance_transaction", charge.getBalanceTransaction());
+        model.addAttribute("description", charge.getDescription());
+        if (charge.getStatus().equals("succeeded")){
+            int selectedYear1=LocalDate.now().getYear();
+            paymentService.createPaymentsIfNotExist(selectedYear1);
+            model.addAttribute("payments", paymentService.getAllPaymentsByYear(selectedYear1));
+            model.addAttribute("year", selectedYear1);
+            paymentService.updatePayment(dto.getId());
+            return "redirect:/payments/list";
+        }
+        return "redirect:/payments/list";
+    }
 
-
-
+    @ExceptionHandler(StripeException.class)
+    public String handleError(Model model, StripeException ex) {
+        model.addAttribute("error", ex.getMessage());
+        return "payment/payment-result";
+    }
 
 }

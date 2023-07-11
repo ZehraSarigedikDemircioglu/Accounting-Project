@@ -1,6 +1,6 @@
 package com.sc.accounting_smart_cookies.service;
 
-import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
+
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
@@ -25,6 +25,6 @@ public interface InvoiceProductService {
 
     BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct);
 
-    List<InvoiceProduct> getAllProductWithStatusTypeAndCompanyTitle(
+    List<InvoiceProductDTO> getAllProductWithStatusTypeAndCompanyTitle(
             InvoiceStatus status, InvoiceType type, String title);
 }

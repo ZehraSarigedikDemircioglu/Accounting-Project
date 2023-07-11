@@ -73,6 +73,18 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(convertedProduct);
         return mapperUtil.convert(convertedProduct, new ProductDTO());
     }
+
+    @Override
+    public ProductDTO updateQuantity(ProductDTO productDTO) {
+
+        Product product = mapperUtil.convert(productDTO, new Product());
+        product.setId(product.getId());
+        product.setQuantityInStock(product.getQuantityInStock());
+        product.setCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company()));
+        productRepository.save(product);
+        return mapperUtil.convert(product, new ProductDTO());
+    }
+
     @Override
     public List<ProductDTO> findAllByCompany() {
         return productRepository.findAllByCompany(mapperUtil.convert(companyService.getCompanyOfLoggedInUser(), new Company())).stream()

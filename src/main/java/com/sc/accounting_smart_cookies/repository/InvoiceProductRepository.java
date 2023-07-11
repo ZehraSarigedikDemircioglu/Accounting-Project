@@ -6,6 +6,7 @@ import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
@@ -17,5 +18,5 @@ public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, 
             (InvoiceType invoiceType, Product product, Integer remainingQuantity);
 
     List<InvoiceProduct> findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
-            InvoiceStatus status,InvoiceType type,String title);
+            InvoiceStatus status, InvoiceType type, String title);
 }

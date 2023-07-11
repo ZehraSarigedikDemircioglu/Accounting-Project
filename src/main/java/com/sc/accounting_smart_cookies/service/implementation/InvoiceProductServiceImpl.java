@@ -46,7 +46,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return invoiceProducts.stream().map(invoiceProduct ->
                         mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
                 .peek(dto -> dto.setTotal(dto.getPrice().multiply(BigDecimal.valueOf(dto.getQuantity() *
-                        (dto.getTax()+100)/100d))))
+                        (dto.getTax() + 100) / 100d))))
                 .collect(Collectors.toList());
     }
 
@@ -109,6 +109,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                     each.setProfitLoss(setProfitLossOfInvoiceProductsForSalesInvoice(each));
 
                     invoiceProductRepository.save(each);
+                    break;
 
                 } else {
                     throw new RuntimeException("Insufficient quantity of product");
@@ -132,7 +133,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         } else {
             productDTO.setQuantityInStock(productDTO.getQuantityInStock() - invoiceProduct.getQuantity());
         }
-        productService.update(productDTO.getId(), productDTO);
+        productService.updateQuantity(productDTO);
     }
 
     @Override
@@ -142,7 +143,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(
                         InvoiceType.PURCHASE, toBeSoldProduct.getProduct(), 0);
 
-        BigDecimal profitLoss = BigDecimal.ZERO;
+        BigDecimal profitLoss;
 
         for (InvoiceProduct purchasedProduct : purchasedProducts) {
 
@@ -188,16 +189,15 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public List<InvoiceProductDTO> getAllProductWithStatusTypeAndCompanyTitle
+    public List<InvoiceProduct> getAllProductWithStatusTypeAndCompanyTitle
             (InvoiceStatus status, InvoiceType type, String title) {
 
-        List<InvoiceProduct>invoiceProductList=
-                invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
-                        InvoiceStatus.APPROVED,InvoiceType.SALES,securityService.getLoggedInUser()
+        return invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
+                        InvoiceStatus.APPROVED, InvoiceType.SALES, securityService.getLoggedInUser()
                                 .getCompany().getTitle());
 
-        return invoiceProductList.stream().map(invoiceProduct ->
-                mapperUtil.convert(invoiceProduct,new InvoiceProductDTO())).collect(Collectors.toList());
+//        return invoiceProductList.stream().map(invoiceProduct ->
+//                mapperUtil.convert(invoiceProduct, new InvoiceProductDTO())).collect(Collectors.toList());
     }
 
 }

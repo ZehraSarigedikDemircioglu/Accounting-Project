@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
+import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import com.sc.accounting_smart_cookies.service.InvoiceProductService;
@@ -20,7 +21,8 @@ public class ReportingServiceImpl implements ReportingService {
     private final InvoiceProductService invoiceProductService;
     @Override
     public Map<String, BigDecimal> listMonthlyProfitLoss() {
-        List<InvoiceProductDTO> salesList = invoiceProductService.getAllProductWithStatusTypeAndCompanyTitle(
+
+        List<InvoiceProduct> salesList = invoiceProductService.getAllProductWithStatusTypeAndCompanyTitle(
                 InvoiceStatus.APPROVED, InvoiceType.SALES, securityService.getLoggedInUser().getCompany().getTitle());
 
         Map<String, BigDecimal> monthlyProfitLoss = new HashMap<>();

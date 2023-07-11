@@ -17,6 +17,8 @@ public interface ProductService {
 
     ProductDTO update(Long id, ProductDTO productDTO);
 
+    ProductDTO updateQuantity(ProductDTO productDTO);
+
     List<ProductDTO> findAllByCompany();
     boolean isProductNameExist(ProductDTO productDTO);
 

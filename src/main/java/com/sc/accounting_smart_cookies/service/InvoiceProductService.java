@@ -25,6 +25,6 @@ public interface InvoiceProductService {
 
     BigDecimal setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct toBeSoldProduct);
 
-    List<InvoiceProductDTO>getAllProductWithStatusTypeAndCompanyTitle(
-            InvoiceStatus status,InvoiceType type,String title);
+    List<InvoiceProduct> getAllProductWithStatusTypeAndCompanyTitle(
+            InvoiceStatus status, InvoiceType type, String title);
 }

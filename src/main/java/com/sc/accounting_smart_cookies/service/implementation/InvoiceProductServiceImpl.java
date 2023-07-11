@@ -151,9 +151,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
 
                 BigDecimal costTotalForQty = purchasedProduct.getPrice().multiply(
-                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (purchasedProduct.getTax() +100)/100d));
+                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (purchasedProduct.getTax() + 100) / 100d));
                 BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().multiply(
-                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() +100)/100d));
+                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() + 100) / 100d));
                 profitLoss = salesTotalForQty.subtract(costTotalForQty);
 
                 purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
@@ -165,9 +165,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
             } else {
 
                 BigDecimal costTotalForQty = purchasedProduct.getPrice().multiply(
-                        BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (purchasedProduct.getTax() +100)/100d));
+                        BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (purchasedProduct.getTax() + 100) / 100d));
                 BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().multiply(
-                        BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() +100)/100d));
+                        BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() + 100) / 100d));
                 profitLoss = salesTotalForQty.subtract(costTotalForQty);
                 toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity() - purchasedProduct.getRemainingQuantity());
                 purchasedProduct.setRemainingQuantity(0);
@@ -184,9 +184,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     public List<InvoiceProductDTO> getAllProductWithStatusTypeAndCompanyTitle
             (InvoiceStatus status, InvoiceType type, String title) {
 
-        List<InvoiceProduct>invoiceProductList= invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
-                        InvoiceStatus.APPROVED, InvoiceType.SALES, securityService.getLoggedInUser()
-                                .getCompany().getTitle());
+        List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
+                InvoiceStatus.APPROVED, InvoiceType.SALES, securityService.getLoggedInUser()
+                        .getCompany().getTitle());
 
         return invoiceProductList.stream().map(invoiceProduct ->
                 mapperUtil.convert(invoiceProduct, new InvoiceProductDTO())).collect(Collectors.toList());

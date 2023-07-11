@@ -33,8 +33,8 @@ public class ReportingServiceImpl implements ReportingService {
             String year = String.valueOf(invoiceProduct.getInvoice().getDate().getYear());
             String month = invoiceProduct.getInvoice().getDate().getMonth().toString();
             BigDecimal profitLoss = invoiceProduct.getProfitLoss();
-            BigDecimal totalProfitloss=monthlyProfitLoss.getOrDefault(year+" "+month, BigDecimal.ZERO).add(profitLoss);
-            monthlyProfitLoss.put(year+" "+month,totalProfitloss );
+            BigDecimal totalProfitloss = monthlyProfitLoss.getOrDefault(year + " " + month, BigDecimal.ZERO).add(profitLoss);
+            monthlyProfitLoss.put(year + " " + month, totalProfitloss);
         });
 
         return monthlyProfitLoss;

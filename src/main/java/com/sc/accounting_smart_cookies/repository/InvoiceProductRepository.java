@@ -1,9 +1,10 @@
 package com.sc.accounting_smart_cookies.repository;
 
-import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
+import com.sc.accounting_smart_cookies.entity.Product;
+import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
+import com.sc.accounting_smart_cookies.enums.InvoiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,4 +13,10 @@ import java.util.List;
 public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, Long> {
 
     List<InvoiceProduct> findAllByInvoice_Id(Long invoiceId);
+
+    List<InvoiceProduct> findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc
+            (InvoiceType invoiceType, Product product, Integer remainingQuantity);
+
+    List<InvoiceProduct> findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompanyTitle(
+            InvoiceStatus status, InvoiceType type, String title);
 }

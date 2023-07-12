@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name="payment")
+@Table(name = "payment")
 @Where(clause = "is_deleted=false")
 public class Payment extends BaseEntity implements Serializable {
 
@@ -28,7 +28,7 @@ public class Payment extends BaseEntity implements Serializable {
     @Column(columnDefinition = "DATE")
     private LocalDate year;
 
+    private LocalDate paymentDate;
     private int amount;
     private boolean isPaid;
-
 }

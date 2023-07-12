@@ -192,4 +192,14 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 mapperUtil.convert(invoiceProduct, new InvoiceProductDTO())).collect(Collectors.toList());
     }
 
+    @Override
+    public List<InvoiceProductDTO> findAllInvoicesByStatusApproved(InvoiceStatus status, String company) {
+        List<InvoiceProduct> invoiceProductList =
+                invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceCompanyTitleOrderByInvoiceLastUpdateDateTimeDesc
+                (InvoiceStatus.APPROVED, securityService.getLoggedInUser().getCompany().getTitle());
+        return invoiceProductList.stream().map(invoiceProduct ->
+                mapperUtil.convert(invoiceProduct, new InvoiceProductDTO())).collect(Collectors.toList());
+    }
+
+
 }

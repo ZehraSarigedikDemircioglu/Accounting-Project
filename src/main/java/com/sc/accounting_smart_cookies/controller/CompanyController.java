@@ -34,7 +34,6 @@ public class CompanyController {
     @GetMapping("/create")
     public String createCompany(Model model) {
         model.addAttribute("newCompany", new CompanyDTO());
-//        model.addAttribute("address", new AddressDTO());
 
         return "/company/company-create";
     }

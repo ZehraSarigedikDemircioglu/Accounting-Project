@@ -2,6 +2,7 @@ package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.dto.PaymentDto;
+import com.sc.accounting_smart_cookies.dto.payment.ChargeRequest;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Payment;
 import com.sc.accounting_smart_cookies.enums.Months;
@@ -9,11 +10,21 @@ import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.PaymentRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import com.sc.accounting_smart_cookies.service.PaymentService;
+import com.stripe.Stripe;
+import com.stripe.exception.CardException;
+import com.stripe.exception.StripeException;
+import com.stripe.exception.oauth.InvalidRequestException;
+import com.stripe.model.Charge;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.naming.AuthenticationException;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
@@ -22,6 +33,8 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
+    @Value("${Stripe_Secret_Key}")
+    private String secretKey;
     private final PaymentRepository paymentRepository;
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
@@ -75,6 +88,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentDto getPaymentById(Long id) {
         Payment payment = paymentRepository.findById(id).get();
+        payment.setAmount(250);
         return mapperUtil.convert(payment, new PaymentDto());
     }
 
@@ -82,9 +96,22 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDto updatePayment(Long id) {
 
         Payment payment = paymentRepository.findById(id).get();
+        payment.setAmount(250);
         payment.setPaid(true);
         return mapperUtil.convert(paymentRepository.save(payment), new PaymentDto());
     }
-
+    @PostConstruct
+    public void init() {
+        Stripe.apiKey = secretKey;
+    }
+    public Charge charge(ChargeRequest chargeRequest)
+            throws AuthenticationException, StripeException{
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("amount", chargeRequest.getAmount());
+        chargeParams.put("currency", chargeRequest.getCurrency());
+        chargeParams.put("description", chargeRequest.getDescription());
+        chargeParams.put("source", chargeRequest.getStripeToken());
+        return Charge.create(chargeParams);
+    }
 
 }

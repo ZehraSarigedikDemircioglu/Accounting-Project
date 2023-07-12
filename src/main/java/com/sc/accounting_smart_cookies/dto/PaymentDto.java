@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.dto;
 
+
 import com.sc.accounting_smart_cookies.enums.Months;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +20,5 @@ public class PaymentDto {
     private int amount;
     private boolean isPaid;
     private LocalDate year;
+    private LocalDate paymentDate;
 }

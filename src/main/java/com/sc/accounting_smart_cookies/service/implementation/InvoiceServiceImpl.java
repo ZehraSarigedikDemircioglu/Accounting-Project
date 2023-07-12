@@ -149,7 +149,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceProductService.completeApproval(id, invoice.get().getInvoiceType());
             invoice.get().setInvoiceStatus(InvoiceStatus.APPROVED);
             invoice.get().setDate(LocalDate.now());
-          invoiceProductService.completeApproval(id, invoice.get().getInvoiceType());
             invoiceRepository.save(invoice.get());
             mapperUtil.convert(invoice, new InvoiceDTO());
         }

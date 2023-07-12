@@ -2,6 +2,7 @@ package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.TestDocumentInitializer;
 import com.sc.accounting_smart_cookies.entity.User;
+import com.sc.accounting_smart_cookies.exceptions.UserNotFoundException;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -51,15 +52,15 @@ class UserServiceImplTest {
     @Test
     @DisplayName("When_given_non_existing_id_then_fail")
     public void GIVEN_NON_EXISTING_ID_WHEN_FIND_BY_ID_THEN_FAIL(){
-        when(repository.findById(anyLong())).thenThrow(NoSuchElementException.class); // Mockito return null by itself...
-        assertThrows(NoSuchElementException.class, () -> service.findById(anyLong()));
+        when(repository.findById(anyLong())).thenThrow(UserNotFoundException.class); // Mockito return null by itself...
+        assertThrows(UserNotFoundException.class, () -> service.findById(anyLong()));
     }
 
     @Test
     @DisplayName("When_given_null_id_then_fail")
     public void GIVEN_NULL_ID_WHEN_FIND_BY_ID_THEN_FAIL(){
-        when(repository.findById(null)).thenThrow(NoSuchElementException.class); // Mockito return null by itself...
-        assertThrows(NoSuchElementException.class, () -> service.findById(null));
+        when(repository.findById(null)).thenThrow(UserNotFoundException.class); // Mockito return null by itself...
+        assertThrows(UserNotFoundException.class, () -> service.findById(null));
     }
 
 

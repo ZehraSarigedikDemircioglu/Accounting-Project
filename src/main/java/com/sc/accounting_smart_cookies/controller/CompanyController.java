@@ -36,7 +36,7 @@ public class CompanyController {
     public String createCompany(Model model) {
         model.addAttribute("newCompany", new CompanyDTO());
 //        model.addAttribute("address", new AddressDTO());
-        model.addAttribute("countries", companyService.retrieveCountyList());
+       // model.addAttribute("countries", companyService.retrieveCountyList());
 
         return "/company/company-create";
     }

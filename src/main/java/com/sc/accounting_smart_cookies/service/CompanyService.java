@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.service;
 
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
+import com.sc.accounting_smart_cookies.dto.countries.CountryDTO;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
@@ -18,5 +19,5 @@ public interface CompanyService {
 
     CompanyDTO getCompanyOfLoggedInUser();
 
-   // List<String> retrieveCountyList();
+    List<CountryDTO> retrieveCountyList();
 }

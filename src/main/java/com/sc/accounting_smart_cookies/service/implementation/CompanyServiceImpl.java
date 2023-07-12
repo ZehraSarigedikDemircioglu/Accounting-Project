@@ -3,6 +3,7 @@ package com.sc.accounting_smart_cookies.service.implementation;
 import com.sc.accounting_smart_cookies.client.CountryClient;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.dto.UserDTO;
+import com.sc.accounting_smart_cookies.dto.countries.CountryDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import com.sc.accounting_smart_cookies.exceptions.CompanyNotFoundException;
@@ -10,6 +11,7 @@ import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import com.sc.accounting_smart_cookies.service.SecurityService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
+    @Value("$auth_token")
+    private String authToken;
     private final CompanyRepository companyRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
@@ -66,6 +70,8 @@ public class CompanyServiceImpl implements CompanyService {
            companyDTO.setCompanyStatus(CompanyStatus.PASSIVE);
            companyRepository.save(mapperUtil.convert(companyDTO, new Company()));
 
+
+
     }
 
     @Override
@@ -106,12 +112,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
-//    @Override
-//    public List<String> retrieveCountyList() {
-//
-//        return countryClient.getCountries().stream().map(countries -> countries.getCountryName()).sorted(Comparator.comparing(String::toUpperCase)).collect(Collectors.toList());
-//
-//    }
+    @Override
+    public List<CountryDTO> retrieveCountyList() {
+
+        return countryClient.getCountries(authToken);
+
+    }
 
 
 }

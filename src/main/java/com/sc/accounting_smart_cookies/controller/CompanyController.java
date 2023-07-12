@@ -3,6 +3,7 @@ package com.sc.accounting_smart_cookies.controller;
 import com.sc.accounting_smart_cookies.annotation.LoggingAnnotation;
 import com.sc.accounting_smart_cookies.client.CountryClient;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
+import com.sc.accounting_smart_cookies.dto.countries.CountryDTO;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/companies")
@@ -36,7 +38,7 @@ public class CompanyController {
     public String createCompany(Model model) {
         model.addAttribute("newCompany", new CompanyDTO());
 //        model.addAttribute("address", new AddressDTO());
-       // model.addAttribute("countries", companyService.retrieveCountyList());
+     //  model.addAttribute("countries", companyService.retrieveCountyList());
 
         return "/company/company-create";
     }

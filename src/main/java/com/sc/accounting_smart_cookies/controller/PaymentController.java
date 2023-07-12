@@ -45,7 +45,7 @@ public class PaymentController {
         int amount = dto.getAmount();
         model.addAttribute("amount", amount);
         model.addAttribute("stripePublicKey", api_Key);
-        model.addAttribute("currency", ChargeRequest.Currency.EUR);
+        model.addAttribute("currency", ChargeRequest.Currency.USD);
 
         return "payment/payment-method";
     }

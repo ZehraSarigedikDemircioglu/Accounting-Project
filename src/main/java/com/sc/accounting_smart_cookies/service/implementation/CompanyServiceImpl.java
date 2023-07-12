@@ -106,12 +106,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
-    @Override
-    public List<String> retrieveCountyList() {
-
-        return countryClient.getCountries().stream().map(countries -> countries.getCountryName()).sorted(Comparator.comparing(String::toUpperCase)).collect(Collectors.toList());
-
-    }
+//    @Override
+//    public List<String> retrieveCountyList() {
+//
+//        return countryClient.getCountries().stream().map(countries -> countries.getCountryName()).sorted(Comparator.comparing(String::toUpperCase)).collect(Collectors.toList());
+//
+//    }
 
 
 }

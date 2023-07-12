@@ -27,4 +27,6 @@ public interface InvoiceProductService {
 
     List<InvoiceProductDTO> getAllProductWithStatusTypeAndCompanyTitle(
             InvoiceStatus status, InvoiceType type, String title);
+
+    List<InvoiceProductDTO> findAllInvoicesByStatusApproved ( InvoiceStatus status, String company);
 }

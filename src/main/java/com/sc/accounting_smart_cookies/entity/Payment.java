@@ -31,7 +31,4 @@ public class Payment extends BaseEntity implements Serializable {
     private int amount;
     private boolean isPaid;
 
-
-
-
 }

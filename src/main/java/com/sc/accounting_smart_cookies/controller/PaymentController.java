@@ -5,10 +5,12 @@ import com.sc.accounting_smart_cookies.dto.payment.ChargeRequest;
 import com.sc.accounting_smart_cookies.service.PaymentService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
+import com.stripe.model.StripeError;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.AuthenticationException;
 import java.time.LocalDate;
@@ -40,7 +42,7 @@ public class PaymentController {
     public String checkout(@PathVariable("modelId") Long id, Model model) {
 
         PaymentDto dto = paymentService.getPaymentById(id);
-        int amount=dto.getAmount();
+        int amount = dto.getAmount();
         model.addAttribute("amount", amount);
         model.addAttribute("stripePublicKey", api_Key);
         model.addAttribute("currency", ChargeRequest.Currency.EUR);
@@ -49,31 +51,41 @@ public class PaymentController {
     }
 
     @PostMapping("/charge/{modelId}")
-    public String charge(@PathVariable("modelId") PaymentDto dto,ChargeRequest chargeRequest, Model model)
+    public String charge(@PathVariable("modelId") PaymentDto dto,
+                         RedirectAttributes redirectAttributes, ChargeRequest chargeRequest, Model model)
             throws StripeException, AuthenticationException {
 
         chargeRequest.setCurrency(ChargeRequest.Currency.valueOf(String.valueOf(ChargeRequest.Currency.EUR)));
-        chargeRequest.setDescription("Cydeo accounting subscription fee for : "+dto.getYear().getYear()+" "+dto.getMonth());
+        chargeRequest.setDescription("Cydeo accounting subscription fee for : " + dto.getYear().getYear() + " " + dto.getMonth());
         Charge charge = paymentService.charge(chargeRequest);
         model.addAttribute("id", dto.getId());
         model.addAttribute("status", charge.getStatus());
         model.addAttribute("chargeId", charge.getId());
         model.addAttribute("balance_transaction", charge.getBalanceTransaction());
         model.addAttribute("description", charge.getDescription());
-        if (charge.getStatus().equals("succeeded")){
-            int selectedYear1=LocalDate.now().getYear();
-            paymentService.createPaymentsIfNotExist(selectedYear1);
-            model.addAttribute("payments", paymentService.getAllPaymentsByYear(selectedYear1));
-            model.addAttribute("year", selectedYear1);
-            paymentService.updatePayment(dto.getId());
-            return "redirect:/payments/list";
+        if (!charge.getStatus().equals("succeeded")) {
+            redirectAttributes.addFlashAttribute("error", new StripeError().getMessage());
+            return "payment/payment-result";
         }
+        int selectedYear1 = LocalDate.now().getYear();
+        paymentService.createPaymentsIfNotExist(selectedYear1);
+        model.addAttribute("payments", paymentService.getAllPaymentsByYear(selectedYear1));
+        model.addAttribute("year", selectedYear1);
+
+        paymentService.updatePayment(dto.getId());
         return "redirect:/payments/list";
     }
 
+    @GetMapping("/toInvoice/{modelId}")
+    public String getInvoice(@PathVariable("modelId") PaymentDto dto,Model model) {
+        model.addAttribute("payment", paymentService.getPaymentById(dto.getId()));
+        model.addAttribute("company", paymentService.getPaymentById(dto.getId()).getCompany());
+        return "payment/payment-invoice";
+    }
+
     @ExceptionHandler(StripeException.class)
-    public String handleError(Model model, StripeException ex) {
-        model.addAttribute("error", ex.getMessage());
+    public String handleError(StripeException ex) {
+
         return "payment/payment-result";
     }
 

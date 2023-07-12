@@ -88,7 +88,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentDto getPaymentById(Long id) {
         Payment payment = paymentRepository.findById(id).get();
-        payment.setAmount(250*100);
+        payment.setAmount(250);
         return mapperUtil.convert(payment, new PaymentDto());
     }
 

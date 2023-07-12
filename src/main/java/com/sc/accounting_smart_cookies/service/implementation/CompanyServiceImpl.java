@@ -1,20 +1,16 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
+import com.sc.accounting_smart_cookies.client.CountryClient;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.dto.UserDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
-import com.sc.accounting_smart_cookies.entity.User;
 import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import com.sc.accounting_smart_cookies.exceptions.CompanyNotFoundException;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import com.sc.accounting_smart_cookies.service.SecurityService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,10 +24,13 @@ public class CompanyServiceImpl implements CompanyService {
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService) {
+   private final CountryClient countryClient;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService, CountryClient countryClient) {
         this.companyRepository = companyRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+       this.countryClient = countryClient;
     }
 
 
@@ -107,6 +106,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
+    @Override
+    public List<String> retrieveCountyList() {
+
+        return countryClient.getCountries().stream().map(countries -> countries.getCountryName()).sorted(Comparator.comparing(String::toUpperCase)).collect(Collectors.toList());
+
+    }
 
 
 }

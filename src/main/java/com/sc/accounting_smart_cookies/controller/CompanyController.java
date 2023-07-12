@@ -1,14 +1,12 @@
 package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.annotation.LoggingAnnotation;
-import com.sc.accounting_smart_cookies.dto.AddressDTO;
+import com.sc.accounting_smart_cookies.client.CountryClient;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
-import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +18,11 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-    public CompanyController(CompanyService companyService) {
+    private final CountryClient countryClient;
+
+    public CompanyController(CompanyService companyService, CountryClient countryClient) {
         this.companyService = companyService;
+        this.countryClient = countryClient;
     }
 
 
@@ -34,6 +35,8 @@ public class CompanyController {
     @GetMapping("/create")
     public String createCompany(Model model) {
         model.addAttribute("newCompany", new CompanyDTO());
+//        model.addAttribute("address", new AddressDTO());
+        model.addAttribute("countries", companyService.retrieveCountyList());
 
         return "/company/company-create";
     }

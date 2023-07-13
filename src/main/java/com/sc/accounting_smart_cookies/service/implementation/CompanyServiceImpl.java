@@ -22,19 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
-    @Value("$auth_token")
-    private String authToken;
     private final CompanyRepository companyRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
 
-   private final CountryClient countryClient;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService, CountryClient countryClient) {
         this.companyRepository = companyRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
-       this.countryClient = countryClient;
     }
 
 
@@ -112,12 +108,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
-    @Override
-    public List<CountryDTO> retrieveCountyList() {
 
-        return countryClient.getCountries(authToken);
-
-    }
 
 
 }

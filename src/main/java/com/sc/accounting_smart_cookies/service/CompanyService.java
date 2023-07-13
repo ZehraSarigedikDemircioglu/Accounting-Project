@@ -19,5 +19,5 @@ public interface CompanyService {
 
     CompanyDTO getCompanyOfLoggedInUser();
 
-    List<CountryDTO> retrieveCountyList();
+
 }

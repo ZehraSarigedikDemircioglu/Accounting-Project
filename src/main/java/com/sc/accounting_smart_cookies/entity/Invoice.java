@@ -2,7 +2,6 @@ package com.sc.accounting_smart_cookies.entity;
 
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,4 +31,8 @@ public class Invoice extends BaseEntity {
     private ClientVendor clientVendor;
     @ManyToOne
     private Company company;
+
+
+
+
 }

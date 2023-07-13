@@ -2,6 +2,7 @@ package com.sc.accounting_smart_cookies.service;
 
 
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
+import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
@@ -10,6 +11,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface InvoiceProductService {
+
+    List<InvoiceProductDTO> listAll();
 
     List<InvoiceProductDTO> findAllByInvoiceId(Long invoiceId);
 
@@ -29,4 +32,6 @@ public interface InvoiceProductService {
             InvoiceStatus status, InvoiceType type, String title);
 
     List<InvoiceProductDTO> findAllInvoicesByStatusApproved ( InvoiceStatus status, String company);
+
+    List<InvoiceProductDTO> findAllByInvoiceStatusAndInvoiceTypeAndCompany(InvoiceStatus status, InvoiceType type);
 }

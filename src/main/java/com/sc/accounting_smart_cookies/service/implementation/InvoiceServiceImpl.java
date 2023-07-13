@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
+import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.entity.ClientVendor;
@@ -166,9 +167,22 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceDTO> findTop3ByOrderByDateDesc() {
-        return invoiceRepository.findTop3ByOrderByDateDesc().stream()
-                .map(invoice -> mapperUtil.convert(invoice, new InvoiceDTO()))
+    public List<InvoiceDTO> findTop3ByCompanyOrderByDateDesc() {
+
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+
+
+        return invoiceRepository.findTop3ByCompanyOrderByDateDesc(company).stream()
+                .map(invoice -> {
+                    InvoiceDTO invoiceDTO = mapperUtil.convert(invoice, new InvoiceDTO());
+                    invoiceDTO.setPrice(getTotalPriceOfInvoice(invoiceDTO));
+                    invoiceDTO.setTax(getTotalTaxOfInvoice(invoiceDTO).intValue());
+                    invoiceDTO.setTotal(getTotalPriceOfInvoice(invoiceDTO).add(getTotalTaxOfInvoice(invoiceDTO)));
+
+                    return invoiceDTO;
+                }
+
+                )
                 .collect(Collectors.toList());
     }
 
@@ -204,4 +218,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return invoiceRepository.existsByCompanyAndClientVendorId(company, id);
     }
+
+
 }

@@ -1,14 +1,13 @@
 package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.annotation.LoggingAnnotation;
-import com.sc.accounting_smart_cookies.dto.AddressDTO;
+import com.sc.accounting_smart_cookies.client.CountryClient;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
-import com.sc.accounting_smart_cookies.enums.CompanyStatus;
+import com.sc.accounting_smart_cookies.service.AddressService;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +19,13 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-    public CompanyController(CompanyService companyService) {
+    private final AddressService addressService;
+
+
+    public CompanyController(CompanyService companyService, CountryClient countryClient, AddressService addressService) {
         this.companyService = companyService;
+
+        this.addressService = addressService;
     }
 
 
@@ -34,6 +38,8 @@ public class CompanyController {
     @GetMapping("/create")
     public String createCompany(Model model) {
         model.addAttribute("newCompany", new CompanyDTO());
+//        model.addAttribute("address", new AddressDTO());
+        model.addAttribute("countries", addressService.retrieveCountyList());
 
         return "/company/company-create";
     }
@@ -89,6 +95,11 @@ public class CompanyController {
     public String deactivateCompany(@PathVariable("id") Long companyId) {
         companyService.deactivateCompany(companyId);
         return "redirect:/companies/list";
+    }
+
+    @ModelAttribute()
+    public void commonModelAttribute(Model model){
+        model.addAttribute("countries", addressService.retrieveCountyList());
     }
 
 }

@@ -1,20 +1,18 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
+import com.sc.accounting_smart_cookies.client.CountryClient;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.dto.UserDTO;
+import com.sc.accounting_smart_cookies.dto.countries.CountryDTO;
 import com.sc.accounting_smart_cookies.entity.Company;
-import com.sc.accounting_smart_cookies.entity.User;
 import com.sc.accounting_smart_cookies.enums.CompanyStatus;
 import com.sc.accounting_smart_cookies.exceptions.CompanyNotFoundException;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
 import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
 import com.sc.accounting_smart_cookies.service.SecurityService;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,7 +26,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService) {
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService, CountryClient countryClient) {
         this.companyRepository = companyRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
@@ -66,6 +65,8 @@ public class CompanyServiceImpl implements CompanyService {
     public void create (CompanyDTO companyDTO) {
            companyDTO.setCompanyStatus(CompanyStatus.PASSIVE);
            companyRepository.save(mapperUtil.convert(companyDTO, new Company()));
+
+
 
     }
 
@@ -106,6 +107,7 @@ public class CompanyServiceImpl implements CompanyService {
         return   securityService.getLoggedInUser().getCompany();
 
     }
+
 
 
 

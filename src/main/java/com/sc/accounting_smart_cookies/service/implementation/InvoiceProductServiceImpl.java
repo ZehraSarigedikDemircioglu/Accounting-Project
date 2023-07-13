@@ -220,5 +220,12 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<InvoiceProductDTO> findAllInvoiceProductsByProductId(Long id) {
+        return invoiceProductRepository.findAllInvoiceProductByProductId(id).stream()
+                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
+                .collect(Collectors.toList());
+    }
+
 
 }

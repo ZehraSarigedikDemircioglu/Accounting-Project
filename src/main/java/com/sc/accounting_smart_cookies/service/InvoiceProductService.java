@@ -34,4 +34,6 @@ public interface InvoiceProductService {
     List<InvoiceProductDTO> findAllInvoicesByStatusApproved ( InvoiceStatus status, String company);
 
     List<InvoiceProductDTO> findAllByInvoiceStatusAndInvoiceTypeAndCompany(InvoiceStatus status, InvoiceType type);
+
+    List<InvoiceProductDTO> findAllInvoiceProductsByProductId(Long id);
 }

@@ -25,4 +25,6 @@ public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, 
             InvoiceStatus status, String title);
 
     List<InvoiceProduct> findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompany(InvoiceStatus status, InvoiceType type, Company company);
+
+    List<InvoiceProduct> findAllInvoiceProductByProductId(Long id);
 }

@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean checkProductHasInvoice(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        List<InvoiceProductDTO> invoiceProductDTOs = invoiceProductService.findAllByInvoiceId(id);
+        List<InvoiceProductDTO> invoiceProductDTOs = invoiceProductService.findAllInvoiceProductsByProductId(id);
         return invoiceProductDTOs.size() > 0 || product.getQuantityInStock() > 0;
     }
 

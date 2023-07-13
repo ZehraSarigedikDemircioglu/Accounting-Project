@@ -97,10 +97,10 @@ public class CompanyController {
         return "redirect:/companies/list";
     }
 
-//    @ModelAttribute()
-//    public void commonModelAttribute(Model model){
-//        model.addAttribute("countries", addressService.retrieveCountyList());
-//    }
+    @ModelAttribute()
+    public void commonModelAttribute(Model model){
+        model.addAttribute("countries", addressService.retrieveCountyList());
+    }
 
 }
 

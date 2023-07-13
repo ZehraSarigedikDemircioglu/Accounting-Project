@@ -13,8 +13,9 @@ import java.util.List;
 @FeignClient(url = "https://www.universal-tutorial.com/api", name ="COUNTRY-CLIENT" )
 public interface CountryClient {
     @GetMapping( value ="/getaccesstoken", consumes = MediaType.APPLICATION_JSON_VALUE)
-    AuthorizationTokenDTO getToken(@RequestHeader("api-token") String token,
-                                   @RequestHeader("user-email") String email);
+    AuthorizationTokenDTO getToken(@RequestHeader("user-email") String email,
+                                   @RequestHeader("api-token") String token
+                                   );
     @GetMapping(value = "/countries/", consumes = MediaType.APPLICATION_JSON_VALUE)
     List<CountryDTO> getCountries(@RequestHeader("Authorization") String authToken);
 }

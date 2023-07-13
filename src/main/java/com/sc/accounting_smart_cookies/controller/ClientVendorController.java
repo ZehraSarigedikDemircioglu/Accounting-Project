@@ -2,6 +2,7 @@ package com.sc.accounting_smart_cookies.controller;
 
 import com.sc.accounting_smart_cookies.dto.ClientVendorDTO;
 import com.sc.accounting_smart_cookies.enums.ClientVendorType;
+import com.sc.accounting_smart_cookies.service.AddressService;
 import com.sc.accounting_smart_cookies.service.ClientVendorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +19,11 @@ public class ClientVendorController {
 
     private final ClientVendorService clientVendorService;
 
-    public ClientVendorController(ClientVendorService clientVendorService) {
+    private final AddressService addressService;
+
+    public ClientVendorController(ClientVendorService clientVendorService, AddressService addressService) {
         this.clientVendorService = clientVendorService;
+        this.addressService = addressService;
     }
 
     @GetMapping("/list")
@@ -73,6 +77,11 @@ public class ClientVendorController {
     }
         clientVendorService.deleteById(id);
         return "redirect:/clientVendors/list";
+    }
+
+    @ModelAttribute()
+    public void commonModelAttribute(Model model){
+        model.addAttribute("countries", addressService.retrieveCountyList());
     }
 
 

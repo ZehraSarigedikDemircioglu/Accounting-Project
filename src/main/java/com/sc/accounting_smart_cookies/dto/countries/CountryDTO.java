@@ -10,8 +10,15 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CountryDTO {
+//
+//    @JsonProperty("country_name")
+//    public String countryName;
 
     @JsonProperty("country_name")
-    public String countryName;
+    private String countryName;
+    @JsonProperty("country_short_name")
+    private String countryShortName;
+    @JsonProperty("country_phone_code")
+    private int countryPhoneCode;
 
 }

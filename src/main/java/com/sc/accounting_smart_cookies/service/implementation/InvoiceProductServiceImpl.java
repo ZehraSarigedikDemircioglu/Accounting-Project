@@ -1,7 +1,9 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
+import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.dto.InvoiceProductDTO;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
+import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
@@ -36,6 +38,13 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         this.invoiceService = invoiceService;
         this.productService = productService;
         this.securityService = securityService;
+    }
+
+    @Override
+    public List<InvoiceProductDTO> listAll() {
+        return invoiceProductRepository.findAll().stream()
+                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -199,6 +208,16 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 (InvoiceStatus.APPROVED, securityService.getLoggedInUser().getCompany().getTitle());
         return invoiceProductList.stream().map(invoiceProduct ->
                 mapperUtil.convert(invoiceProduct, new InvoiceProductDTO())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InvoiceProductDTO> findAllByInvoiceStatusAndInvoiceTypeAndCompany(InvoiceStatus status, InvoiceType type) {
+
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+
+        return invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompany(status, type, company).stream()
+                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
+                .collect(Collectors.toList());
     }
 
 

@@ -1,5 +1,6 @@
 package com.sc.accounting_smart_cookies.repository;
 
+import com.sc.accounting_smart_cookies.entity.Company;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.entity.Product;
 import com.sc.accounting_smart_cookies.enums.InvoiceStatus;
@@ -22,4 +23,6 @@ public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, 
 
     List<InvoiceProduct> findAllByInvoiceInvoiceStatusAndInvoiceCompanyTitleOrderByInvoiceLastUpdateDateTimeDesc(
             InvoiceStatus status, String title);
+
+    List<InvoiceProduct> findAllByInvoiceInvoiceStatusAndInvoiceInvoiceTypeAndInvoiceCompany(InvoiceStatus status, InvoiceType type, Company company);
 }

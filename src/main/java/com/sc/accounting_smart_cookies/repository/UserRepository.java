@@ -5,6 +5,7 @@ import com.sc.accounting_smart_cookies.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,5 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByIdAndIsDeleted(Long id,Boolean isDeleted);
 
     boolean existsByUsername(String username);
+
+    @Query("SELECT COUNT(u) = 1 FROM User u WHERE u.company = :company AND u.role = 'Admin'")
+    boolean isUserOnlyAdmin(@Param("company") Company company);
 
 }

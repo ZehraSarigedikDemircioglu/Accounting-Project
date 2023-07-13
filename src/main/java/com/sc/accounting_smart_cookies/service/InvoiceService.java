@@ -6,6 +6,7 @@ import com.sc.accounting_smart_cookies.entity.Invoice;
 import com.sc.accounting_smart_cookies.entity.InvoiceProduct;
 import com.sc.accounting_smart_cookies.enums.InvoiceType;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,9 +27,10 @@ public interface InvoiceService {
 
     InvoiceDTO update(Long id, InvoiceDTO invoiceDTO);
 
-    List<InvoiceDTO> findTop3ByOrderByDateDesc();
+    List<InvoiceDTO> findTop3ByCompanyOrderByDateDesc();
 
     InvoiceDTO printInvoice(Long id);
 
     boolean existsByClientVendorId(Long id);
+
 }

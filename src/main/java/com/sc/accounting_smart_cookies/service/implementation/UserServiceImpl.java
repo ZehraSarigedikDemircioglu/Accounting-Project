@@ -110,6 +110,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         User user = userRepository.findByIdAndIsDeleted(id, false);
         user.setIsDeleted(true);
+        user.setUsername(user.getUsername() + " ");
         userRepository.save(user);
     }
 

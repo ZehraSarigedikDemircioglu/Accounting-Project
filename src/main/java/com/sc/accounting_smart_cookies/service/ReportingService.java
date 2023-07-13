@@ -9,6 +9,12 @@ public interface ReportingService {
 
     Map<String, BigDecimal> listMonthlyProfitLoss();
 
+    BigDecimal getAllProfitLoss();
+
+    BigDecimal getTotalCost();
+
+    BigDecimal getTotalSales();
+
 
 
 }

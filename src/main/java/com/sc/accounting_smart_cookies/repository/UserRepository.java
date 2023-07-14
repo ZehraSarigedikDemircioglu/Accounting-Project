@@ -1,6 +1,7 @@
 package com.sc.accounting_smart_cookies.repository;
 
 import com.sc.accounting_smart_cookies.entity.Company;
+import com.sc.accounting_smart_cookies.entity.Role;
 import com.sc.accounting_smart_cookies.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUsername(String username);
 
-    @Query("SELECT COUNT(u) = 1 FROM User u WHERE u.company = :company AND u.role = 'Admin'")
-    boolean isUserOnlyAdmin(@Param("company") Company company);
+    @Query("SELECT COUNT(u) FROM User u WHERE u.company = ?1 AND u.role.id = 2")
+    Integer isUserOnlyAdmin(Company company, Role role);
 
 }

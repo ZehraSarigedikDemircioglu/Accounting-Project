@@ -42,7 +42,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     @Override
     public List<InvoiceProductDTO> listAll() {
-        return invoiceProductRepository.findAll().stream()
+        return invoiceProductRepository.findAllByInvoiceCompanyTitle
+                        (securityService.getLoggedInUser().getCompany().getTitle()).stream()
                 .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDTO()))
                 .collect(Collectors.toList());
     }
@@ -205,7 +206,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     public List<InvoiceProductDTO> findAllInvoicesByStatusApproved(InvoiceStatus status, String company) {
         List<InvoiceProduct> invoiceProductList =
                 invoiceProductRepository.findAllByInvoiceInvoiceStatusAndInvoiceCompanyTitleOrderByInvoiceLastUpdateDateTimeDesc
-                (InvoiceStatus.APPROVED, securityService.getLoggedInUser().getCompany().getTitle());
+                        (InvoiceStatus.APPROVED, securityService.getLoggedInUser().getCompany().getTitle());
         return invoiceProductList.stream().map(invoiceProduct ->
                 mapperUtil.convert(invoiceProduct, new InvoiceProductDTO())).collect(Collectors.toList());
     }

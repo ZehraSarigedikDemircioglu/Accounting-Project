@@ -35,12 +35,14 @@ public class ClientVendorController {
     public String createClientVendor(Model model){
         model.addAttribute("newClientVendor", new ClientVendorDTO());
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+        model.addAttribute("countries", addressService.retrieveCountyList());
         return "clientVendor/clientVendor-create";
     }
     @PostMapping("/create")
     public String saveClientVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDTO clientVendorDTO, BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()){
             model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+            model.addAttribute("countries", addressService.retrieveCountyList());
             return "clientVendor/clientVendor-create";
         }
         clientVendorService.save(clientVendorDTO);
@@ -51,6 +53,7 @@ public class ClientVendorController {
     public String editClientVendor(@PathVariable("id") Long id, Model model){
         model.addAttribute("clientVendor", clientVendorService.findById(id));
         model.addAttribute("clientVendors", clientVendorService.findAll());
+        model.addAttribute("countries", addressService.retrieveCountyList());
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
         return "clientVendor/clientVendor-update";
     }
@@ -61,6 +64,7 @@ public class ClientVendorController {
                     "This Client/Vendor in current company already exists.");
         }
         if (bindingResult.hasErrors()) {
+            model.addAttribute("countries", addressService.retrieveCountyList());
             return "clientVendor/clientVendor-update";
         }
         clientVendorService.update(id, clientVendorDTO);

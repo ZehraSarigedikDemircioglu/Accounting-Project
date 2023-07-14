@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-               // () -> new NoSuchElementException("User can not be found")
+                // () -> new NoSuchElementException("User can not be found")
                 () -> new UserNotFoundException("This user can not be found in the system")
         );
         return mapperUtil.convert(user, new UserDTO());
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         User user = userRepository.findByIdAndIsDeleted(id, false);
         user.setIsDeleted(true);
-        user.setUsername(user.getUsername() + " ");
+        user.setUsername(user.getUsername() + " "+user.getId());
         userRepository.save(user);
     }
 
@@ -127,9 +127,20 @@ public class UserServiceImpl implements UserService {
                     collect(Collectors.toList());
         } else {
             List<User> userList = userRepository.findAllAdminRole("Admin");
-            return userList.stream().map(user -> mapperUtil.convert(user, new UserDTO())).
-                    collect(Collectors.toList());
+            return userList.stream()
+                    .map(user ->mapperUtil.convert(user,new UserDTO()) )
+                    .peek(dto->dto.setOnlyAdmin(isOnlyAdmin(dto)))
+                    .collect(Collectors.toList());
+
         }
+
+
     }
 
+    private boolean isOnlyAdmin(UserDTO userDTO) {
+        User user=mapperUtil.convert(userDTO,new User());
+        Integer userOnlyAdmin = userRepository.isUserOnlyAdmin(user.getCompany(),user.getRole());
+        return userOnlyAdmin == 1;
+
+    }
 }

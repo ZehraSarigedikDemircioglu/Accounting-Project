@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-//@Where(clause = "is_deleted=false")
+@Where(clause = "is_deleted=false")
 public class User extends BaseEntity{
 
     @Column(unique = true)

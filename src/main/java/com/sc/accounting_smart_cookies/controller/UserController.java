@@ -84,7 +84,11 @@ public class UserController {
 
     @PostMapping("/create")
     public String createUser(@Valid @ModelAttribute("user") UserDTO dto, BindingResult bindingResult, Model model) {
+        boolean emailExist=userService.findByUsername1(dto.getUsername());
         if (bindingResult.hasErrors()) {
+            if (emailExist) {
+                bindingResult.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
+            }
 
             model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
 

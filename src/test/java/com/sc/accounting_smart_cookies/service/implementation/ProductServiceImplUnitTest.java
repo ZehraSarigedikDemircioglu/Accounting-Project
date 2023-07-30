@@ -1,24 +1,19 @@
 package com.sc.accounting_smart_cookies.service.implementation;
 
 import com.sc.accounting_smart_cookies.TestDocumentInitializer;
-import com.sc.accounting_smart_cookies.dto.CategoryDTO;
 import com.sc.accounting_smart_cookies.dto.CompanyDTO;
 import com.sc.accounting_smart_cookies.dto.ProductDTO;
 import com.sc.accounting_smart_cookies.entity.*;
 import com.sc.accounting_smart_cookies.enums.CompanyStatus;
-import com.sc.accounting_smart_cookies.enums.ProductUnit;
 import com.sc.accounting_smart_cookies.mapper.MapperUtil;
-import com.sc.accounting_smart_cookies.repository.CompanyRepository;
 import com.sc.accounting_smart_cookies.repository.ProductRepository;
 import com.sc.accounting_smart_cookies.service.CompanyService;
-import com.sc.accounting_smart_cookies.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
@@ -27,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.concurrent.CountedCompleter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -38,7 +32,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceImplTest {
+class ProductServiceImplUnitTest {
 
     @Mock
     private ProductRepository productRepository;

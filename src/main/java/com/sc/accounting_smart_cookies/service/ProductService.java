@@ -25,4 +25,5 @@ public interface ProductService {
     boolean checkProductHasInvoice(Long id);
 
     List<ProductDTO> getProductsByCategory(Long id);
+
 }

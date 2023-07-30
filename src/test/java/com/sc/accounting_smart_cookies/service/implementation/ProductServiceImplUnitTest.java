@@ -116,14 +116,12 @@ class ProductServiceImplUnitTest {
         List<ProductDTO> actualList = productService.findAll();
         assertThat(actualList).usingRecursiveComparison().isEqualTo(getProductDTOs()); // check values foe each fields, not object
     }
-
     @Test
     void should_find_product_by_id() {
         when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
         ProductDTO actualProductDTO = productService.findById(anyLong());
         assertThat(actualProductDTO).usingRecursiveComparison().ignoringActualNullFields().isEqualTo(productDTO);
     }
-
     @Test
     void should_throw_exception_when_find_product_id_doesnt_exist() {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());

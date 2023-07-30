@@ -153,13 +153,13 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(
                         InvoiceType.PURCHASE, toBeSoldProduct.getProduct(), 0);
 
-        BigDecimal profitLoss;
+        BigDecimal profitLoss = BigDecimal.ZERO;
 
         for (InvoiceProduct purchasedProduct : purchasedProducts) {
 
             if (toBeSoldProduct.getRemainingQuantity() <= purchasedProduct.getRemainingQuantity()) {
-
-
+                //calculate how much money we spent to buy/purchase And how much money we earned from this sale
+                //calculate profit loss
                 BigDecimal costTotalForQty = purchasedProduct.getPrice().multiply(
                         BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (purchasedProduct.getTax() + 100) / 100d));
                 BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().multiply(
@@ -167,6 +167,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 profitLoss = salesTotalForQty.subtract(costTotalForQty);
 
                 purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
+                // Add new profit/loss
                 toBeSoldProduct.setProfitLoss(toBeSoldProduct.getProfitLoss().add(profitLoss));
                 toBeSoldProduct.setRemainingQuantity(0);
                 invoiceProductRepository.save(purchasedProduct);
@@ -184,7 +185,6 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 toBeSoldProduct.setProfitLoss(profitLoss);
                 invoiceProductRepository.save(purchasedProduct);
                 invoiceProductRepository.save(toBeSoldProduct);
-
             }
         }
         return toBeSoldProduct.getProfitLoss();

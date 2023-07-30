@@ -55,4 +55,5 @@ public class AddressServiceImplUnitTest {
                 addressService.retrieveCountyList());
         assertThat(throwable).isInstanceOf(RuntimeException.class);
     }
+
 }

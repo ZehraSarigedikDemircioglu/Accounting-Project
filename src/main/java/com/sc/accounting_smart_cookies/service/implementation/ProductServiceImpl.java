@@ -120,5 +120,4 @@ public class ProductServiceImpl implements ProductService {
 
         return products.stream().map(product -> mapperUtil.convert(product, new ProductDTO())).collect(Collectors.toList());
     }
-
 }
